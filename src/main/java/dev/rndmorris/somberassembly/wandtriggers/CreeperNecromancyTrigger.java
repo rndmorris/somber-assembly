@@ -23,7 +23,7 @@ public class CreeperNecromancyTrigger implements IWandTriggerManager {
             NBTTagCompound tagCompound = new NBTTagCompound();
             creeper.writeEntityToNBT(tagCompound);
 
-            tagCompound.setShort("Fuse", (short)1);
+            tagCompound.setShort("Fuse", (short) 1);
 
             creeper.readEntityFromNBT(tagCompound);
             return creeper;
