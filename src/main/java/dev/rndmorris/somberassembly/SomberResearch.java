@@ -14,6 +14,7 @@ import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.lib.research.ResearchManager;
 
 public class SomberResearch {
 
@@ -30,10 +31,12 @@ public class SomberResearch {
 
     // Research keys
     public final static String NECROMANCY_INTRO = "NECROMANCY_INTRO";
+    public final static String BONE_BLOCKS = "BONE_BLOCKS";
     public final static String ASSEMBLE_ZOMBIE = "ASSEMBLE_ZOMBIE";
     public final static String ASSEMBLE_CREEPER_PERFORMED = "ASSEMBLE_CREEPER_PERFORMED";
     public final static String ASSEMBLE_SKELETON_PERFORMED = "ASSEMBLE_SKELETON_PERFORMED";
     public final static String ASSEMBLE_ZOMBIE_PERFORMED = "ASSEMBLE_ZOMBIE_PERFORMED";
+    public final static String SHOCK_FOCUS_ASSEMBLY = "SHOCK_FOCUS_ASSEMBLY";
 
     // External research keys
     final static String SHOCK_FOCUS = "FOCUSSHOCK";
@@ -46,15 +49,21 @@ public class SomberResearch {
     private static ResourceLocation iconSkullWither;
     private static ResourceLocation iconSkullZombie;
 
-    public static void unlockResearch(EntityPlayer player, String researchKey) {
-        Thaumcraft.proxy.researchManager.completeResearch(player, researchKey);
+    public static void unlockResearch(EntityPlayer player, String... researchKeys) {
+        for (var key : researchKeys) {
+            if (!ResearchManager.isResearchComplete(player.getCommandSenderName(), key)) {
+                Thaumcraft.proxy.researchManager.completeResearch(player, key);
+                SomberAssembly.proxy.playDiscoverySounds(player);
+            }
+        }
     }
 
     public static void init() {
         registerIcons();
         registerCategory();
-        registerNecromancyIntro();
+        registerStarterResearch();
         registerMobAssemblyResearch();
+        // Always run this last to avoid false conflicts with other research
         registerVirutalResearch();
     }
 
@@ -79,9 +88,8 @@ public class SomberResearch {
         addItemScanResearch(SCANNED_FOCUS_SHOCK, ItemApi.getItem("itemFocusShock", 0), true);
 
         // Behavior flags
-        ResearchItemBuilder.forKey(ASSEMBLE_ZOMBIE_PERFORMED)
-            .virtual()
-            .register();
+        addVirtualFlag(ASSEMBLE_ZOMBIE_PERFORMED, ASSEMBLE_ZOMBIE);
+        addVirtualFlag(SHOCK_FOCUS_ASSEMBLY, ASSEMBLE_ZOMBIE_PERFORMED);
     }
 
     private static void addEntityScanResearch(String researchKey, Class entityClass, EntityPredicate predicate) {
@@ -96,7 +104,6 @@ public class SomberResearch {
                 final var entity = event.scannedObject();
                 if (entityClass.isInstance(entity) && (predicate == null || predicate.evaluate(entity))) {
                     unlockResearch(event.byPlayer(), researchKey);
-                    SomberAssembly.LOG.debug("Unlocked {}!", researchKey);
                 }
             });
     }
@@ -120,18 +127,37 @@ public class SomberResearch {
                         event.scannedObject()
                             .getItem()))
                     || item.isItemEqual(event.scannedObject())) {
-                    unlockResearch(event.byPlayer(), researchKey);
-                    SomberAssembly.LOG.debug("Unlocked {}!", researchKey);
+                    final var player = event.byPlayer();
+                    if (!ResearchManager.isResearchComplete(player.getCommandSenderName(), researchKey)) {
+                        unlockResearch(player, researchKey);
+                    }
                 }
             });
     }
 
-    private static void registerNecromancyIntro() {
+    private static void addVirtualFlag(String researchKey, String parents) {
+        ResearchItemBuilder.forKey(researchKey)
+            .virtual()
+            .parents(parents)
+            .register();
+    }
+
+    private static void registerStarterResearch() {
         ResearchItemBuilder.forKey(NECROMANCY_INTRO)
             .position(0, 0)
             .display(iconSinisterStone)
-            .textPage("tc.research_page.NECROMANCY_INTRO.1")
-            .textPage("tc.research_page.NECROMANCY_INTRO.2")
+            .textPage(1)
+            .textPage(2)
+            .autoUnlock()
+            .register();
+        ResearchItemBuilder.forKey(BONE_BLOCKS)
+            .position(0, -2)
+            .display(new ItemStack(SomberBlocks.boneBlock))
+            .textPage(1)
+            .recipePage(SomberRecipes.boneBlockRecipe)
+            .recipePage(SomberRecipes.boneBlockUncraftRecipe)
+            .secretPage(ASSEMBLE_SKELETON_PERFORMED, ASSEMBLE_SKELETON_PERFORMED)
+            .parents(NECROMANCY_INTRO)
             .autoUnlock()
             .register();
     }
@@ -146,7 +172,7 @@ public class SomberResearch {
             .textPage(1)
             .compoundRecipePage(SomberRecipes.assembleZombie)
             .secretPage(ASSEMBLE_ZOMBIE_PERFORMED, ASSEMBLE_ZOMBIE_PERFORMED)
-            .parent(NECROMANCY_INTRO)
+            .parents(NECROMANCY_INTRO)
             .hiddenParent(FLESH_GOLEM, SHOCK_FOCUS, SCANNED_FOCUS_SHOCK, SCANNED_ZOMBIE)
             .register()
             .registerResearchItem();
@@ -155,8 +181,8 @@ public class SomberResearch {
             .display(iconSkullSkeleton)
             .textPage(1)
             .compoundRecipePage(SomberRecipes.assembleSkeleton)
-            .parent(ASSEMBLE_ZOMBIE)
-            .hiddenParent(ASSEMBLE_ZOMBIE_PERFORMED, SCANNED_SKELETON)
+            .parents(ASSEMBLE_ZOMBIE)
+            .hiddenParent(SHOCK_FOCUS_ASSEMBLY, SCANNED_SKELETON)
             .lost()
             .register();
         ResearchItemBuilder.forKey(ASSEMBLE_CREEPER_PERFORMED)
@@ -164,8 +190,8 @@ public class SomberResearch {
             .display(iconSkullCreeper)
             .textPage(1)
             .compoundRecipePage(SomberRecipes.assembleCreeper)
-            .parent(ASSEMBLE_ZOMBIE)
-            .hiddenParent(ASSEMBLE_ZOMBIE_PERFORMED, SCANNED_CREEPER)
+            .parents(ASSEMBLE_ZOMBIE)
+            .hiddenParent(SHOCK_FOCUS_ASSEMBLY, SCANNED_CREEPER)
             .lost()
             .register();
     }
