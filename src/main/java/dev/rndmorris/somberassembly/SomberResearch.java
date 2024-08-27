@@ -167,23 +167,31 @@ public class SomberResearch {
             .addSecretPage(Research.ASSEMBLED_A_ZOMBIE)
             .register();
 
-        ResearchItemBuilder.forKey(Research.HOW_TO_ASSEMBLE_ZOMBIES)
-            .position(3, 1)
-            .display(iconSkullZombie)
+        ResearchItemBuilder.forKey(Research.HOW_TO_ASSEMBLE_SKELETONS)
+            .position(3, 3)
+            .display(iconSkullSkeleton)
             .addTextPage(1)
             .addParents(Research.SHOCK_FOCUS_ASSEMBLY)
             .addHiddenParents(
                 Research.ASSEMBLED_A_SKELETON,
                 Research.SCANNED_ENTITY_SKELETON,
                 Research.SCANNED_BLOCK_BONE)
-            .addAspectCost(Aspect.UNDEAD, 8)
-            .addAspectCost(Aspect.ENERGY, 8)
-            .addAspectCost(Aspect.MAN, 8)
-            .addAspectCost(Aspect.EXCHANGE, 8)
             .setComplexity(2)
             .addTextPage(1)
-            .addCompoundRecipePage(SomberRecipes.assembleZombie)
-            .addSecretPage(Research.ASSEMBLED_A_ZOMBIE)
+            .addCompoundRecipePage(SomberRecipes.assembleSkeleton)
+            .makeLost()
+            .register();
+
+        ResearchItemBuilder.forKey(Research.HOW_TO_ASSEMBLE_CREEPERS)
+            .position(3, 5)
+            .display(iconSkullCreeper)
+            .addTextPage(1)
+            .addParents(Research.SHOCK_FOCUS_ASSEMBLY)
+            .addHiddenParents(Research.ASSEMBLED_A_CREEPER, Research.SCANNED_ENTITY_CREEPER, Research.SCANNED_BLOCK_TNT)
+            .setComplexity(2)
+            .addTextPage(1)
+            .addCompoundRecipePage(SomberRecipes.assembleCreeper)
+            .makeLost()
             .register();
     }
 

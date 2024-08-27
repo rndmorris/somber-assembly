@@ -59,16 +59,36 @@ public class ResearchItemBuilder {
         return new ResearchItemBuilder(key.toString(), SomberResearch.CATEGORY);
     }
 
+    /**
+     * Add research points required to buy the research. Also determines which aspects appear
+     * on the research paper.
+     * 
+     * @param aspect The aspect to add.
+     * @param cost   How much it will cost.
+     * @return The builder, for chaining.
+     */
     public ResearchItemBuilder addAspectCost(Aspect aspect, int cost) {
         aspectCosts.add(aspect, cost);
         return this;
     }
 
+    /**
+     * Set the image that should represent the research in the 'nomicon. An ItemStack will have precedence over this.
+     * 
+     * @param displayIcon A ResourceLocation to the image to display.
+     * @return The builder, for chaining.
+     */
     public ResearchItemBuilder display(ResourceLocation displayIcon) {
         this.displayIcon = displayIcon;
         return this;
     }
 
+    /**
+     * Set the item that should represent the research in the 'nomicon. Has precedence over a ResourceLocation.
+     * 
+     * @param display A stack containing the item to use.
+     * @return The builder, for chaining.
+     */
     public ResearchItemBuilder display(ItemStack display) {
         this.displayItem = display;
         return this;
@@ -92,6 +112,11 @@ public class ResearchItemBuilder {
         return this;
     }
 
+    /**
+     * Give the research a starry shape in the 'nomicon.
+     * 
+     * @return The builder, for chaining.
+     */
     public ResearchItemBuilder makeSpecial() {
         this.special = true;
         return this;
@@ -102,6 +127,12 @@ public class ResearchItemBuilder {
         return this;
     }
 
+    /**
+     * Prevent the research from showing up in the 'nomicon until conditions are met
+     * (don't ask me what those are, I"m not using it for that)
+     * 
+     * @return The builder, for chaining.
+     */
     public ResearchItemBuilder makeLost() {
         this.lost = true;
         return this;
@@ -117,11 +148,22 @@ public class ResearchItemBuilder {
         return this;
     }
 
+    /**
+     * The rearch is technical and won't be shown in the 'nomicon.
+     * We're using this for our on-scan and on-assembly research flags.
+     * 
+     * @return The builder, for chaining.
+     */
     public ResearchItemBuilder makeVirtual() {
         this.virtual = true;
         return this;
     }
 
+    /**
+     * This research will always be unlocked. Always. Even if you set parents (I think).
+     * 
+     * @return The builder, for chaining.
+     */
     public ResearchItemBuilder makeAutoUnlock() {
         this.autoUnlock = true;
         return this;

@@ -21,9 +21,9 @@ import thaumcraft.common.items.wands.foci.ItemFocusShock;
  */
 public class WandTriggerManager implements IWandTriggerManager {
 
-    public final static int ASSEMBLE_CREEPER_EVENT = 0;
-    public final static int ASSEMBLE_SKELETON_EVENT = 1;
-    public final static int ASSEMBLE_ZOMBIE_EVENT = 2;
+    private final static int ASSEMBLE_CREEPER_EVENT = 0;
+    private final static int ASSEMBLE_SKELETON_EVENT = 1;
+    private final static int ASSEMBLE_ZOMBIE_EVENT = 2;
 
     private final MobAssemblyService creeperAssemblyService;
     private final MobAssemblyService skeletonAssemblyService;

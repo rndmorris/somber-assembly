@@ -36,7 +36,6 @@ public class CommonProxy {
     // postInit "Handle interaction with other mods, complete your setup based on this."
     public void postInit(FMLPostInitializationEvent ignoredEvent) {
         wandTriggerManager = new WandTriggerManager();
-
         SomberResearch.init();
     }
 
