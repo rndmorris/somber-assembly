@@ -1,7 +1,7 @@
 package dev.rndmorris.somberassembly.potions;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityZombie;
 
 /**
@@ -22,7 +22,11 @@ public class PotionDeathStench extends SomberPotion {
         return false;
     }
 
-    public static boolean affectsEntity(Entity entity) {
-        return entity instanceof EntityZombie || entity instanceof EntitySkeleton;
+    public static boolean makesNeutral(Entity entity) {
+        return entity instanceof EntityZombie;
+    }
+
+    public static boolean makesHostile(Entity entity) {
+        return entity instanceof EntityIronGolem;
     }
 }

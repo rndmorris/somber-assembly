@@ -33,11 +33,11 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         SomberBlock.init();
+        SomberItem.init();
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes."
     public void init(FMLInitializationEvent ignoredEvent) {
-        SomberItem.init();
         SomberRecipes.init();
     }
 

@@ -75,6 +75,6 @@ public class SomberAssembly implements IEarlyMixinLoader {
 
     @Override
     public List<String> getMixins(Set<String> loadedCoreMods) {
-        return CollectionUtil.listOf("MixinWorld", "MixinEntityAITarget");
+        return CollectionUtil.listOf("MixinWorld", "MixinEntityAINearestAttackableTarget$1");
     }
 }

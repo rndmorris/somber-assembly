@@ -17,6 +17,8 @@ import thaumcraft.api.research.ResearchPage;
 
 public class ResearchItemBuilder {
 
+    private static String configuredCategory = null;
+
     private final String key;
     private final String category;
     private final AspectList aspectCosts = new AspectList();
@@ -45,9 +47,13 @@ public class ResearchItemBuilder {
     private final List<String> entityTriggers = new ArrayList<>();
     private final List<Aspect> aspectTriggers = new ArrayList<>();
 
-    private ResearchItemBuilder(String key, String category) {
+    private ResearchItemBuilder(String key) {
         this.key = key;
-        this.category = category;
+        this.category = configuredCategory;
+    }
+
+    public static void setCategory(String category) {
+        configuredCategory = category;
     }
 
     /**
@@ -57,7 +63,7 @@ public class ResearchItemBuilder {
      * @return The new research builder.
      */
     public static ResearchItemBuilder forKey(Research key) {
-        return new ResearchItemBuilder(key.toString(), SomberResearch.CATEGORY);
+        return new ResearchItemBuilder(key.toString());
     }
 
     /**
