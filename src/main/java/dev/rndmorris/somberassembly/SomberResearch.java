@@ -17,6 +17,7 @@ public class SomberResearch {
     // Research keys
     public final static String NECROMANCY_INTRO = "NECROMANCY_INTRO";
     public final static String ASSEMBLE_ZOMBIE = "ASSEMBLE_ZOMBIE";
+    public final static String ASSEMBLE_ZOMBIE_PERFORMED = "ASSEMBLE_ZOMBIE_PERFORMED";
 
     // External research keys
     final static String SHOCK_FOCUS = "FOCUSSHOCK";
@@ -52,6 +53,7 @@ public class SomberResearch {
             .position(0, 0)
             .displayIcon(iconSinisterStone)
             .textPage("tc.research_page.NECROMANCY_INTRO.1")
+            .textPage("tc.research_page.NECROMANCY_INTRO.2")
             .autoUnlock(true)
             .build()
             .registerResearchItem();
@@ -73,5 +75,8 @@ public class SomberResearch {
             .hiddenParent(SHOCK_FOCUS)
             .build()
             .registerResearchItem();
+        ResearchItemBuilder.forKeyAndCategory(ASSEMBLE_ZOMBIE_PERFORMED, CATEGORY)
+            .hidden(true)
+            .parent(ASSEMBLE_ZOMBIE);
     }
 }

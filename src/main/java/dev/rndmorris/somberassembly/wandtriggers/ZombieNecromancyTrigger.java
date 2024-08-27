@@ -13,12 +13,12 @@ import thaumcraft.api.wands.WandTriggerRegistry;
 
 public class ZombieNecromancyTrigger implements IWandTriggerManager {
 
-    private final WandNecromancyManager manager;
+    private final MobAssemblyService manager;
 
     public ZombieNecromancyTrigger() {
         final int fleshBlockMetadata = 2;
         var fleshBlock = Utils.getThaumcraftBlock("blockTaint", fleshBlockMetadata);
-        WandNecromancyManager.CreateEntity createZombie = (args) -> {
+        MobAssemblyService.CreateEntity createZombie = (args) -> {
             var zombie = new EntityZombie(args.world());
             for (var slot = 0; slot <= 4; ++slot) {
                 zombie.setCurrentItemOrArmor(slot, null);
@@ -26,7 +26,7 @@ public class ZombieNecromancyTrigger implements IWandTriggerManager {
             zombie.setCanPickUpLoot(true);
             return zombie;
         };
-        this.manager = new WandNecromancyManager(
+        this.manager = new MobAssemblyService(
             fleshBlock,
             fleshBlockMetadata,
             createZombie,

@@ -28,9 +28,17 @@ public class CompoundRecipe {
         return this;
     }
 
+    public AspectList aspectCost() {
+        return this.aspects;
+    }
+
     public CompoundRecipe blueprint(SetShapeClosure setShape) {
         this.blueprint = setShape.buildBlueprint();
         return this;
+    }
+
+    public ItemStack[][][] blueprint() {
+        return this.blueprint;
     }
 
     public interface SetShapeClosure {

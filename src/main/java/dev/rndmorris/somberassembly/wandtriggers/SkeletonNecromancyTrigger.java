@@ -11,12 +11,12 @@ import thaumcraft.api.wands.WandTriggerRegistry;
 
 public class SkeletonNecromancyTrigger implements IWandTriggerManager {
 
-    private final WandNecromancyManager manager;
+    private final MobAssemblyService manager;
 
     public SkeletonNecromancyTrigger() {
         final int boneBlockMetadata = 0;
         var boneBlock = SomberBlocks.boneBlock;
-        WandNecromancyManager.CreateEntity createSkeleton = (args) -> {
+        MobAssemblyService.CreateEntity createSkeleton = (args) -> {
             var skeleton = new EntitySkeleton(args.world());
             for (var slot = 0; slot <= 4; ++slot) {
                 skeleton.setCurrentItemOrArmor(slot, null);
@@ -24,7 +24,7 @@ public class SkeletonNecromancyTrigger implements IWandTriggerManager {
             skeleton.setCanPickUpLoot(true);
             return skeleton;
         };
-        this.manager = new WandNecromancyManager(boneBlock, boneBlockMetadata, createSkeleton, null, null);
+        this.manager = new MobAssemblyService(boneBlock, boneBlockMetadata, createSkeleton, null, null);
         WandTriggerRegistry.registerWandBlockTrigger(this, 1, boneBlock, boneBlockMetadata);
     }
 

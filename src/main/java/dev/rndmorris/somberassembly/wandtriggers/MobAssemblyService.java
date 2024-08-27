@@ -12,7 +12,7 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.lib.research.ResearchManager;
 
-public class WandNecromancyManager {
+public class MobAssemblyService {
 
     private final Block expectedBlockType;
     private final int expectedBlockMetadata;
@@ -20,7 +20,7 @@ public class WandNecromancyManager {
     private final String requiredResearch;
     private final AspectList visCost;
 
-    public WandNecromancyManager(Block expectedBlockType, int expectedBlockMetadata, CreateEntity createEntityClosure,
+    public MobAssemblyService(Block expectedBlockType, int expectedBlockMetadata, CreateEntity createEntityClosure,
         String requiredResearch, AspectList visCost) {
         this.expectedBlockType = expectedBlockType;
         this.expectedBlockMetadata = expectedBlockMetadata;
@@ -31,7 +31,7 @@ public class WandNecromancyManager {
 
     public boolean tryCreateEntity(World world, ItemStack wand, EntityPlayer player, int x, int y, int z, int side,
         int event) {
-        var args = new WandNecromancyManager.TriggerEventArgs(world, wand, player, x, y, z, side, event);
+        var args = new MobAssemblyService.TriggerEventArgs(world, wand, player, x, y, z, side, event);
         if (checkPredicates(args)) {
             return spawnEntity(args);
         }
@@ -52,7 +52,7 @@ public class WandNecromancyManager {
     private boolean checkBlockStructure(TriggerEventArgs args) {
         var world = args.world;
         int x = args.x, y = args.y, z = args.z;
-        return checkBlock(world, x, y, z) && checkBlock(world, x, y - 1, z);
+        return checkBlock(world, x, y + 1, z) && checkBlock(world, x, y, z) && checkBlock(world, x, y - 1, z);
     }
 
     private boolean checkBlock(World world, int x, int y, int z) {
@@ -96,6 +96,7 @@ public class WandNecromancyManager {
     }
 
     private void clearBlocks(World world, int x, int y, int z) {
+        world.setBlockToAir(x, y + 1, z);
         world.setBlockToAir(x, y, z);
         world.setBlockToAir(x, y - 1, z);
     }

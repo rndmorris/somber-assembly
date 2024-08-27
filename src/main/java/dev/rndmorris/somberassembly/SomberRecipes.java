@@ -18,8 +18,6 @@ public class SomberRecipes {
 
     // Thaumcraft block references
     private static ItemStack basicWand;
-    private static ItemStack empty;
-    private static ItemStack fleshBlock;
 
     public static void init() {
         assignBlockReferences();
@@ -29,8 +27,6 @@ public class SomberRecipes {
 
     private static void assignBlockReferences() {
         basicWand = ItemApi.getItem("itemWandCasting", 0);
-        empty = ItemApi.getBlock("blockHole", 0);
-        fleshBlock = ItemApi.getBlock("blockTaint", 2);
     }
 
     private static void craftingRecipes() {
@@ -46,20 +42,8 @@ public class SomberRecipes {
         assembleCreeper = CompoundRecipe.start()
             .blueprint(() -> {
                 final var tnt = new ItemStack(Blocks.tnt);
-                return new ItemStack[][][] {
-                    {
-                        { tnt, },
-                        { null, },
-                    },
-                    {
-                        { tnt, },
-                        { basicWand, }
-                    },
-                    {
-                        { tnt, },
-                        { null, }
-                    },
-                };
+                return new ItemStack[][][] { { { tnt, }, { null, }, }, { { tnt, }, { basicWand, } },
+                    { { tnt, }, { null, } }, };
             })
             .aspectCost(Aspect.ENTROPY, 10)
             .aspectCost(Aspect.FIRE, 30)
@@ -67,40 +51,19 @@ public class SomberRecipes {
         assembleSkeleton = CompoundRecipe.start()
             .blueprint(() -> {
                 final var bone = new ItemStack(SomberBlocks.boneBlock);
-                return new ItemStack[][][] {
-                    {
-                        { bone, },
-                        { null, },
-                    },
-                    {
-                        { bone, },
-                        { basicWand, }
-                    },
-                    {
-                        { bone, },
-                        { null, }
-                    },
-                };
+                return new ItemStack[][][] { { { bone, }, { null, }, }, { { bone, }, { basicWand, } },
+                    { { bone, }, { null, } }, };
             })
             .aspectCost(Aspect.AIR, 15)
             .aspectCost(Aspect.FIRE, 10)
             .aspectCost(Aspect.ENTROPY, 15);
         assembleZombie = CompoundRecipe.start()
             .blueprint(() -> {
-                return new ItemStack[][][] {
-                    {
-                        { fleshBlock, },
-                        { null, },
-                    },
-                    {
-                        { fleshBlock, },
-                        { basicWand, }
-                    },
-                    {
-                        { fleshBlock, },
-                        { null, }
-                    },
-                };
+                final var fleshBlock = new ItemStack(
+                    SomberBlocks.Thaumcraft.fleshBlock(), 0,
+                    SomberBlocks.Thaumcraft.fleshBlockDamage());
+                return new ItemStack[][][] { { { fleshBlock, }, { null, }, }, { { fleshBlock, }, { basicWand, } },
+                    { { fleshBlock, }, { null, } }, };
             })
             .aspectCost(Aspect.AIR, 15)
             .aspectCost(Aspect.ENTROPY, 15);

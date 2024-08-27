@@ -12,12 +12,12 @@ import thaumcraft.api.wands.WandTriggerRegistry;
 
 public class CreeperNecromancyTrigger implements IWandTriggerManager {
 
-    private final WandNecromancyManager manager;
+    private final MobAssemblyService manager;
 
     public CreeperNecromancyTrigger() {
         final int blockMetadata = 0;
         var tntBlock = Blocks.tnt;
-        WandNecromancyManager.CreateEntity createCreeper = (args) -> {
+        MobAssemblyService.CreateEntity createCreeper = (args) -> {
             var creeper = new EntityCreeper(args.world());
             creeper.setCreeperState(1);
             NBTTagCompound tagCompound = new NBTTagCompound();
@@ -28,7 +28,7 @@ public class CreeperNecromancyTrigger implements IWandTriggerManager {
             creeper.readEntityFromNBT(tagCompound);
             return creeper;
         };
-        this.manager = new WandNecromancyManager(tntBlock, blockMetadata, createCreeper, null, null);
+        this.manager = new MobAssemblyService(tntBlock, blockMetadata, createCreeper, null, null);
         WandTriggerRegistry.registerWandBlockTrigger(this, 1, tntBlock, blockMetadata);
     }
 

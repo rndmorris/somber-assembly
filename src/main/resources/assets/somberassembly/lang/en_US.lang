@@ -5,7 +5,7 @@ tile.bone_block.name=Block of Bones
 tc.research_name.NECROMANCY_INTRO=Somber Assembly
 tc.research_text.NECROMANCY_INTRO=An introduction to formalized necromancy
 tc.research_page.NECROMANCY_INTRO.1=I've heard tales of a tablet can form new creatures from essentia-laden aspects of a creature's soul. Deep in the earth I've found cages that, in my presence, conjure hordes to attack me. I've found hints of a wrathful version that can do so even without my presence, albeit at the cost of essentia. I've even learned to shape zombie flesh into a small, but subservient, golem.
-tc.research_page.NECROMANCY_INTRO.2=As far as necromancy goes, however, these options leave something to be desired. To that end, I've devised a new category of research I'm calling Somber Assembly: the formal study and practice of constructing and reanimating the dead. I'll document my findings here.   
+tc.research_page.NECROMANCY_INTRO.2=As far as necromancy goes, however, these options leave something to be desired. To that end, I've devised a new category of research that I've taken to calling Somber Assembly. Somber Assembly encompasses the formal study and practice of constructing and reanimating the dead. I'll document my findings here.   
 
 tc.research_name.ASSEMBLE_ZOMBIE=Reanimating Zombies
 tc.research_text.ASSEMBLE_ZOMBIE=Restoring unlife to the formerly undead
