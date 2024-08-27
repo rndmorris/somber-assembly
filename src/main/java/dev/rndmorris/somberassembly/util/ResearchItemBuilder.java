@@ -34,6 +34,7 @@ public class ResearchItemBuilder {
     private boolean hidden = false;
     private boolean virtual = false;
     private boolean autoUnlock = false;
+    private boolean round = false;
     private boolean secondary = false;
 
     private final List<String> parents = new ArrayList<>();
@@ -62,7 +63,7 @@ public class ResearchItemBuilder {
     /**
      * Add research points required to buy the research. Also determines which aspects appear
      * on the research paper.
-     * 
+     *
      * @param aspect The aspect to add.
      * @param cost   How much it will cost.
      * @return The builder, for chaining.
@@ -74,7 +75,7 @@ public class ResearchItemBuilder {
 
     /**
      * Set the image that should represent the research in the 'nomicon. An ItemStack will have precedence over this.
-     * 
+     *
      * @param displayIcon A ResourceLocation to the image to display.
      * @return The builder, for chaining.
      */
@@ -85,7 +86,7 @@ public class ResearchItemBuilder {
 
     /**
      * Set the item that should represent the research in the 'nomicon. Has precedence over a ResourceLocation.
-     * 
+     *
      * @param display A stack containing the item to use.
      * @return The builder, for chaining.
      */
@@ -114,7 +115,7 @@ public class ResearchItemBuilder {
 
     /**
      * Give the research a starry shape in the 'nomicon.
-     * 
+     *
      * @return The builder, for chaining.
      */
     public ResearchItemBuilder makeSpecial() {
@@ -130,7 +131,7 @@ public class ResearchItemBuilder {
     /**
      * Prevent the research from showing up in the 'nomicon until conditions are met
      * (don't ask me what those are, I"m not using it for that)
-     * 
+     *
      * @return The builder, for chaining.
      */
     public ResearchItemBuilder makeLost() {
@@ -151,7 +152,7 @@ public class ResearchItemBuilder {
     /**
      * The rearch is technical and won't be shown in the 'nomicon.
      * We're using this for our on-scan and on-assembly research flags.
-     * 
+     *
      * @return The builder, for chaining.
      */
     public ResearchItemBuilder makeVirtual() {
@@ -161,11 +162,20 @@ public class ResearchItemBuilder {
 
     /**
      * This research will always be unlocked. Always. Even if you set parents (I think).
-     * 
+     *
      * @return The builder, for chaining.
      */
     public ResearchItemBuilder makeAutoUnlock() {
         this.autoUnlock = true;
+        return this;
+    }
+
+    /**
+     * Makes the research appear round in a circle in the 'nomicon instead of a square.
+     * @return The builder, for chaining.
+     */
+    public ResearchItemBuilder makeRound() {
+        this.round = true;
         return this;
     }
 
@@ -354,6 +364,9 @@ public class ResearchItemBuilder {
         }
         if (this.autoUnlock) {
             researchItem.setAutoUnlock();
+        }
+        if (this.round) {
+            researchItem.setRound();
         }
         if (this.secondary) {
             researchItem.setSecondary();
