@@ -3,6 +3,7 @@ package dev.rndmorris.somberassembly;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import dev.rndmorris.somberassembly.research.SomberResearch;
 import dev.rndmorris.somberassembly.wandtriggers.CreeperNecromancyTrigger;
 import dev.rndmorris.somberassembly.wandtriggers.SkeletonNecromancyTrigger;
 import dev.rndmorris.somberassembly.wandtriggers.ZombieNecromancyTrigger;
@@ -27,6 +28,7 @@ public class CommonProxy {
 
     // postInit "Handle interaction with other mods, complete your setup based on this."
     public void postInit(FMLPostInitializationEvent ignoredEvent) {
+        SomberResearch.init();
         creeperNecromancyTrigger = new CreeperNecromancyTrigger();
         skeletonNecromancyTrigger = new SkeletonNecromancyTrigger();
         zombieNecromancyTrigger = new ZombieNecromancyTrigger();

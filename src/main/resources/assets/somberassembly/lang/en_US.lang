@@ -1,1 +1,8 @@
+# Blocks
 tile.bone_block.name=Block of Bones
+
+# Research
+tc.research_page.ASSEMBLE_ZOMBIE.1=*Flavor text, flavor text, blah blah blah* I suspect that a carefully calibrated zap from a shock focus might be able to return some semblance of life to a pile of dead flesh.  
+
+# Misc
+tc.research_category.SOMBERASSEMBLY=Necromancy
