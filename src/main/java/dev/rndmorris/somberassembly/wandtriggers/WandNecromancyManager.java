@@ -6,18 +6,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import dev.rndmorris.somberassembly.SomberAssembly;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.lib.research.ResearchManager;
 
 public class WandNecromancyManager {
 
-    private Block expectedBlockType;
-    private int expectedBlockMetadata;
-    private CreateEntity createEntityClosure;
-    private String requiredResearch;
-    private AspectList visCost;
+    private final Block expectedBlockType;
+    private final int expectedBlockMetadata;
+    private final CreateEntity createEntityClosure;
+    private final String requiredResearch;
+    private final AspectList visCost;
 
     public WandNecromancyManager(Block expectedBlockType, int expectedBlockMetadata, CreateEntity createEntityClosure,
         String requiredResearch, AspectList visCost) {
@@ -36,13 +35,10 @@ public class WandNecromancyManager {
     }
 
     private boolean checkPredicates(World world, ItemStack wand, EntityPlayer player, int x, int y, int z, int event) {
-        SomberAssembly.LOG.info("isRemote: {}", world.isRemote);
-        SomberAssembly.LOG.info("event: {}", event);
         return event == 1 && checkResearch(player) && checkBlockStructure(world, x, y, z) && checkWand(wand, player);
     }
 
     private boolean checkResearch(EntityPlayer player) {
-        SomberAssembly.LOG.info("requiredReasearch: {}", this.requiredResearch);
         if (this.requiredResearch == null) {
             return true;
         }
@@ -50,27 +46,19 @@ public class WandNecromancyManager {
     }
 
     private boolean checkBlockStructure(World world, int x, int y, int z) {
-        // to-do: find out what happens if the bottom block would be out of bounds
         return checkBlock(world, x, y, z) && checkBlock(world, x, y - 1, z);
     }
 
     private boolean checkBlock(World world, int x, int y, int z) {
         var block = world.getBlock(x, y, z);
         var metadata = world.getBlockMetadata(x, y, z);
-        SomberAssembly.LOG
-            .info("Block at ({}, {}, {}) is {} (metadata: {})", x, y, z, block.getUnlocalizedName(), metadata);
         return this.expectedBlockType.equals(block) && this.expectedBlockMetadata == metadata;
     }
 
     private boolean checkWand(ItemStack wand, EntityPlayer player) {
-        SomberAssembly.LOG.info(
-            "Wand is not null: {}. Wand is ItemWandCasting: {}",
-            wand != null,
-            wand.getItem() instanceof ItemWandCasting);
-        if (wand == null || !(wand.getItem() instanceof ItemWandCasting castingWand)) {
+        if (!(wand.getItem() instanceof ItemWandCasting castingWand)) {
             return false;
         }
-        SomberAssembly.LOG.info("Vis cost: {}", this.visCost);
         if (this.visCost == null) {
             return true;
         }
@@ -81,7 +69,6 @@ public class WandNecromancyManager {
         if (world.isRemote) {
             return false;
         }
-        SomberAssembly.LOG.info("Attempting to create a mob!");
         drainVis(wand, player);
         clearBlocks(world, x, y, z);
         spawnMob(world, x, y, z);
@@ -121,6 +108,6 @@ public class WandNecromancyManager {
 
     public interface CreateEntity {
 
-        public EntityLiving create(World world);
+        EntityLiving create(World world);
     }
 }
