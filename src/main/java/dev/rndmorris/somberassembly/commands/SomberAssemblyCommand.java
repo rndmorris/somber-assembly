@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import dev.rndmorris.somberassembly.commands.actions.ActionListPotions;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
@@ -38,6 +39,7 @@ public class SomberAssemblyCommand extends CommandBase {
             new ActionHelp(this),
             new ActionForgetResearch(this),
             new ActionForgetResearch(this),
+            new ActionListPotions(this),
             new ActionResetScanned(this));
         this.commandUsage = String
             .format("Command usage: /%1s <%2s> [<arg1>, <arg2>, ...]", COMMAND_NAME, listActionNames(" | "));
