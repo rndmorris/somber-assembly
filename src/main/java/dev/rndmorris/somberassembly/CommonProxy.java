@@ -3,7 +3,6 @@ package dev.rndmorris.somberassembly;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import dev.rndmorris.somberassembly.wandtriggers.SkeletonNecromancyTrigger;
 import dev.rndmorris.somberassembly.wandtriggers.ZombieNecromancyTrigger;
 
@@ -13,22 +12,20 @@ public class CommonProxy {
     SkeletonNecromancyTrigger skeletonNecromancyTrigger;
 
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
-    // GameRegistry." (Remove if not needed)
+    // GameRegistry."
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         SomberBlocks.init();
+    }
+
+    // load "Do your mod setup. Build whatever data structures you care about. Register recipes."
+    public void init(FMLInitializationEvent event) {
         SomberRecipes.preInit();
     }
 
-    // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
-    // public void init(FMLInitializationEvent event) {}
-
-    // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
-    public void postInit(FMLPostInitializationEvent event) {
+    // postInit "Handle interaction with other mods, complete your setup based on this."
+    public void postInit(FMLPostInitializationEvent ignoredEvent) {
         zombieNecromancyTrigger = new ZombieNecromancyTrigger();
         skeletonNecromancyTrigger = new SkeletonNecromancyTrigger();
     }
-
-    // register server commands in this event handler (Remove if not needed)
-    // public void serverStarting(FMLServerStartingEvent event) {}
 }
