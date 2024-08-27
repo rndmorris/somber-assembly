@@ -50,12 +50,12 @@ public class SomberAssemblyCommand extends CommandBase {
 
         private static final List<String> ARGS_LIST_SCANNED = CollectionUtil.listOf(
             "- <player>: the username of the target player",
-            "- <type>: \"object\", \"entity\", or \"phenomena\"",
+            String.format("- <type>: %1s", ScanType.getScanTypeList(", ")),
             "- <containing>: only return things containing this text (spaces are included).");
 
         private static final List<String> ARGS_RESET_SCANNED = CollectionUtil.listOf(
             "- <player>: the username of the target player",
-            "- <type>: \"object\", \"entity\", or \"phenomena\"",
+            String.format("- <type>: %1s", ScanType.getScanTypeList(", ")),
             "- <object>: the name of the thing to unscan");
 
         public static String getActionList(String delimiter) {
@@ -368,6 +368,14 @@ public class SomberAssemblyCommand extends CommandBase {
 
         public static String unknown(String type) {
             return String.format("Unrecognized scanType \"%1s\".", type);
+        }
+
+        public static String getScanTypeList(String delimiter) {
+            return Strings.join(
+                Arrays.stream(ScanType.values())
+                    .map(Enum::toString)
+                    .collect(Collectors.toList()),
+                delimiter);
         }
 
         public static ScanType fromStringIgnoreCase(String string) {
