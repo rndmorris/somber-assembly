@@ -16,12 +16,13 @@ public class ZombieNecromancyTrigger implements IWandTriggerManager {
     public ZombieNecromancyTrigger() {
         final int fleshBlockMetadata = 2;
         var fleshBlock = Utils.getThaumcraftBlock("blockTaint", fleshBlockMetadata);
-        WandNecromancyManager.CreateEntity createZombie = (world) -> {
-            var skeleton = new EntityZombie(world);
+        WandNecromancyManager.CreateEntity createZombie = (args) -> {
+            var zombie = new EntityZombie(args.world());
             for (var slot = 0; slot <= 4; ++slot) {
-                skeleton.setCurrentItemOrArmor(slot, null);
+                zombie.setCurrentItemOrArmor(slot, null);
             }
-            return skeleton;
+            zombie.setCanPickUpLoot(true);
+            return zombie;
         };
         this.manager = new WandNecromancyManager(fleshBlock, fleshBlockMetadata, createZombie, null, null);
         WandTriggerRegistry.registerWandBlockTrigger(this, 1, fleshBlock, fleshBlockMetadata);
@@ -30,6 +31,6 @@ public class ZombieNecromancyTrigger implements IWandTriggerManager {
     @Override
     public boolean performTrigger(World world, ItemStack wand, EntityPlayer player, int x, int y, int z, int side,
         int event) {
-        return manager.tryCreateEntity(world, wand, player, x, y, z, event);
+        return manager.tryCreateEntity(world, wand, player, x, y, z, side, event);
     }
 }
