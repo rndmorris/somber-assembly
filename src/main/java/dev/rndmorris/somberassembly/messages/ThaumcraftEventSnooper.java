@@ -19,12 +19,12 @@ public class ThaumcraftEventSnooper
 
     public static void init() {
         // chosen at random
-        final int DISCRIMINATOR = 991388426;
-        PacketHandler.INSTANCE.registerMessage(
-            new ThaumcraftEventSnooper(),
-            thaumcraft.common.lib.network.playerdata.PacketScannedToServer.class,
-            DISCRIMINATOR,
-            Side.SERVER);
+//        final int DISCRIMINATOR = 991388426;
+//        PacketHandler.INSTANCE.registerMessage(
+//            new ThaumcraftEventSnooper(),
+//            thaumcraft.common.lib.network.playerdata.PacketScannedToServer.class,
+//            DISCRIMINATOR,
+//            Side.SERVER);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ThaumcraftEventSnooper
             proxy.entityScannedEventRegistrar()
                 .announceEvent(entityScannedEvent);
         }
-        return null;
+        return message;
     }
 
     private IEvent buildEvent(PacketScannedToServer message) {
