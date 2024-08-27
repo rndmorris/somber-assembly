@@ -26,16 +26,16 @@ public class SomberBlocks {
             return ItemApi.getBlock("blockHole", 0);
         }
 
-        /**
-         * Block of flesh
-         */
         public static Block fleshBlock() {
-            var blockStack = ItemApi.getBlock("blockTaint", fleshBlockDamage());
-            return Block.getBlockFromItem(blockStack.getItem());
+            return Block.getBlockFromItem(fleshBlockItemStack().getItem());
         }
 
         public static int fleshBlockDamage() {
             return 2;
+        }
+
+        public static ItemStack fleshBlockItemStack() {
+            return ItemApi.getBlock("blockTaint", fleshBlockDamage());
         }
     }
 }

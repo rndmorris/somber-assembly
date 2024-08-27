@@ -6,10 +6,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class CommonProxy {
 
-    // CreeperNecromancyTrigger creeperNecromancyTrigger;
-    // SkeletonNecromancyTrigger skeletonNecromancyTrigger;
-    // ZombieNecromancyTrigger zombieNecromancyTrigger;
-
     WandTriggerManager wandTriggerManager;
 
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
@@ -28,8 +24,5 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent ignoredEvent) {
         SomberResearch.init();
         wandTriggerManager = new WandTriggerManager();
-        // creeperNecromancyTrigger = new CreeperNecromancyTrigger();
-        // skeletonNecromancyTrigger = new SkeletonNecromancyTrigger();
-        // zombieNecromancyTrigger = new ZombieNecromancyTrigger();
     }
 }

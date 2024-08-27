@@ -59,9 +59,7 @@ public class SomberRecipes {
             .aspectCost(Aspect.ENTROPY, 15);
         assembleZombie = CompoundRecipe.start()
             .blueprint(() -> {
-                final var fleshBlock = new ItemStack(
-                    SomberBlocks.Thaumcraft.fleshBlock(), 0,
-                    SomberBlocks.Thaumcraft.fleshBlockDamage());
+                final var fleshBlock = SomberBlocks.Thaumcraft.fleshBlockItemStack();
                 return new ItemStack[][][] { { { fleshBlock, }, { null, }, }, { { fleshBlock, }, { basicWand, } },
                     { { fleshBlock, }, { null, } }, };
             })

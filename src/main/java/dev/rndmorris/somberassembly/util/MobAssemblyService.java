@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.wandtriggers;
+package dev.rndmorris.somberassembly.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;

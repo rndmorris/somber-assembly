@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import dev.rndmorris.somberassembly.wandtriggers.MobAssemblyService;
+import dev.rndmorris.somberassembly.util.MobAssemblyService;
 import thaumcraft.api.wands.IWandTriggerManager;
 import thaumcraft.api.wands.WandTriggerRegistry;
 
