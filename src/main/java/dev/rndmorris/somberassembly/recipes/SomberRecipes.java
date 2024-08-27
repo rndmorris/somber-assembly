@@ -9,10 +9,14 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import dev.rndmorris.somberassembly.blocks.SomberBlock;
+import dev.rndmorris.somberassembly.items.SomberItem;
 import dev.rndmorris.somberassembly.lib.ArrayUtil;
 import dev.rndmorris.somberassembly.lib.CollectionUtil;
+import dev.rndmorris.somberassembly.research.SomberResearch;
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.CrucibleRecipe;
 
 public class SomberRecipes {
 
@@ -25,6 +29,8 @@ public class SomberRecipes {
     public static IRecipe boneBlockRecipe;
     public static IRecipe boneBlockUncraftRecipe;
 
+    public static CrucibleRecipe decayingFleshRecipe;
+
     // Thaumcraft block references
     private static ItemStack basicWand;
 
@@ -32,6 +38,7 @@ public class SomberRecipes {
         assignBlockReferences();
         craftingRecipes();
         compoundRecipes();
+        alchemyRecipes();
     }
 
     private static void assignBlockReferences() {
@@ -85,5 +92,14 @@ public class SomberRecipes {
             })
             .aspectCost(Aspect.AIR, 15)
             .aspectCost(Aspect.ENTROPY, 10);
+    }
+
+    private static void alchemyRecipes() {
+        decayingFleshRecipe = new CrucibleRecipe(
+            SomberResearch.Research.PERMISSION_CRAFT_DECAYING_FLESH,
+            SomberItem.decayingFlesh(),
+            new ItemStack(Items.rotten_flesh, 1),
+            new AspectList().add(Aspect.ENTROPY, 8)
+                .add(Aspect.SENSES, 6));
     }
 }

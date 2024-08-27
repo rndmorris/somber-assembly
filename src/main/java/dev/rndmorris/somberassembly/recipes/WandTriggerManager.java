@@ -74,7 +74,7 @@ public class WandTriggerManager implements IWandTriggerManager {
             })
             .requiredResearch(Research.PERMISSION_ASSEMBLE_CREEPER)
             .visCost(SomberRecipes.assembleCreeper.aspectCost())
-            .teachesResearch(Research.ASSEMBLED_A_CREEPER)
+            .teachesResearch(Research.ACTION_ASSEMBLED_A_CREEPER)
             .wandPredicate(WandTriggerManager::wandHasShockFocus)
             .build();
     }
@@ -99,7 +99,7 @@ public class WandTriggerManager implements IWandTriggerManager {
             })
             .requiredResearch(Research.PERMISSION_ASSEMBLE_SKELETON)
             .visCost(SomberRecipes.assembleSkeleton.aspectCost())
-            .teachesResearch(Research.ASSEMBLED_A_SKELETON)
+            .teachesResearch(Research.ACTION_ASSEMBLED_A_SKELETON)
             .wandPredicate(WandTriggerManager::wandHasShockFocus)
             .build();
     }
@@ -124,7 +124,7 @@ public class WandTriggerManager implements IWandTriggerManager {
             })
             .requiredResearch(Research.PERMISSION_ASSEMBLE_ZOMBIE)
             .visCost(SomberRecipes.assembleZombie.aspectCost())
-            .teachesResearch(Research.ASSEMBLED_A_ZOMBIE)
+            .teachesResearch(Research.ACTION_ASSEMBLED_A_ZOMBIE)
             .givesWarpSticky(1)
             .givesWarpTemp(2)
             .wandPredicate(WandTriggerManager::wandHasShockFocus)

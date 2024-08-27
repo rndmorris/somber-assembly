@@ -22,7 +22,7 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         SomberBlock.init();
-        SomberItem.init();
+        SomberItem.initItems();
         EntityEvents.init();
     }
 
@@ -36,6 +36,7 @@ public class CommonProxy {
         SomberPotion.init();
         WandTriggerManager.init();
         SomberResearch.init();
+        SomberItem.initItemAspects();
     }
 
     public void playSound(World world, double x, double y, double z, String soundName, float volume, float pitch,

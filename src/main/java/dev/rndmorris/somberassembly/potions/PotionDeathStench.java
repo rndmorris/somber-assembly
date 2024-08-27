@@ -3,6 +3,7 @@ package dev.rndmorris.somberassembly.potions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -29,7 +30,7 @@ public class PotionDeathStench extends SomberPotion {
     }
 
     public static boolean makesHostile(Entity entity) {
-        return entity instanceof EntityIronGolem;
+        return entity instanceof EntityIronGolem || entity instanceof EntitySnowman;
     }
 
     @Override

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import com.github.bsideup.jabel.Desugar;
 
 import dev.rndmorris.somberassembly.SomberAssembly;
+import dev.rndmorris.somberassembly.research.SomberResearch;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.wands.ItemWandCasting;
@@ -80,20 +81,7 @@ public class MobAssemblyService {
     }
 
     private void teachResearch(EventArgs args) {
-        var learnedSomething = false;
-        for (String research : this.config.teachesResearch) {
-            if (!ResearchManager.isResearchComplete(
-                args.player()
-                    .getCommandSenderName(),
-                research)) {
-                Thaumcraft.proxy.researchManager.completeResearch(args.player, research);
-                learnedSomething = true;
-            }
-        }
-        if (learnedSomething) {
-            SomberAssembly.LOG.info("Learned something, play sounds!");
-            SomberAssembly.proxy.playDiscoverySounds(args.player);
-        }
+        SomberResearch.unlockResearch(args.player(), this.config.teachesResearch);
     }
 
     private void handleWarp(EventArgs args) {

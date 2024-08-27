@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import dev.rndmorris.somberassembly.recipes.CompoundRecipe;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 
@@ -315,6 +316,11 @@ public class ResearchBuilder {
     }
 
     public ResearchBuilder addRecipePage(IRecipe... recipe) {
+        this.pages.add(new ResearchPage(recipe));
+        return this;
+    }
+
+    public ResearchBuilder addRecipePage(CrucibleRecipe... recipe) {
         this.pages.add(new ResearchPage(recipe));
         return this;
     }
