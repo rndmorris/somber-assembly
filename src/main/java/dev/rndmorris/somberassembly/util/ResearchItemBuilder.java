@@ -172,6 +172,7 @@ public class ResearchItemBuilder {
 
     /**
      * Makes the research appear round in a circle in the 'nomicon instead of a square.
+     *
      * @return The builder, for chaining.
      */
     public ResearchItemBuilder makeRound() {
@@ -326,23 +327,7 @@ public class ResearchItemBuilder {
     }
 
     public ResearchItem register() {
-        final var researchItem = this.displayItem != null
-            ? new ResearchItem(
-                this.key,
-                this.category,
-                this.aspectCosts,
-                this.displayColumn,
-                this.displayRow,
-                this.complexity,
-                this.displayItem)
-            : new ResearchItem(
-                this.key,
-                this.category,
-                this.aspectCosts,
-                this.displayColumn,
-                this.displayRow,
-                this.complexity,
-                this.displayIcon);
+        final var researchItem = initializeResearchItem();
 
         if (this.special) {
             researchItem.setSpecial();
@@ -396,6 +381,27 @@ public class ResearchItemBuilder {
         researchItem.registerResearchItem();
 
         return researchItem;
+    }
+
+    private ResearchItem initializeResearchItem() {
+        if (this.displayItem != null) {
+            return new ResearchItem(
+                this.key,
+                this.category,
+                this.aspectCosts,
+                this.displayColumn,
+                this.displayRow,
+                this.complexity,
+                this.displayItem);
+        }
+        return new ResearchItem(
+            this.key,
+            this.category,
+            this.aspectCosts,
+            this.displayColumn,
+            this.displayRow,
+            this.complexity,
+            this.displayIcon);
     }
 
     // Internal utility
