@@ -12,7 +12,11 @@ import net.minecraft.world.World;
 import dev.rndmorris.somberassembly.util.MobAssemblyService;
 import thaumcraft.api.wands.IWandTriggerManager;
 import thaumcraft.api.wands.WandTriggerRegistry;
+import thaumcraft.common.items.wands.foci.ItemFocusShock;
 
+/**
+ * Handles wand-based crafting for the addon.
+ */
 public class WandTriggerManager implements IWandTriggerManager {
 
     public final static int ASSEMBLE_CREEPER_EVENT = 0;
@@ -23,11 +27,25 @@ public class WandTriggerManager implements IWandTriggerManager {
     private final MobAssemblyService skeletonAssemblyService;
     private final MobAssemblyService zombieAssemblyService;
 
+    private final MobAssemblyService.WandPredicate wandHasShockFocus = (wandItemStack, wand) -> {
+        var focus = wand.getFocus(wandItemStack);
+        return focus instanceof ItemFocusShock;
+    };
+
     public WandTriggerManager() {
-        // Creeper assembly
+        creeperAssemblyService = buildCreeperService();
+        skeletonAssemblyService = buildSkeletonService();
+        zombieAssemblyService = buildZombieService();
+    }
+
+    private MobAssemblyService buildCreeperService() {
         final var assembleCreeperBlock = Blocks.tnt;
         final var assembleCreeperMetadata = 0;
-        creeperAssemblyService = MobAssemblyService.configure()
+
+        WandTriggerRegistry
+            .registerWandBlockTrigger(this, ASSEMBLE_CREEPER_EVENT, assembleCreeperBlock, assembleCreeperMetadata);
+
+        return MobAssemblyService.configure()
             .expectedBlockType(assembleCreeperBlock)
             .expectedBlockMetadata(assembleCreeperMetadata)
             .createEntityClosure((args) -> {
@@ -44,14 +62,18 @@ public class WandTriggerManager implements IWandTriggerManager {
             .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED, SomberResearch.SCANNED_CREEPER)
             .visCost(SomberRecipes.assembleCreeper.aspectCost())
             .teachesResearch(SomberResearch.ASSEMBLE_CREEPER_PERFORMED)
+            .wandPredicate(wandHasShockFocus)
             .build();
-        WandTriggerRegistry
-            .registerWandBlockTrigger(this, ASSEMBLE_CREEPER_EVENT, assembleCreeperBlock, assembleCreeperMetadata);
+    }
 
-        // Skeleton assembly
+    private MobAssemblyService buildSkeletonService() {
         final var assembleSkeletonBlock = SomberBlocks.boneBlock;
         final var assembleSkeletonMetadata = 0;
-        skeletonAssemblyService = MobAssemblyService.configure()
+
+        WandTriggerRegistry
+            .registerWandBlockTrigger(this, ASSEMBLE_SKELETON_EVENT, assembleSkeletonBlock, assembleSkeletonMetadata);
+
+        return MobAssemblyService.configure()
             .expectedBlockType(assembleSkeletonBlock)
             .expectedBlockMetadata(assembleSkeletonMetadata)
             .createEntityClosure((args) -> {
@@ -65,14 +87,18 @@ public class WandTriggerManager implements IWandTriggerManager {
             .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED, SomberResearch.SCANNED_SKELETON)
             .visCost(SomberRecipes.assembleSkeleton.aspectCost())
             .teachesResearch(SomberResearch.ASSEMBLE_SKELETON_PERFORMED)
+            .wandPredicate(wandHasShockFocus)
             .build();
-        WandTriggerRegistry
-            .registerWandBlockTrigger(this, ASSEMBLE_SKELETON_EVENT, assembleSkeletonBlock, assembleSkeletonMetadata);
+    }
 
-        // Zombie assembly
+    private MobAssemblyService buildZombieService() {
         final var assembleZombieBlock = SomberBlocks.Thaumcraft.fleshBlock();
         final var assembleZombieMetadata = SomberBlocks.Thaumcraft.fleshBlockDamage();
-        zombieAssemblyService = MobAssemblyService.configure()
+
+        WandTriggerRegistry
+            .registerWandBlockTrigger(this, ASSEMBLE_ZOMBIE_EVENT, assembleZombieBlock, assembleZombieMetadata);
+
+        return MobAssemblyService.configure()
             .expectedBlockType(assembleZombieBlock)
             .expectedBlockMetadata(assembleZombieMetadata)
             .createEntityClosure((args) -> {
@@ -88,9 +114,8 @@ public class WandTriggerManager implements IWandTriggerManager {
             .teachesResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED)
             .givesWarpSticky(1)
             .givesWarpTemp(2)
+            .wandPredicate(wandHasShockFocus)
             .build();
-        WandTriggerRegistry
-            .registerWandBlockTrigger(this, ASSEMBLE_ZOMBIE_EVENT, assembleZombieBlock, assembleZombieMetadata);
     }
 
     @Override
