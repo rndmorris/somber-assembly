@@ -7,7 +7,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinEntityAINearestAttackableTarget$1",
-
+    "MixinEntityVillager",
     "MixinWorld"
   ],
   "client": [],

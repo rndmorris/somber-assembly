@@ -31,7 +31,7 @@ public class PotionDeathStench extends SomberPotion {
     }
 
     public static boolean makesHostile(Entity entity) {
-        return entity instanceof EntityIronGolem || entity instanceof EntityVillager;
+        return entity instanceof EntityIronGolem;
     }
 
     @Override
@@ -41,8 +41,16 @@ public class PotionDeathStench extends SomberPotion {
 
     @Override
     public void performEffect(EntityLivingBase affected, int amplifier) {
-        final var entitiesToHarm = affected.worldObj.selectEntitiesWithinAABB(EntityLivingBase.class, affected.boundingBox.expand(10, 10, 10), PotionDeathStench::makesHostile);
-        final var damageSource = affected instanceof EntityPlayer player ? DamageSource.causePlayerDamage(player) : DamageSource.causeMobDamage(affected);
+        if (affected instanceof EntityPlayer player && player.capabilities.disableDamage) {
+            return;
+        }
+        final var range = 8D;
+        final var entitiesToHarm = affected.worldObj.selectEntitiesWithinAABB(
+            EntityLivingBase.class,
+            affected.boundingBox.expand(range, range, range),
+            PotionDeathStench::makesHostile);
+        final var damageSource = affected instanceof EntityPlayer player ? DamageSource.causePlayerDamage(player)
+            : DamageSource.causeMobDamage(affected);
         for (final var entity : entitiesToHarm) {
             entity.attackEntityFrom(damageSource, 0);
         }
