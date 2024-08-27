@@ -24,6 +24,8 @@ public class SomberAssembly {
     public static final Logger LOG = LogManager.getLogger(MODID);
     public static final String VERSION = "1.7.10-A1";
 
+    ZombieWandNecromancy zombieWandNecromancy;
+
     @SidedProxy(
         clientSide = "dev.rndmorris.somberassembly.ClientProxy",
         serverSide = "dev.rndmorris.somberassembly.CommonProxy")
