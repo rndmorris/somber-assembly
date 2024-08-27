@@ -1,11 +1,12 @@
 package dev.rndmorris.somberassembly.wandtriggers;
 
-import com.github.bsideup.jabel.Desugar;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.github.bsideup.jabel.Desugar;
 
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.wands.ItemWandCasting;
