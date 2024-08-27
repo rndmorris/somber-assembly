@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import dev.rndmorris.somberassembly.SomberResearch;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.research.ResearchItem;
@@ -49,12 +50,11 @@ public class ResearchItemBuilder {
     /**
      * Initialize a new research builder for the given key and category.
      *
-     * @param key      The unique key identifying this research.
-     * @param category The tab of the Thaumonomicon to which this research belongs.
+     * @param key The unique key identifying this research.
      * @return The new research builder.
      */
-    public static ResearchItemBuilder forKeyAndCategory(String key, String category) {
-        return new ResearchItemBuilder(key, category);
+    public static ResearchItemBuilder forKey(String key) {
+        return new ResearchItemBuilder(key, SomberResearch.CATEGORY);
     }
 
     public ResearchItemBuilder aspect(Aspect aspect, int cost) {
@@ -90,43 +90,43 @@ public class ResearchItemBuilder {
         return this;
     }
 
-    public ResearchItemBuilder special(boolean special) {
-        this.special = special;
+    public ResearchItemBuilder special() {
+        this.special = true;
         return this;
     }
 
-    public ResearchItemBuilder stub(boolean stub) {
-        this.stub = stub;
+    public ResearchItemBuilder stub() {
+        this.stub = true;
         return this;
     }
 
-    public ResearchItemBuilder lost(boolean lost) {
-        this.lost = lost;
+    public ResearchItemBuilder lost() {
+        this.lost = true;
         return this;
     }
 
-    public ResearchItemBuilder concealed(boolean concealed) {
-        this.concealed = concealed;
+    public ResearchItemBuilder concealed() {
+        this.concealed = true;
         return this;
     }
 
-    public ResearchItemBuilder hidden(boolean hidden) {
-        this.hidden = hidden;
+    public ResearchItemBuilder hidden() {
+        this.hidden = true;
         return this;
     }
 
-    public ResearchItemBuilder virtual(boolean virtual) {
-        this.virtual = virtual;
+    public ResearchItemBuilder virtual() {
+        this.virtual = true;
         return this;
     }
 
-    public ResearchItemBuilder autoUnlock(boolean autoUnlock) {
-        this.autoUnlock = autoUnlock;
+    public ResearchItemBuilder autoUnlock() {
+        this.autoUnlock = true;
         return this;
     }
 
-    public ResearchItemBuilder secondary(boolean secondary) {
-        this.secondary = secondary;
+    public ResearchItemBuilder secondary() {
+        this.secondary = true;
         return this;
     }
 
@@ -145,63 +145,63 @@ public class ResearchItemBuilder {
         return this;
     }
 
-    private String unlocalizedTextName(int page) {
+    private String unlocalizedTextKey(int page) {
         return "tc.research_page." + this.key + "." + page;
     }
 
-    private String unlocalizedTextName(String page) {
+    private String unlocalizedTextKey(String page) {
         return "tc.research_page." + this.key + "." + page;
     }
 
     /**
      * Add a basic page of text.
-     * 
+     *
      * @param pageNumber The number of the page to add.
      * @return The builder, for chaining.
      */
     public ResearchItemBuilder textPage(int pageNumber) {
-        this.pages.add(new ResearchPage(unlocalizedTextName(pageNumber)));
+        this.pages.add(new ResearchPage(unlocalizedTextKey(pageNumber)));
         return this;
     }
 
     /**
      * Add a basic page of text.
-     * 
+     *
      * @param pageName The name of the page to add.
      * @return The builder, for chaining.
      */
     public ResearchItemBuilder textPage(String pageName) {
-        this.pages.add(new ResearchPage(unlocalizedTextName(pageName)));
+        this.pages.add(new ResearchPage(unlocalizedTextKey(pageName)));
         return this;
     }
 
     /**
      * Add a page of text that will appear only after the required secondary research is unlocked.
-     * 
+     *
      * @param requiredResearch The research the page depends on.
      * @param pageName         The name of the page to add.
      * @return The builder, for chaining.
      */
     public ResearchItemBuilder secretPage(String requiredResearch, String pageName) {
-        this.pages.add(new ResearchPage(requiredResearch, unlocalizedTextName(pageName)));
+        this.pages.add(new ResearchPage(requiredResearch, unlocalizedTextKey(pageName)));
         return this;
     }
 
     /**
      * Add a page of text that will appear only after the required secondary research is unlocked.
-     * 
+     *
      * @param requiredResearch The research the page depends on.
      * @param pageNumber       The number of the page to add.
      * @return The builder, for chaining.
      */
     public ResearchItemBuilder secretPage(String requiredResearch, int pageNumber) {
-        this.pages.add(new ResearchPage(requiredResearch, unlocalizedTextName(pageNumber)));
+        this.pages.add(new ResearchPage(requiredResearch, unlocalizedTextKey(pageNumber)));
         return this;
     }
 
     /**
      * Add a page that will render a compound recipe (e.g. a multiblock structure).
-     * 
+     *
      * @param recipe The compound recipe to display.
      * @return The builder, for chaining.
      */

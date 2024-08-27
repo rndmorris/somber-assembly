@@ -41,8 +41,9 @@ public class WandTriggerManager implements IWandTriggerManager {
                 creeper.readEntityFromNBT(tagCompound);
                 return creeper;
             })
-            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED)
+            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED, SomberResearch.SCANNED_CREEPER)
             .visCost(SomberRecipes.assembleCreeper.aspectCost())
+            .teachesResearch(SomberResearch.ASSEMBLE_CREEPER_PERFORMED)
             .build();
         WandTriggerRegistry
             .registerWandBlockTrigger(this, ASSEMBLE_CREEPER_EVENT, assembleCreeperBlock, assembleCreeperMetadata);
@@ -61,9 +62,12 @@ public class WandTriggerManager implements IWandTriggerManager {
                 skeleton.setCanPickUpLoot(true);
                 return skeleton;
             })
-            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED)
+            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED, SomberResearch.SCANNED_SKELETON)
             .visCost(SomberRecipes.assembleSkeleton.aspectCost())
+            .teachesResearch(SomberResearch.ASSEMBLE_SKELETON_PERFORMED)
             .build();
+        WandTriggerRegistry
+            .registerWandBlockTrigger(this, ASSEMBLE_SKELETON_EVENT, assembleSkeletonBlock, assembleSkeletonMetadata);
 
         // Zombie assembly
         final var assembleZombieBlock = SomberBlocks.Thaumcraft.fleshBlock();
@@ -79,7 +83,7 @@ public class WandTriggerManager implements IWandTriggerManager {
                 zombie.setCanPickUpLoot(true);
                 return zombie;
             })
-            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE)
+            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE, SomberResearch.SCANNED_ZOMBIE)
             .visCost(SomberRecipes.assembleZombie.aspectCost())
             .teachesResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED)
             .givesWarpSticky(1)

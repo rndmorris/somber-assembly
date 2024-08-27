@@ -1,9 +1,11 @@
 package dev.rndmorris.somberassembly.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import dev.rndmorris.somberassembly.SomberAssembly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,10 +47,14 @@ public class MobAssemblyService {
     }
 
     private boolean checkResearch(EventArgs args) {
-        if (this.config.requiredResearch == null) {
-            return true;
+        for (var research : this.config.requiredResearch) {
+            final var found = ResearchManager.isResearchComplete(args.player.getCommandSenderName(), research);
+            SomberAssembly.LOG.info("Found required research {}? {}", research, found);
+            if (!found) {
+                return false;
+            }
         }
-        return ResearchManager.isResearchComplete(args.player.getCommandSenderName(), this.config.requiredResearch);
+        return true;
     }
 
     private boolean checkBlockStructure(EventArgs args) {
@@ -149,7 +155,7 @@ public class MobAssemblyService {
         private Block expectedBlockType;
         private int expectedBlockMetadata;
         private CreateEntity createEntityClosure;
-        private String requiredResearch;
+        private final List<String> requiredResearch = new ArrayList<>();
         private final AspectList visCost = new AspectList();
         private final List<String> teachesResearch = new ArrayList<>();
         private int givesWarpPerm;
@@ -177,8 +183,8 @@ public class MobAssemblyService {
             return this;
         }
 
-        public MobAssemblyServiceConfig requiredResearch(String requiredResearch) {
-            this.requiredResearch = requiredResearch;
+        public MobAssemblyServiceConfig requiredResearch(String... requiredResearch) {
+            Collections.addAll(this.requiredResearch, requiredResearch);
             return this;
         }
 

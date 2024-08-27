@@ -5,18 +5,22 @@ tile.bone_block.name=Block of Bones
 tc.research_name.NECROMANCY_INTRO=Somber Assembly
 tc.research_text.NECROMANCY_INTRO=An introduction to formalized necromancy
 tc.research_page.NECROMANCY_INTRO.1=I've heard tales of a tablet capable of forming new creatures from essentia-laden aspects of a creature's soul. Deep in the earth I've found cages that, in my presence, conjure hordes to attack me. I've found hints of a wrathful version that can do so even without my presence, albeit at the cost of liquid essentia. I've even learned to shape zombie flesh into a small, but subservient, golem.
-tc.research_page.NECROMANCY_INTRO.2=As far as necromancy goes, however, these options leave something to be desired. To that end, I've devised a new category of research that I've taken to calling Somber Assembly. Somber Assembly encompasses the formal study and practice of constructing and reanimating the dead. I'll document my findings here.   
+tc.research_page.NECROMANCY_INTRO.2=As far as necromancy goes, however, these options leave something to be desired. To that end, I've devised a new category of research that I've taken to calling Somber Assembly. Somber Assembly encompasses the formal study and practice of constructing and reanimating the dead.<LINE>Since this is uncharted territory, I will need to try EVERYTHING before I'll be able to progress. I'll document my findings here, with observations and updates where applicable.   
 
 tc.research_name.ASSEMBLE_ZOMBIE=Zombie Assembly
 tc.research_text.ASSEMBLE_ZOMBIE=Unliving flesh
 tc.research_page.ASSEMBLE_ZOMBIE.1=Of all the undead I've so far discovered, zombies seem like the simplest to reproduce. I've made some calibrations to my wand's shock focus. If I smack a pile of flesh with it, I believe I can encourage the muscles, nerve endings, and other miscellaneous body parts in the pile to rearrange themselves into a functional zombie.
-tc.research_page.ASSEMBLE_ZOMBIE.ASSEMBLE_ZOMBIE_PERFORMED=I can't believe it worked! It's a shame the resulting zombie was just as aggressive towards me as the ones that I've encountered in the wild. Its eagerness to pick up anything it could use against me is even more surprising, as that requires a level of cognition most wild zombies simply don't have. Perhaps I'll find a way to render them docile, or maybe even helpful, in the future.<BR>I wonder what other creatures I might be able to reanimate in this way?          
+tc.research_page.ASSEMBLE_ZOMBIE.ASSEMBLE_ZOMBIE_PERFORMED=I can't believe it worked! It's a shame the resulting zombie was just as aggressive towards me as the ones that I've encountered in the wild. Its eagerness to pick up anything it could use against me is even more surprising, as that requires a level of cognition most wild zombies simply don't have. Perhaps I'll find a way to render them docile, or maybe even helpful, in the future.<BR>I wonder what other creatures I might be able to reanimate in this way? I should scan the mobs I want to assemble first, to make sure I understand them fully.           
 
 tc.research_name.ASSEMBLE_ZOMBIE_PERFORMED=Observations
 
-tc.research_name.ASSEMBLE_SKELETON=Skeletal Assembly
-tc.research_text.ASSEMBLE_SKELETON=Rattling bones
-tc.research_page.ASSEMBLE_SKELETON.1=Reanimating skeletons, it turns out, is a much more complicated process than reanimating zombies. Unlike the flesh used for zombies, bones don't have any muscles, tendons, ligaments, nerves, or any of the other biological mechanisms required for movement. Reanimating them requires some Ignis vis, to weld their bones into a stable formation, additional Aer vis to jolt them awake, and Ordo vis to help direct their movement. They're also pretty unstable, shaking themselves back to pieces after a short while.<BR>There is definitely room for improvement.  
+tc.research_name.ASSEMBLE_SKELETON_PERFORMED=Skeletal Assembly
+tc.research_text.ASSEMBLE_SKELETON_PERFORMED=Rattling bones
+tc.research_page.ASSEMBLE_SKELETON_PERFORMED.1=Reanimating skeletons, it turns out, is a much more complicated process than reanimating zombies. Unlike the flesh used for zombies, bones don't have any muscles, tendons, ligaments, nerves, or any of the other biological mechanisms required for movement. Reanimating them requires some Ignis vis, to weld their bones into a stable formation, additional Aer vis to jolt them awake, and Ordo vis to help direct their movement. They're also pretty unstable, shaking themselves back to pieces after a short while. That doesn't stop them from trying to kill me, however.<BR>There is definitely room for improvement.  
+
+tc.research_name.ASSEMBLE_CREEPER_PERFORMED=Creeper Assem- Disassembly
+tc.research_text.ASSEMBLE_CREEPER_PERFORMED=A very bad idea
+tc.research_page.ASSEMBLE_CREEPER_PERFORMED.1="Let's zap a pile of explosives, maybe it'll form a creeper! What could possibly go wrong?"<BR>I don't know what I expected.
 
 # Misc
 tc.research_category.SOMBERASSEMBLY=Necromancy
