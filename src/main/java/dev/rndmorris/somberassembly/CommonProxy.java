@@ -21,15 +21,14 @@ public class CommonProxy {
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
-    public void init(FMLInitializationEvent event) {}
+    // public void init(FMLInitializationEvent event) {}
 
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
-        // wandNecromancy = new WandNecromancy().register();
         zombieNecromancyTrigger = new ZombieNecromancyTrigger();
         skeletonNecromancyTrigger = new SkeletonNecromancyTrigger();
     }
 
     // register server commands in this event handler (Remove if not needed)
-    public void serverStarting(FMLServerStartingEvent event) {}
+    // public void serverStarting(FMLServerStartingEvent event) {}
 }
