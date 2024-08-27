@@ -9,8 +9,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
-import dev.rndmorris.somberassembly.Utils;
-
 public final class CollectionUtil {
 
     private CollectionUtil() {}
@@ -33,11 +31,16 @@ public final class CollectionUtil {
             .reduce(Stream.empty(), Stream::concat);
     }
 
-    public static <T> T[] fillArray(T[] array, Utils.InitializerClosure<T> initializer) {
+    public static <T> T[] fillArray(T[] array, InitializerClosure<T> initializer) {
         for (var index = 0; index < array.length; ++index) {
             array[index] = initializer.create(index);
         }
         return array;
+    }
+
+    public interface InitializerClosure<T> {
+
+        T create(int index);
     }
 
     public static boolean containsIgnoreCase(String[] array, String find) {

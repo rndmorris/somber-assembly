@@ -9,9 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import dev.rndmorris.somberassembly.SomberResearch.Research;
 import dev.rndmorris.somberassembly.util.MobAssemblyService;
 import thaumcraft.api.wands.IWandTriggerManager;
 import thaumcraft.api.wands.WandTriggerRegistry;
+import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.items.wands.foci.ItemFocusShock;
 
 /**
@@ -27,10 +29,10 @@ public class WandTriggerManager implements IWandTriggerManager {
     private final MobAssemblyService skeletonAssemblyService;
     private final MobAssemblyService zombieAssemblyService;
 
-    private final MobAssemblyService.WandPredicate wandHasShockFocus = (wandItemStack, wand) -> {
+    private static boolean wandHasShockFocus(ItemStack wandItemStack, ItemWandCasting wand) {
         var focus = wand.getFocus(wandItemStack);
         return focus instanceof ItemFocusShock;
-    };
+    }
 
     public WandTriggerManager() {
         creeperAssemblyService = buildCreeperService();
@@ -59,10 +61,13 @@ public class WandTriggerManager implements IWandTriggerManager {
                 creeper.readEntityFromNBT(tagCompound);
                 return creeper;
             })
-            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED, SomberResearch.SCANNED_CREEPER)
+            .requiredResearch(
+                Research.SHOCK_FOCUS_ASSEMBLY,
+                Research.ASSEMBLED_A_ZOMBIE,
+                Research.SCANNED_ENTITY_CREEPER)
             .visCost(SomberRecipes.assembleCreeper.aspectCost())
-            .teachesResearch(SomberResearch.ASSEMBLE_CREEPER_PERFORMED)
-            .wandPredicate(wandHasShockFocus)
+            .teachesResearch(Research.HOW_TO_ASSEMBLE_CREEPERS, Research.ASSEMBLED_A_CREEPER)
+            .wandPredicate(WandTriggerManager::wandHasShockFocus)
             .build();
     }
 
@@ -84,10 +89,13 @@ public class WandTriggerManager implements IWandTriggerManager {
                 skeleton.setCanPickUpLoot(true);
                 return skeleton;
             })
-            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED, SomberResearch.SCANNED_SKELETON)
+            .requiredResearch(
+                Research.SHOCK_FOCUS_ASSEMBLY,
+                Research.ASSEMBLED_A_ZOMBIE,
+                Research.SCANNED_ENTITY_SKELETON)
             .visCost(SomberRecipes.assembleSkeleton.aspectCost())
-            .teachesResearch(SomberResearch.ASSEMBLE_SKELETON_PERFORMED)
-            .wandPredicate(wandHasShockFocus)
+            .teachesResearch(Research.HOW_TO_ASSEMBLE_SKELETONS, Research.ASSEMBLED_A_SKELETON)
+            .wandPredicate(WandTriggerManager::wandHasShockFocus)
             .build();
     }
 
@@ -109,12 +117,12 @@ public class WandTriggerManager implements IWandTriggerManager {
                 zombie.setCanPickUpLoot(true);
                 return zombie;
             })
-            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE, SomberResearch.SCANNED_ZOMBIE)
+            .requiredResearch(Research.HOW_TO_ASSEMBLE_ZOMBIES, Research.SCANNED_ENTITY_ZOMBIE)
             .visCost(SomberRecipes.assembleZombie.aspectCost())
-            .teachesResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED)
+            .teachesResearch(Research.ASSEMBLED_A_ZOMBIE)
             .givesWarpSticky(1)
             .givesWarpTemp(2)
-            .wandPredicate(wandHasShockFocus)
+            .wandPredicate(WandTriggerManager::wandHasShockFocus)
             .build();
     }
 

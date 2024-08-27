@@ -1,10 +1,16 @@
 package dev.rndmorris.somberassembly;
 
+import java.util.Arrays;
+import java.util.function.Predicate;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -23,31 +29,220 @@ public class SomberResearch {
      */
     public final static String CATEGORY = SomberAssembly.MODID.toUpperCase();
 
-    // Scanned flags
-    public final static String SCANNED_FOCUS_SHOCK = "SCANNED_FOCUS_SHOCK";
-    public final static String SCANNED_CREEPER = "SCANNED_CREEPER";
-    public final static String SCANNED_SKELETON = "SCANNED_SKELETON";
-    public final static String SCANNED_ZOMBIE = "SCANNED_ZOMBIE";
-
-    // Research keys
-    public final static String NECROMANCY_INTRO = "NECROMANCY_INTRO";
-    public final static String BONE_BLOCKS = "BONE_BLOCKS";
-    public final static String ASSEMBLE_ZOMBIE = "ASSEMBLE_ZOMBIE";
-    public final static String ASSEMBLE_CREEPER_PERFORMED = "ASSEMBLE_CREEPER_PERFORMED";
-    public final static String ASSEMBLE_SKELETON_PERFORMED = "ASSEMBLE_SKELETON_PERFORMED";
-    public final static String ASSEMBLE_ZOMBIE_PERFORMED = "ASSEMBLE_ZOMBIE_PERFORMED";
-    public final static String SHOCK_FOCUS_ASSEMBLY = "SHOCK_FOCUS_ASSEMBLY";
-
-    // External research keys
-    final static String SHOCK_FOCUS = "FOCUSSHOCK";
-    final static String FLESH_GOLEM = "GOLEMFLESH";
-
     // Icons
     private static ResourceLocation iconSinisterStone;
     private static ResourceLocation iconSkullCreeper;
     private static ResourceLocation iconSkullSkeleton;
     private static ResourceLocation iconSkullWither;
     private static ResourceLocation iconSkullZombie;
+
+    // ItemStacks
+    private static ItemStack blockBone;
+    private static ItemStack blockFlesh;
+    private static ItemStack blockTnt;
+    private static ItemStack itemFocusShock;
+
+    // Research Keys
+    public enum Research {
+
+        // Visible research
+        INTRO_TO_SOMBER_ASSEMBLY,
+        BONE_BLOCKS,
+
+        // Mob assembly
+        SHOCK_FOCUS_ASSEMBLY,
+        HOW_TO_ASSEMBLE_CREEPERS,
+        HOW_TO_ASSEMBLE_SKELETONS,
+        HOW_TO_ASSEMBLE_ZOMBIES,
+
+        // Performed action flags
+        ASSEMBLED_A_CREEPER,
+        ASSEMBLED_A_SKELETON,
+        ASSEMBLED_A_ZOMBIE,
+
+        // Scanned flags
+        ROOT_SCAN_RESEARCH,
+
+        // Item scan flags
+        SCANNED_BLOCK_BONE,
+        SCANNED_BLOCK_FLESH,
+        SCANNED_BLOCK_TNT,
+        SCANNED_ITEM_SHOCK_FOCUS,
+
+        // Entity scan flags
+        SCANNED_ENTITY_CREEPER,
+        SCANNED_ENTITY_SKELETON,
+        SCANNED_ENTITY_ZOMBIE,;
+
+        public static String[] toStrings(Research... research) {
+            return Arrays.stream(research)
+                .map(Research::toString)
+                .toArray(String[]::new);
+        }
+    }
+
+    public enum VanillaResearch {
+        FOCUSSHOCK,
+        GOLEMFLESH,
+    }
+
+    public static void init() {
+        initializeIconsAndItems();
+        registerCategory();
+        registerStarterResearch();
+
+        // Register wand mob assembly research
+        registerEarlyMobAssembly();
+
+        // Always run this last to avoid false conflicts with other research
+        registerVirutalResearch();
+    }
+
+    private static void initializeIconsAndItems() {
+        iconSinisterStone = new ResourceLocation("thaumcraft", "textures/items/sinister_stone.png");
+        iconSkullCreeper = new ResourceLocation("minecraft", "textures/items/skull_creeper.png");
+        iconSkullSkeleton = new ResourceLocation("minecraft", "textures/items/skull_skeleton.png");
+        iconSkullWither = new ResourceLocation("minecraft", "textures/items/skull_wither.png");
+        iconSkullZombie = new ResourceLocation("minecraft", "textures/items/skull_zombie.png");
+
+        blockBone = new ItemStack(SomberBlocks.boneBlock);
+        blockFlesh = ItemApi.getBlock("blockTaint", 2);
+        blockTnt = new ItemStack(Blocks.tnt);
+        itemFocusShock = ItemApi.getItem("itemFocusShock", 0);
+    }
+
+    private static void registerCategory() {
+        final var background = new ResourceLocation("thaumcraft", "textures/gui/gui_researchbackeldritch.png");
+        ResearchCategories.registerCategory(CATEGORY, iconSkullWither, background);
+    }
+
+    private static void registerStarterResearch() {
+        ResearchItemBuilder.forKey(Research.INTRO_TO_SOMBER_ASSEMBLY)
+            .position(0, 0)
+            .display(iconSinisterStone)
+            .addTextPage(1, 2)
+            .makeAutoUnlock()
+            .makeSpecial()
+            .register();
+
+        ResearchItemBuilder.forKey(Research.BONE_BLOCKS)
+            .position(0, -2)
+            .display(new ItemStack(SomberBlocks.boneBlock))
+            .addTextPage(1)
+            .addRecipePage(SomberRecipes.boneBlockRecipe)
+            .addRecipePage(SomberRecipes.boneBlockUncraftRecipe)
+            .addSecretPage(Research.HOW_TO_ASSEMBLE_SKELETONS)
+            .addParents(Research.INTRO_TO_SOMBER_ASSEMBLY)
+            .makeAutoUnlock()
+            .register();
+    }
+
+    private static void registerEarlyMobAssembly() {
+        ResearchItemBuilder.forKey(Research.SHOCK_FOCUS_ASSEMBLY)
+            .position(0, 3)
+            .display(itemFocusShock)
+            .addTextPage(1)
+            .addParents(Research.INTRO_TO_SOMBER_ASSEMBLY)
+            .addHiddenParents(Research.SCANNED_ITEM_SHOCK_FOCUS)
+            .addAspectCost(Aspect.WEATHER, 5)
+            .addAspectCost(Aspect.CRAFT, 8)
+            .addAspectCost(Aspect.ENERGY, 5)
+            .addAspectCost(Aspect.TOOL, 8)
+            .register();
+
+        ResearchItemBuilder.forKey(Research.HOW_TO_ASSEMBLE_ZOMBIES)
+            .position(3, 1)
+            .display(iconSkullZombie)
+            .addTextPage(1)
+            .addParents(Research.SHOCK_FOCUS_ASSEMBLY)
+            .addHiddenParents(Research.SCANNED_ENTITY_ZOMBIE, Research.SCANNED_BLOCK_FLESH)
+            .addHiddenParents(VanillaResearch.GOLEMFLESH.toString())
+            .addAspectCost(Aspect.UNDEAD, 8)
+            .addAspectCost(Aspect.ENERGY, 8)
+            .addAspectCost(Aspect.MAN, 8)
+            .addAspectCost(Aspect.EXCHANGE, 8)
+            .setComplexity(2)
+            .addTextPage(1)
+            .addCompoundRecipePage(SomberRecipes.assembleZombie)
+            .addSecretPage(Research.ASSEMBLED_A_ZOMBIE)
+            .register();
+
+        ResearchItemBuilder.forKey(Research.HOW_TO_ASSEMBLE_ZOMBIES)
+            .position(3, 1)
+            .display(iconSkullZombie)
+            .addTextPage(1)
+            .addParents(Research.SHOCK_FOCUS_ASSEMBLY)
+            .addHiddenParents(
+                Research.ASSEMBLED_A_SKELETON,
+                Research.SCANNED_ENTITY_SKELETON,
+                Research.SCANNED_BLOCK_BONE)
+            .addAspectCost(Aspect.UNDEAD, 8)
+            .addAspectCost(Aspect.ENERGY, 8)
+            .addAspectCost(Aspect.MAN, 8)
+            .addAspectCost(Aspect.EXCHANGE, 8)
+            .setComplexity(2)
+            .addTextPage(1)
+            .addCompoundRecipePage(SomberRecipes.assembleZombie)
+            .addSecretPage(Research.ASSEMBLED_A_ZOMBIE)
+            .register();
+    }
+
+    private static void registerVirutalResearch() {
+        ResearchItemBuilder.forKey(Research.ROOT_SCAN_RESEARCH)
+            .makeVirtual()
+            .makeAutoUnlock()
+            .addHiddenParents(Research.INTRO_TO_SOMBER_ASSEMBLY)
+            .register();
+        addItemScanResearch(blockBone::isItemEqual, Research.SCANNED_BLOCK_BONE);
+        addItemScanResearch(blockFlesh::isItemEqual, Research.SCANNED_BLOCK_FLESH);
+        addItemScanResearch(blockTnt::isItemEqual, Research.SCANNED_BLOCK_TNT);
+        addItemScanResearch(itemFocusShock::isItemEqual, Research.SCANNED_ITEM_SHOCK_FOCUS);
+        addEntityScanResearch((e) -> e instanceof EntityCreeper, Research.SCANNED_ENTITY_CREEPER);
+        addEntityScanResearch((e) -> e instanceof EntitySkeleton, Research.SCANNED_ENTITY_SKELETON);
+        addEntityScanResearch((e) -> e instanceof EntityZombie, Research.SCANNED_ENTITY_ZOMBIE);
+    }
+
+    // Registration helpers
+
+    private static void addEntityScanResearch(@Nonnull Predicate<Entity> predicate, Research... research) {
+        for (var newResearch : research) {
+            ResearchItemBuilder.forKey(newResearch)
+                .addHiddenParents(Research.ROOT_SCAN_RESEARCH)
+                .makeVirtual()
+                .register();
+        }
+        SomberAssembly.proxy.entityScannedEventRegistrar()
+            .registerEventListener((event) -> {
+                if (predicate.test(event.scannedObject())) {
+                    unlockResearch(event.byPlayer(), research);
+                }
+            });
+    }
+
+    private static void addItemScanResearch(@Nonnull Predicate<ItemStack> predicate, Research... research) {
+        Objects.ensureNotNull(research);
+        Objects.ensureNotNull(predicate);
+
+        for (var newResearch : research) {
+            ResearchItemBuilder.forKey(newResearch)
+                .addHiddenParents(Research.ROOT_SCAN_RESEARCH)
+                .makeVirtual()
+                .register();
+        }
+
+        SomberAssembly.proxy.itemScannedEventRegistrar()
+            .registerEventListener((event) -> {
+                if (predicate.test(event.scannedObject())) {
+                    unlockResearch(event.byPlayer(), research);
+                }
+            });
+    }
+
+    // Public methods
+
+    public static void unlockResearch(EntityPlayer player, Research... research) {
+        unlockResearch(player, Research.toStrings(research));
+    }
 
     public static void unlockResearch(EntityPlayer player, String... researchKeys) {
         for (var key : researchKeys) {
@@ -56,143 +251,5 @@ public class SomberResearch {
                 SomberAssembly.proxy.playDiscoverySounds(player);
             }
         }
-    }
-
-    public static void init() {
-        registerIcons();
-        registerCategory();
-        registerStarterResearch();
-        registerMobAssemblyResearch();
-        // Always run this last to avoid false conflicts with other research
-        registerVirutalResearch();
-    }
-
-    private static void registerIcons() {
-        iconSinisterStone = new ResourceLocation("thaumcraft", "textures/items/sinister_stone.png");
-        iconSkullCreeper = new ResourceLocation("minecraft", "textures/items/skull_creeper.png");
-        iconSkullSkeleton = new ResourceLocation("minecraft", "textures/items/skull_skeleton.png");
-        iconSkullWither = new ResourceLocation("minecraft", "textures/items/skull_wither.png");
-        iconSkullZombie = new ResourceLocation("minecraft", "textures/items/skull_zombie.png");
-    }
-
-    private static void registerCategory() {
-        final var background = new ResourceLocation("thaumcraft", "textures/gui/gui_researchbackeldritch.png");
-        ResearchCategories.registerCategory(CATEGORY, iconSkullWither, background);
-    }
-
-    private static void registerVirutalResearch() {
-        // Scan flags
-        addEntityScanResearch(SCANNED_CREEPER, EntityCreeper.class, null);
-        addEntityScanResearch(SCANNED_SKELETON, EntitySkeleton.class, null);
-        addEntityScanResearch(SCANNED_ZOMBIE, EntityZombie.class, null);
-        addItemScanResearch(SCANNED_FOCUS_SHOCK, ItemApi.getItem("itemFocusShock", 0), true);
-
-        // Behavior flags
-        addVirtualFlag(ASSEMBLE_ZOMBIE_PERFORMED, ASSEMBLE_ZOMBIE);
-        addVirtualFlag(SHOCK_FOCUS_ASSEMBLY, ASSEMBLE_ZOMBIE_PERFORMED);
-    }
-
-    private static void addEntityScanResearch(String researchKey, Class entityClass, EntityPredicate predicate) {
-        Objects.ensureNotNull(researchKey);
-        Objects.ensureNotNull(entityClass);
-
-        ResearchItemBuilder.forKey(researchKey)
-            .virtual()
-            .register();
-        SomberAssembly.proxy.entityScannedEventRegistrar()
-            .registerEventListener((event) -> {
-                final var entity = event.scannedObject();
-                if (entityClass.isInstance(entity) && (predicate == null || predicate.evaluate(entity))) {
-                    unlockResearch(event.byPlayer(), researchKey);
-                }
-            });
-    }
-
-    private interface EntityPredicate {
-
-        boolean evaluate(Entity entity);
-    }
-
-    private static void addItemScanResearch(String researchKey, ItemStack item, boolean ignoreDamage) {
-        Objects.ensureNotNull(researchKey);
-        Objects.ensureNotNull(item);
-
-        ResearchItemBuilder.forKey(researchKey)
-            .virtual()
-            .register();
-        SomberAssembly.proxy.itemScannedEventRegistrar()
-            .registerEventListener((event) -> {
-                if ((ignoreDamage && item.getItem()
-                    .equals(
-                        event.scannedObject()
-                            .getItem()))
-                    || item.isItemEqual(event.scannedObject())) {
-                    final var player = event.byPlayer();
-                    if (!ResearchManager.isResearchComplete(player.getCommandSenderName(), researchKey)) {
-                        unlockResearch(player, researchKey);
-                    }
-                }
-            });
-    }
-
-    private static void addVirtualFlag(String researchKey, String parents) {
-        ResearchItemBuilder.forKey(researchKey)
-            .virtual()
-            .parents(parents)
-            .register();
-    }
-
-    private static void registerStarterResearch() {
-        ResearchItemBuilder.forKey(NECROMANCY_INTRO)
-            .position(0, 0)
-            .display(iconSinisterStone)
-            .textPage(1)
-            .textPage(2)
-            .autoUnlock()
-            .register();
-        ResearchItemBuilder.forKey(BONE_BLOCKS)
-            .position(0, -2)
-            .display(new ItemStack(SomberBlocks.boneBlock))
-            .textPage(1)
-            .recipePage(SomberRecipes.boneBlockRecipe)
-            .recipePage(SomberRecipes.boneBlockUncraftRecipe)
-            .secretPage(ASSEMBLE_SKELETON_PERFORMED, ASSEMBLE_SKELETON_PERFORMED)
-            .parents(NECROMANCY_INTRO)
-            .autoUnlock()
-            .register();
-    }
-
-    private static void registerMobAssemblyResearch() {
-        ResearchItemBuilder.forKey(ASSEMBLE_ZOMBIE)
-            .position(0, 2)
-            .display(iconSkullZombie)
-            .aspect(Aspect.FLESH, 4)
-            .aspect(Aspect.UNDEAD, 8)
-            .aspect(Aspect.CRAFT, 8)
-            .textPage(1)
-            .compoundRecipePage(SomberRecipes.assembleZombie)
-            .secretPage(ASSEMBLE_ZOMBIE_PERFORMED, ASSEMBLE_ZOMBIE_PERFORMED)
-            .parents(NECROMANCY_INTRO)
-            .hiddenParent(FLESH_GOLEM, SHOCK_FOCUS, SCANNED_FOCUS_SHOCK, SCANNED_ZOMBIE)
-            .register()
-            .registerResearchItem();
-        ResearchItemBuilder.forKey(ASSEMBLE_SKELETON_PERFORMED)
-            .position(2, 1)
-            .display(iconSkullSkeleton)
-            .textPage(1)
-            .compoundRecipePage(SomberRecipes.assembleSkeleton)
-            .parents(ASSEMBLE_ZOMBIE)
-            .hiddenParent(SHOCK_FOCUS_ASSEMBLY, SCANNED_SKELETON)
-            .lost()
-            .register();
-        ResearchItemBuilder.forKey(ASSEMBLE_CREEPER_PERFORMED)
-            .position(-2, 1)
-            .display(iconSkullCreeper)
-            .textPage(1)
-            .compoundRecipePage(SomberRecipes.assembleCreeper)
-            .parents(ASSEMBLE_ZOMBIE)
-            .hiddenParent(SHOCK_FOCUS_ASSEMBLY, SCANNED_CREEPER)
-            .lost()
-            .register();
     }
 }

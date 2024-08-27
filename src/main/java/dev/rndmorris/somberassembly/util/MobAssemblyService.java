@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import com.github.bsideup.jabel.Desugar;
 
 import dev.rndmorris.somberassembly.SomberAssembly;
+import dev.rndmorris.somberassembly.SomberResearch;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.wands.ItemWandCasting;
@@ -210,6 +211,10 @@ public class MobAssemblyService {
             return this;
         }
 
+        public MobAssemblyServiceConfig requiredResearch(SomberResearch.Research... requiredResearch) {
+            return requiredResearch(SomberResearch.Research.toStrings(requiredResearch));
+        }
+
         public MobAssemblyServiceConfig requiredResearch(String... requiredResearch) {
             Collections.addAll(this.requiredResearch, requiredResearch);
             return this;
@@ -220,8 +225,12 @@ public class MobAssemblyService {
             return this;
         }
 
-        public MobAssemblyServiceConfig teachesResearch(String teachesResearch) {
-            this.teachesResearch.add(teachesResearch);
+        public MobAssemblyServiceConfig teachesResearch(SomberResearch.Research... teachesResearch) {
+            return this.teachesResearch(SomberResearch.Research.toStrings(teachesResearch));
+        }
+
+        public MobAssemblyServiceConfig teachesResearch(String... teachesResearch) {
+            Collections.addAll(this.teachesResearch, teachesResearch);
             return this;
         }
 

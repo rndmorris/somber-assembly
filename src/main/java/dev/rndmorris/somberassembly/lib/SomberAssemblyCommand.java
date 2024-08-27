@@ -419,14 +419,10 @@ public class SomberAssemblyCommand extends CommandBase {
         }
         sendMessage(
             sender,
-            String
-                .format("Success! Unscanned %1s scanned %2s for %3s.", removed, scanType, playerName));
+            String.format("Success! Unscanned %1s scanned %2s for %3s.", removed, scanType, playerName));
         sendMessage(
             player,
-            String.format(
-                "%1s removed all %2s of your scanned %3s.",
-                sender.getCommandSenderName(),
-                removed,
-                scanType));
+            String
+                .format("%1s removed all %2s of your scanned %3s.", sender.getCommandSenderName(), removed, scanType));
     }
 }

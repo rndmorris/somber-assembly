@@ -1,5 +1,7 @@
 package dev.rndmorris.somberassembly;
 
+import javax.annotation.Nonnull;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,5 +54,9 @@ public class SomberAssembly {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new SomberAssemblyCommand());
+    }
+
+    public static String prefixModid(@Nonnull String toPrefix) {
+        return MODID + ":" + toPrefix;
     }
 }

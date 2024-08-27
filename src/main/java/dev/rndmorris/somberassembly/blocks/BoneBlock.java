@@ -5,7 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import dev.rndmorris.somberassembly.Utils;
+import dev.rndmorris.somberassembly.SomberAssembly;
 
 public class BoneBlock extends Block {
 
@@ -17,7 +17,7 @@ public class BoneBlock extends Block {
         // to-do: set block sounds. Borrow TC4's jar sounds?
 
         this.setBlockName(name);
-        this.setBlockTextureName(Utils.prefixModId(name));
+        this.setBlockTextureName(SomberAssembly.prefixModid(name));
         this.setCreativeTab(CreativeTabs.tabBlock);
         GameRegistry.registerBlock(this, name);
     }
