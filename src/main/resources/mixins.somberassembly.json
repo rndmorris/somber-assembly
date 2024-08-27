@@ -5,7 +5,9 @@
   "refmap": "mixins.somberassembly.refmap.json",
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [],
+  "mixins": [
+    "MixinWorld"
+  ],
   "client": [],
   "server": []
 }
