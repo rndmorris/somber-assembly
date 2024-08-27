@@ -11,8 +11,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import dev.rndmorris.somberassembly.common.commands.SomberAssemblyCommand;
 
 @Mod(
     modid = SomberAssembly.MODID,
@@ -53,11 +51,6 @@ public class SomberAssembly {
     public void postInit(FMLPostInitializationEvent event) {
         LOG.info("Starting postInit :3");
         proxy.postInit(event);
-    }
-
-    @Mod.EventHandler
-    public void serverStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new SomberAssemblyCommand());
     }
 
     public static String prefixModid(@Nonnull String toPrefix) {
