@@ -1,5 +1,6 @@
-package dev.rndmorris.somberassembly;
+package dev.rndmorris.somberassembly.events;
 
+import dev.rndmorris.somberassembly.SomberAssembly;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;

@@ -1,5 +1,6 @@
 package dev.rndmorris.somberassembly;
 
+import dev.rndmorris.somberassembly.events.EntityEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
