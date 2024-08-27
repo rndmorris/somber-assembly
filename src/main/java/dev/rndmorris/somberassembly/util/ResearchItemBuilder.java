@@ -1,6 +1,7 @@
 package dev.rndmorris.somberassembly.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -134,8 +135,8 @@ public class ResearchItemBuilder {
         return this;
     }
 
-    public ResearchItemBuilder hiddenParent(String hiddenParent) {
-        this.hiddenParents.add(hiddenParent);
+    public ResearchItemBuilder hiddenParent(String... hiddenParents) {
+        Collections.addAll(this.hiddenParents, hiddenParents);
         return this;
     }
 
@@ -144,32 +145,63 @@ public class ResearchItemBuilder {
         return this;
     }
 
+    private String unlocalizedTextName(int page) {
+        return "tc.research_page." + this.key + "." + page;
+    }
+
+    private String unlocalizedTextName(String page) {
+        return "tc.research_page." + this.key + "." + page;
+    }
+
     /**
      * Add a basic page of text.
-     *
-     * @param text The langfile key of the page's text.
+     * 
+     * @param pageNumber The number of the page to add.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder textPage(String text) {
-        this.pages.add(new ResearchPage(text));
+    public ResearchItemBuilder textPage(int pageNumber) {
+        this.pages.add(new ResearchPage(unlocalizedTextName(pageNumber)));
+        return this;
+    }
+
+    /**
+     * Add a basic page of text.
+     * 
+     * @param pageName The name of the page to add.
+     * @return The builder, for chaining.
+     */
+    public ResearchItemBuilder textPage(String pageName) {
+        this.pages.add(new ResearchPage(unlocalizedTextName(pageName)));
         return this;
     }
 
     /**
      * Add a page of text that will appear only after the required secondary research is unlocked.
-     *
+     * 
      * @param requiredResearch The research the page depends on.
-     * @param text             The langfile key of the page's text
+     * @param pageName         The name of the page to add.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder secretPage(String requiredResearch, String text) {
-        this.pages.add(new ResearchPage(requiredResearch, text));
+    public ResearchItemBuilder secretPage(String requiredResearch, String pageName) {
+        this.pages.add(new ResearchPage(requiredResearch, unlocalizedTextName(pageName)));
+        return this;
+    }
+
+    /**
+     * Add a page of text that will appear only after the required secondary research is unlocked.
+     * 
+     * @param requiredResearch The research the page depends on.
+     * @param pageNumber       The number of the page to add.
+     * @return The builder, for chaining.
+     */
+    public ResearchItemBuilder secretPage(String requiredResearch, int pageNumber) {
+        this.pages.add(new ResearchPage(requiredResearch, unlocalizedTextName(pageNumber)));
         return this;
     }
 
     /**
      * Add a page that will render a compound recipe (e.g. a multiblock structure).
-     *
+     * 
      * @param recipe The compound recipe to display.
      * @return The builder, for chaining.
      */

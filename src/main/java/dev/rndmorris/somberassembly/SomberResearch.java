@@ -1,5 +1,7 @@
 package dev.rndmorris.somberassembly;
 
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import dev.rndmorris.somberassembly.util.ResearchItemBuilder;
@@ -36,6 +38,10 @@ public class SomberResearch {
     private static ResourceLocation iconSkullWither;
     private static ResourceLocation iconSkullZombie;
 
+    public static void unlockResearch(EntityPlayer player, String researchKey) {
+        Thaumcraft.proxy.researchManager.completeResearch(player, researchKey);
+    }
+
     public static void init() {
         registerIcons();
         registerCategory();
@@ -43,7 +49,6 @@ public class SomberResearch {
         registerAssembleZombie();
         // registerAssembleSkeleton();
         registerVirutalResearch();
-        Thaumcraft.
     }
 
     private static void registerIcons() {
@@ -59,24 +64,36 @@ public class SomberResearch {
     }
 
     private static void registerVirutalResearch() {
-        final boolean FLAGS_VIRTUAL = false;
-        final boolean FLAGS_HIDDEN = false;
         // Scan flags
         ResearchItemBuilder.forKeyAndCategory(SCANNED_ZOMBIE, CATEGORY)
-            .virtual(FLAGS_VIRTUAL)
-            .position(0, 5)
-            .hidden(FLAGS_HIDDEN)
+            .virtual(true)
             .entityTrigger("Zombie")
             .display(iconSkullZombie)
             .register();
+        SomberAssembly.proxy.entityScannedEventRegistrar()
+            .registerEventListener((event) -> {
+                if (event.scannedObject() instanceof EntityZombie) {
+                    SomberAssembly.LOG.info("Scanned a zombie!");
+                    unlockResearch(event.byPlayer(), SCANNED_ZOMBIE);
+                }
+            });
+
         final var itemFocusShock = ItemApi.getItem("itemFocusShock", 0);
         ResearchItemBuilder.forKeyAndCategory(SCANNED_SHOCK_FOCUS, CATEGORY)
-            .virtual(FLAGS_VIRTUAL)
-            .position(0, 6)
-            .hidden(FLAGS_HIDDEN)
+            .virtual(true)
             .display(itemFocusShock)
             .itemTrigger(itemFocusShock)
             .register();
+        SomberAssembly.proxy.itemScannedEventRegistrar()
+            .registerEventListener((event) -> {
+                if (itemFocusShock.getItem()
+                    .equals(
+                        event.scannedObject()
+                            .getItem())) {
+                    SomberAssembly.LOG.info("Scanned a shock focus!");
+                    unlockResearch(event.byPlayer(), SCANNED_SHOCK_FOCUS);
+                }
+            });
 
         // Behavior flags
         ResearchItemBuilder.forKeyAndCategory(ASSEMBLE_ZOMBIE_PERFORMED, CATEGORY)
@@ -101,16 +118,11 @@ public class SomberResearch {
             .aspect(Aspect.FLESH, 4)
             .aspect(Aspect.UNDEAD, 8)
             .aspect(Aspect.CRAFT, 8)
-            .textPage(page(ASSEMBLE_ZOMBIE, 1))
+            .textPage(1)
             .compoundRecipePage(SomberRecipes.assembleZombie)
-            .secretPage(ASSEMBLE_ZOMBIE_PERFORMED, page(ASSEMBLE_ZOMBIE, ASSEMBLE_ZOMBIE_PERFORMED))
-            .entityTrigger("Zombie")
+            .secretPage(ASSEMBLE_ZOMBIE_PERFORMED, ASSEMBLE_ZOMBIE_PERFORMED)
             .parent(NECROMANCY_INTRO)
-            .hiddenParent(FLESH_GOLEM)
-            .hiddenParent(SHOCK_FOCUS)
-            .hiddenParent(SCANNED_ZOMBIE)
-            .hiddenParent(SCANNED_SHOCK_FOCUS)
-            .hidden(true)
+            .hiddenParent(FLESH_GOLEM, SHOCK_FOCUS, SCANNED_SHOCK_FOCUS, SCANNED_ZOMBIE)
             .register()
             .registerResearchItem();
     }
@@ -119,19 +131,12 @@ public class SomberResearch {
         ResearchItemBuilder.forKeyAndCategory(ASSEMBLE_SKELETON, CATEGORY)
             .position(1, 1)
             .display(iconSkullSkeleton)
-            .textPage(page(ASSEMBLE_SKELETON, 1))
+            .textPage(1)
             .compoundRecipePage(SomberRecipes.assembleSkeleton)
             .entityTrigger("Skeleton")
-            .parent(ASSEMBLE_ZOMBIE_PERFORMED)
+            .hiddenParent(ASSEMBLE_ZOMBIE_PERFORMED)
             .lost(true)
             .register();
     }
 
-    private static String page(String research, int page) {
-        return "tc.research_page." + research + "." + page;
-    }
-
-    private static String page(String research, String page) {
-        return "tc.research_page." + research + "." + page;
-    }
 }
