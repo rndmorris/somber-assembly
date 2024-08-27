@@ -1,10 +1,12 @@
 package dev.rndmorris.somberassembly.items;
 
+import dev.rndmorris.somberassembly.lib.Randoms;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -13,6 +15,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import dev.rndmorris.somberassembly.SomberAssembly;
 import dev.rndmorris.somberassembly.potions.SomberPotion;
+import thaumcraft.common.lib.utils.InventoryUtils;
 
 public class ItemResource extends SomberItem {
 
@@ -64,6 +67,7 @@ public class ItemResource extends SomberItem {
         // Give the player the Stench of Death, or refresh it if needed
         final var effectDuration = 260;
         final var refreshInterval = 200;
+        final var decayChance = 50;
         if (stack.stackSize < 1) {
             return;
         }
@@ -71,6 +75,11 @@ public class ItemResource extends SomberItem {
         if (effect == null || (effect.getDuration() < (effectDuration - refreshInterval))) {
             var newEffect = new PotionEffect(SomberPotion.deathMask.id, effectDuration, 0, false);
             player.addPotionEffect(newEffect);
+            if (!player.capabilities.isCreativeMode && Randoms.nextPercentile(player.worldObj.rand) <= decayChance) {
+                // Why reinvent the wheel if we know this is going to be here anyway?
+                InventoryUtils.consumeInventoryItem(player, stack.getItem(), stack.getItemDamage());
+                player.addChatMessage(new ChatComponentTranslation("msg.somberassembly.decaying_flesh_rotted"));
+            }
         }
     }
 }

@@ -41,7 +41,7 @@ public class PotionDeathStench extends SomberPotion {
 
     @Override
     public void performEffect(EntityLivingBase affected, int amplifier) {
-        if (affected instanceof EntityPlayer player && player.capabilities.disableDamage) {
+        if (affected instanceof EntityPlayer player && player.capabilities.isCreativeMode) {
             return;
         }
         final var range = 8D;
@@ -49,10 +49,10 @@ public class PotionDeathStench extends SomberPotion {
             EntityLivingBase.class,
             affected.boundingBox.expand(range, range, range),
             PotionDeathStench::makesHostile);
-        final var damageSource = affected instanceof EntityPlayer player ? DamageSource.causePlayerDamage(player)
-            : DamageSource.causeMobDamage(affected);
         for (final var entity : entitiesToHarm) {
-            entity.attackEntityFrom(damageSource, 0);
+            if (entity.getAITarget() == null) {
+                entity.setRevengeTarget(affected);
+            }
         }
     }
 }

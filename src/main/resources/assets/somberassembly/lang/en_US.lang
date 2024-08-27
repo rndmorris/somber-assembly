@@ -4,6 +4,9 @@ tile.somberassembly:block_bone.name=Block of Bones
 # Items
 item.somberassembly:item_resource.0.name=Decaying Flesh
 
+# Messages
+msg.somberassembly.decaying_flesh_rotted=Some decaying flesh has rotted away.
+
 # Potions
 potion.somberassembly:death_stench=Stench of Death
 
