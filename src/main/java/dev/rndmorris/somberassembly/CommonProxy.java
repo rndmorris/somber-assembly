@@ -4,10 +4,11 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import dev.rndmorris.somberassembly.wandtriggers.ZombieNecromancyTrigger;
 
 public class CommonProxy {
 
-    WandNecromancy wandNecromancy;
+    ZombieNecromancyTrigger zombieNecromancyTrigger;
 
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
     // GameRegistry." (Remove if not needed)
@@ -22,7 +23,8 @@ public class CommonProxy {
 
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
-        wandNecromancy = new WandNecromancy().register();
+        // wandNecromancy = new WandNecromancy().register();
+        zombieNecromancyTrigger = new ZombieNecromancyTrigger();
     }
 
     // register server commands in this event handler (Remove if not needed)
