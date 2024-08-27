@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import dev.rndmorris.somberassembly.SomberAssembly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +13,7 @@ import net.minecraft.world.World;
 
 import com.github.bsideup.jabel.Desugar;
 
+import dev.rndmorris.somberassembly.SomberAssembly;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.wands.ItemWandCasting;
@@ -73,14 +73,26 @@ public class MobAssemblyService {
         if (!(args.wand.getItem() instanceof ItemWandCasting castingWand)) {
             return false;
         }
+        if (config.wandPredicate != null && !config.wandPredicate.evalutate(args.wand, castingWand)) {
+            return false;
+        }
         return castingWand.consumeAllVisCrafting(args.wand, args.player, this.config.visCost, false);
     }
 
     private void teachResearch(EventArgs args) {
-        if (!this.config.teachesResearch.isEmpty()) {
-            for (String research : this.config.teachesResearch) {
+        var learnedSomething = false;
+        for (String research : this.config.teachesResearch) {
+            if (!ResearchManager.isResearchComplete(
+                args.player()
+                    .getCommandSenderName(),
+                research)) {
                 Thaumcraft.proxy.researchManager.completeResearch(args.player, research);
+                learnedSomething = true;
             }
+        }
+        if (learnedSomething) {
+            SomberAssembly.LOG.info("Learned something, play sounds!");
+            SomberAssembly.proxy.playDiscoverySounds(args.player);
         }
     }
 
@@ -103,7 +115,7 @@ public class MobAssemblyService {
 
         drainVis(args.wand, player);
         clearBlocks(world, x, y, z);
-        doEffects(world, player, x, y, z);
+        doEffects(args);
 
         if (args.world.isRemote) {
             return false;
@@ -130,15 +142,24 @@ public class MobAssemblyService {
         args.world.spawnEntityInWorld(newEntity);
     }
 
-    private void doEffects(World world, EntityPlayer player, int x, int y, int z) {
-        world.playSoundEffect(
-            (double) x + 0.5D,
-            (double) y + 0.5D,
-            (double) z + 0.5D,
+    private void doEffects(EventArgs args) {
+        playShock(args);
+        args.player.swingItem();
+    }
+
+    private void playShock(EventArgs args) {
+        SomberAssembly.proxy.playSoundEffect(
+            args.world,
+            (double) args.x + 0.5D,
+            (double) args.y + 0.5D,
+            (double) args.z + 0.5D,
             "Thaumcraft:shock",
             1.0F,
-            world.rand.nextFloat() * 0.4F + 0.8F);
-        player.swingItem();
+            args.world.rand.nextFloat() * 0.4F + 0.8F);
+    }
+
+    private void playSoundAtPlayer(EventArgs args, String soundName) {
+        SomberAssembly.proxy.playSoundAtEntity(args.player, soundName, 1.0F, args.world.rand.nextFloat() * 0.4F + 0.8F);
     }
 
     @Desugar
@@ -148,6 +169,11 @@ public class MobAssemblyService {
     public interface CreateEntity {
 
         EntityLiving create(EventArgs args);
+    }
+
+    public interface WandPredicate {
+
+        boolean evalutate(ItemStack wandItemStack, ItemWandCasting wand);
     }
 
     public static final class MobAssemblyServiceConfig {
@@ -161,6 +187,7 @@ public class MobAssemblyService {
         private int givesWarpPerm;
         private int givesWarpSticky;
         private int givesWarpTemp;
+        private WandPredicate wandPredicate;
 
         private MobAssemblyServiceConfig() {}
 
@@ -210,6 +237,11 @@ public class MobAssemblyService {
 
         public MobAssemblyServiceConfig givesWarpTemp(int givesWarpTemp) {
             this.givesWarpTemp = givesWarpTemp;
+            return this;
+        }
+
+        public MobAssemblyServiceConfig wandPredicate(WandPredicate wandPredicate) {
+            this.wandPredicate = wandPredicate;
             return this;
         }
     }

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 
 import dev.rndmorris.somberassembly.SomberResearch;
@@ -130,8 +131,8 @@ public class ResearchItemBuilder {
         return this;
     }
 
-    public ResearchItemBuilder parent(String parent) {
-        this.parents.add(parent);
+    public ResearchItemBuilder parents(String... parents) {
+        Collections.addAll(this.parents, parents);
         return this;
     }
 
@@ -207,6 +208,11 @@ public class ResearchItemBuilder {
      */
     public ResearchItemBuilder compoundRecipePage(CompoundRecipe recipe) {
         this.pages.add(new ResearchPage(recipe.toRecipeList()));
+        return this;
+    }
+
+    public ResearchItemBuilder recipePage(IRecipe... recipe) {
+        this.pages.add(new ResearchPage(recipe));
         return this;
     }
 
