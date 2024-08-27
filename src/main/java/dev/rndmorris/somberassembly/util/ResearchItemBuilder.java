@@ -20,6 +20,7 @@ public class ResearchItemBuilder {
     private int displayColumn = 0;
     private int displayRow = 0;
     private ResourceLocation displayIcon;
+    private ItemStack displayItem;
     private int complexity = 1;
 
     private boolean special = false;
@@ -60,8 +61,13 @@ public class ResearchItemBuilder {
         return this;
     }
 
-    public ResearchItemBuilder displayIcon(ResourceLocation displayIcon) {
+    public ResearchItemBuilder display(ResourceLocation displayIcon) {
         this.displayIcon = displayIcon;
+        return this;
+    }
+
+    public ResearchItemBuilder display(ItemStack display) {
+        this.displayItem = display;
         return this;
     }
 
@@ -187,15 +193,24 @@ public class ResearchItemBuilder {
         return this;
     }
 
-    public ResearchItem build() {
-        final var researchItem = new ResearchItem(
-            this.key,
-            this.category,
-            this.aspectCosts,
-            this.displayColumn,
-            this.displayRow,
-            this.complexity,
-            this.displayIcon);
+    public ResearchItem register() {
+        final var researchItem = this.displayItem != null
+            ? new ResearchItem(
+                this.key,
+                this.category,
+                this.aspectCosts,
+                this.displayColumn,
+                this.displayRow,
+                this.complexity,
+                this.displayItem)
+            : new ResearchItem(
+                this.key,
+                this.category,
+                this.aspectCosts,
+                this.displayColumn,
+                this.displayRow,
+                this.complexity,
+                this.displayIcon);
 
         if (this.special) {
             researchItem.setSpecial();
@@ -242,6 +257,8 @@ public class ResearchItemBuilder {
         if (!this.aspectTriggers.isEmpty()) {
             researchItem.setAspectTriggers(this.aspectTriggers.toArray(new Aspect[0]));
         }
+
+        researchItem.registerResearchItem();
 
         return researchItem;
     }
