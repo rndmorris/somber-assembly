@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.events;
+package dev.rndmorris.somberassembly.data.events;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;

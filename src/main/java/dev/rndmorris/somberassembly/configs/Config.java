@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly;
+package dev.rndmorris.somberassembly.configs;
 
 import java.io.File;
 

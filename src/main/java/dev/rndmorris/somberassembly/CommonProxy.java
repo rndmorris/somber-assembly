@@ -7,9 +7,14 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import dev.rndmorris.somberassembly.events.IEventManager;
-import dev.rndmorris.somberassembly.events.SimpleEventManager;
-import dev.rndmorris.somberassembly.events.SuccessfulScanEvent;
+import dev.rndmorris.somberassembly.blocks.SomberBlocks;
+import dev.rndmorris.somberassembly.configs.Config;
+import dev.rndmorris.somberassembly.data.events.IEventManager;
+import dev.rndmorris.somberassembly.data.events.SimpleEventManager;
+import dev.rndmorris.somberassembly.data.events.SuccessfulScanEvent;
+import dev.rndmorris.somberassembly.recipes.SomberRecipes;
+import dev.rndmorris.somberassembly.recipes.WandTriggerManager;
+import dev.rndmorris.somberassembly.research.SomberResearch;
 
 public class CommonProxy {
 
@@ -35,7 +40,7 @@ public class CommonProxy {
 
     // postInit "Handle interaction with other mods, complete your setup based on this."
     public void postInit(FMLPostInitializationEvent ignoredEvent) {
-        wandTriggerManager = new WandTriggerManager();
+        WandTriggerManager.init();
         SomberResearch.init();
     }
 

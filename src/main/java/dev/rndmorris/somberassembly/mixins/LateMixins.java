@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly;
+package dev.rndmorris.somberassembly.mixins;
 
 import java.util.List;
 import java.util.Set;
@@ -6,7 +6,8 @@ import java.util.Set;
 import com.gtnewhorizon.gtnhmixins.ILateMixinLoader;
 import com.gtnewhorizon.gtnhmixins.LateMixin;
 
-import dev.rndmorris.somberassembly.util.CollectionUtil;
+import dev.rndmorris.somberassembly.SomberAssembly;
+import dev.rndmorris.somberassembly.lib.CollectionUtil;
 
 @LateMixin
 public class LateMixins implements ILateMixinLoader {
@@ -18,6 +19,6 @@ public class LateMixins implements ILateMixinLoader {
 
     @Override
     public List<String> getMixins(Set<String> loadedMods) {
-        return CollectionUtil.listOf("late.MixinScanManager");
+        return CollectionUtil.listOf("MixinScanManager");
     }
 }

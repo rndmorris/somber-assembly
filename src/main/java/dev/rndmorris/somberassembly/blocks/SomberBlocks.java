@@ -1,9 +1,8 @@
-package dev.rndmorris.somberassembly;
+package dev.rndmorris.somberassembly.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
-import dev.rndmorris.somberassembly.blocks.BoneBlock;
 import thaumcraft.api.ItemApi;
 
 public class SomberBlocks {

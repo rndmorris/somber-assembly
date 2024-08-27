@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.util;
+package dev.rndmorris.somberassembly.research;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 
-import dev.rndmorris.somberassembly.SomberResearch;
-import dev.rndmorris.somberassembly.SomberResearch.Research;
+import dev.rndmorris.somberassembly.recipes.CompoundRecipe;
+import dev.rndmorris.somberassembly.research.SomberResearch.Research;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.research.ResearchItem;
@@ -123,6 +123,7 @@ public class ResearchItemBuilder {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ResearchItemBuilder makeStub() {
         this.stub = true;
         return this;
@@ -139,11 +140,13 @@ public class ResearchItemBuilder {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ResearchItemBuilder makeConcealed() {
         this.concealed = true;
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ResearchItemBuilder makeHidden() {
         this.hidden = true;
         return this;
@@ -175,11 +178,13 @@ public class ResearchItemBuilder {
      *
      * @return The builder, for chaining.
      */
+    @SuppressWarnings("unused")
     public ResearchItemBuilder makeRound() {
         this.round = true;
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ResearchItemBuilder makeSecondary() {
         this.secondary = true;
         return this;
@@ -203,6 +208,7 @@ public class ResearchItemBuilder {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ResearchItemBuilder addSiblings(Research... siblings) {
         return addSiblings(Research.toStrings(siblings));
     }
@@ -243,6 +249,7 @@ public class ResearchItemBuilder {
      * @param pageName The name of the page to add.
      * @return The builder, for chaining.
      */
+    @SuppressWarnings("unused")
     public ResearchItemBuilder addTextPage(String pageName) {
         this.pages.add(new ResearchPage(unlocalizedTextKey(pageName)));
         return this;
@@ -290,6 +297,7 @@ public class ResearchItemBuilder {
      * @param pageNumber       The number of the page to add.
      * @return The builder, for chaining.
      */
+    @SuppressWarnings("unused")
     public ResearchItemBuilder addSecretPage(String requiredResearch, int pageNumber) {
         this.pages.add(new ResearchPage(requiredResearch, unlocalizedTextKey(pageNumber)));
         return this;
@@ -311,16 +319,19 @@ public class ResearchItemBuilder {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ResearchItemBuilder addItemTrigger(ItemStack itemTrigger) {
         this.itemTriggers.add(itemTrigger);
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ResearchItemBuilder addEntityTrigger(String entityTrigger) {
         this.entityTriggers.add(entityTrigger);
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ResearchItemBuilder addAspectTrigger(Aspect aspectTrigger) {
         this.aspectTriggers.add(aspectTrigger);
         return this;

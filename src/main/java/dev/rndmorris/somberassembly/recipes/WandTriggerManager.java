@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly;
+package dev.rndmorris.somberassembly.recipes;
 
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -9,8 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import dev.rndmorris.somberassembly.SomberResearch.Research;
-import dev.rndmorris.somberassembly.util.MobAssemblyService;
+import dev.rndmorris.somberassembly.blocks.SomberBlocks;
+import dev.rndmorris.somberassembly.research.SomberResearch.Research;
 import thaumcraft.api.wands.IWandTriggerManager;
 import thaumcraft.api.wands.WandTriggerRegistry;
 import thaumcraft.common.items.wands.ItemWandCasting;
@@ -21,6 +21,13 @@ import thaumcraft.common.items.wands.foci.ItemFocusShock;
  */
 public class WandTriggerManager implements IWandTriggerManager {
 
+    private static WandTriggerManager INSTANCE;
+
+    @SuppressWarnings("unused")
+    public static WandTriggerManager getInstance() {
+        return INSTANCE;
+    }
+
     private final static int ASSEMBLE_CREEPER_EVENT = 0;
     private final static int ASSEMBLE_SKELETON_EVENT = 1;
     private final static int ASSEMBLE_ZOMBIE_EVENT = 2;
@@ -29,15 +36,19 @@ public class WandTriggerManager implements IWandTriggerManager {
     private final MobAssemblyService skeletonAssemblyService;
     private final MobAssemblyService zombieAssemblyService;
 
-    private static boolean wandHasShockFocus(ItemStack wandItemStack, ItemWandCasting wand) {
-        var focus = wand.getFocus(wandItemStack);
-        return focus instanceof ItemFocusShock;
+    public static void init() {
+        INSTANCE = new WandTriggerManager();
     }
 
-    public WandTriggerManager() {
+    private WandTriggerManager() {
         creeperAssemblyService = buildCreeperService();
         skeletonAssemblyService = buildSkeletonService();
         zombieAssemblyService = buildZombieService();
+    }
+
+    private static boolean wandHasShockFocus(ItemStack wandItemStack, ItemWandCasting wand) {
+        var focus = wand.getFocus(wandItemStack);
+        return focus instanceof ItemFocusShock;
     }
 
     private MobAssemblyService buildCreeperService() {

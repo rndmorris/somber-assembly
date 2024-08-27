@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly;
+package dev.rndmorris.somberassembly.recipes;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -8,8 +8,8 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import dev.rndmorris.somberassembly.util.CollectionUtil;
-import dev.rndmorris.somberassembly.util.CompoundRecipe;
+import dev.rndmorris.somberassembly.blocks.SomberBlocks;
+import dev.rndmorris.somberassembly.lib.CollectionUtil;
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;
 

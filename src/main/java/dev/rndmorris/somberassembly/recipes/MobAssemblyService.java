@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.util;
+package dev.rndmorris.somberassembly.recipes;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import com.github.bsideup.jabel.Desugar;
 
 import dev.rndmorris.somberassembly.SomberAssembly;
-import dev.rndmorris.somberassembly.SomberResearch;
+import dev.rndmorris.somberassembly.research.SomberResearch;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.wands.ItemWandCasting;
@@ -159,6 +159,7 @@ public class MobAssemblyService {
             args.world.rand.nextFloat() * 0.4F + 0.8F);
     }
 
+    @SuppressWarnings("unused")
     private void playSoundAtPlayer(EventArgs args, String soundName) {
         SomberAssembly.proxy.playSoundAtEntity(args.player, soundName, 1.0F, args.world.rand.nextFloat() * 0.4F + 0.8F);
     }
@@ -234,6 +235,7 @@ public class MobAssemblyService {
             return this;
         }
 
+        @SuppressWarnings("unused")
         public MobAssemblyServiceConfig givesWarpPerm(int givesWarpPerm) {
             this.givesWarpPerm = givesWarpPerm;
             return this;

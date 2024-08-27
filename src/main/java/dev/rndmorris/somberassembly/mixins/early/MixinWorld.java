@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.mixins;
+package dev.rndmorris.somberassembly.mixins.early;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,15 +9,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import dev.rndmorris.somberassembly.SomberAssembly;
-
 @Mixin(value = World.class)
 public abstract class MixinWorld {
 
     @Inject(at = @At(value = "HEAD"), method = "getClosestVulnerablePlayerToEntity")
     private void getClosestVulnerablePlayerToEntity(Entity entityIn, double distance,
-        CallbackInfoReturnable<EntityPlayer> ci) {
-        SomberAssembly.LOG.info("Yo");
-    }
-
+        CallbackInfoReturnable<EntityPlayer> ci) {}
 }

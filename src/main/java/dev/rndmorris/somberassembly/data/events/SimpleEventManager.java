@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.events;
+package dev.rndmorris.somberassembly.data.events;
 
 import java.util.ArrayList;
 import java.util.List;

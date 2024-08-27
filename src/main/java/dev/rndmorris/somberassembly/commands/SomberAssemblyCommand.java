@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.lib;
+package dev.rndmorris.somberassembly.commands;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,8 +18,8 @@ import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 
-import dev.rndmorris.somberassembly.util.CollectionUtil;
-import dev.rndmorris.somberassembly.util.Tuple2;
+import dev.rndmorris.somberassembly.data.Tuple2;
+import dev.rndmorris.somberassembly.lib.CollectionUtil;
 import joptsimple.internal.Strings;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.common.Thaumcraft;

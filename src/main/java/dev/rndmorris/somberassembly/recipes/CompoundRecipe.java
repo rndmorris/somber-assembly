@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.util;
+package dev.rndmorris.somberassembly.recipes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +37,7 @@ public class CompoundRecipe {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ItemStack[][][] blueprint() {
         return this.blueprint;
     }
@@ -49,8 +50,7 @@ public class CompoundRecipe {
     public List<Object> toRecipeList() {
         var translated = translateBlueprint();
         // Order: String tag, AspectList aspects, int xDimension, int yDimension, int zDimension, Object[] blocks
-        return Arrays
-            .asList(new Object[] { aspects, translated.dimX, translated.dimY, translated.dimZ, translated.blockList });
+        return Arrays.asList(aspects, translated.dimX, translated.dimY, translated.dimZ, translated.blockList);
     }
 
     private TranslatedBlueprint translateBlueprint() {
@@ -72,5 +72,5 @@ public class CompoundRecipe {
     }
 
     @Desugar
-    private record TranslatedBlueprint(int dimX, int dimY, int dimZ, List<ItemStack> blockList) {};
+    private record TranslatedBlueprint(int dimX, int dimY, int dimZ, List<ItemStack> blockList) {}
 }

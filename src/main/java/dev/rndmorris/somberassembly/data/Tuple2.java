@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.util;
+package dev.rndmorris.somberassembly.data;
 
 import com.github.bsideup.jabel.Desugar;
 

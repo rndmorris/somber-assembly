@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly.util;
+package dev.rndmorris.somberassembly.lib;
 
 import java.util.Arrays;
 import java.util.Collection;

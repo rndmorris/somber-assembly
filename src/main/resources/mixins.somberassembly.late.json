@@ -1,12 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8.5-GTNH",
-  "package": "dev.rndmorris.somberassembly.mixins",
+  "package": "dev.rndmorris.somberassembly.mixins.late",
   "refmap": "mixins.somberassembly.refmap.json",
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "late.MixinScanManager"
+    "MixinScanManager"
   ],
   "client": [],
   "server": []

@@ -1,4 +1,4 @@
-package dev.rndmorris.somberassembly;
+package dev.rndmorris.somberassembly.research;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -14,7 +14,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import dev.rndmorris.somberassembly.util.ResearchItemBuilder;
+import dev.rndmorris.somberassembly.SomberAssembly;
+import dev.rndmorris.somberassembly.blocks.SomberBlocks;
+import dev.rndmorris.somberassembly.recipes.SomberRecipes;
 import joptsimple.internal.Objects;
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.rndmorris.somberassembly.SomberAssembly;
-import dev.rndmorris.somberassembly.events.SuccessfulScanEvent;
+import dev.rndmorris.somberassembly.data.events.SuccessfulScanEvent;
 import thaumcraft.api.research.ScanResult;
 import thaumcraft.common.lib.research.ScanManager;
 
