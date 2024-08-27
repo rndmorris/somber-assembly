@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import dev.rndmorris.somberassembly.util.CollectionUtil;
 import dev.rndmorris.somberassembly.util.CompoundRecipe;
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;
@@ -40,11 +41,11 @@ public class SomberRecipes {
         boneBlockRecipe = new ShapedRecipes(
             3,
             3,
-            Utils.fillArray(new ItemStack[9], (index) -> new ItemStack(Items.bone)),
+            CollectionUtil.fillArray(new ItemStack[9], (index) -> new ItemStack(Items.bone)),
             new ItemStack(SomberBlocks.boneBlock));
         boneBlockUncraftRecipe = new ShapelessRecipes(
             new ItemStack(Items.bone, 9),
-            Utils.list(new ItemStack(SomberBlocks.boneBlock)));
+            CollectionUtil.listOf(new ItemStack(SomberBlocks.boneBlock)));
 
         GameRegistry.addRecipe(boneBlockRecipe);
         GameRegistry.addRecipe(boneBlockUncraftRecipe);
