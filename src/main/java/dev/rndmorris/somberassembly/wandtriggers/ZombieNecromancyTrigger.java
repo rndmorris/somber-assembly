@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import dev.rndmorris.somberassembly.Utils;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.IWandTriggerManager;
 import thaumcraft.api.wands.WandTriggerRegistry;
 
@@ -24,7 +26,13 @@ public class ZombieNecromancyTrigger implements IWandTriggerManager {
             zombie.setCanPickUpLoot(true);
             return zombie;
         };
-        this.manager = new WandNecromancyManager(fleshBlock, fleshBlockMetadata, createZombie, null, null);
+        this.manager = new WandNecromancyManager(
+            fleshBlock,
+            fleshBlockMetadata,
+            createZombie,
+            null,
+            new AspectList().add(Aspect.AIR, 1500)
+                .add(Aspect.ENTROPY, 1500));
         WandTriggerRegistry.registerWandBlockTrigger(this, 1, fleshBlock, fleshBlockMetadata);
     }
 
