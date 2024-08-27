@@ -198,8 +198,8 @@ public class SomberResearch {
             .addParents(Research.INFO_INTRODUCTION)
             .setHidden()
             .setPosition(-1, -2)
-            .setImage(SomberItem.decayingFlesh())
-            .addItemTrigger(SomberItem.decayingFlesh())
+            .setImage(SomberItem.decayingFlesh(0))
+            .addItemTrigger(SomberItem.decayingFlesh(0))
             .addAspectCost(Aspect.DEATH, 2)
             .addAspectCost(Aspect.SENSES, 4)
             .addAspectCost(Aspect.FLESH, 4)
@@ -215,7 +215,8 @@ public class SomberResearch {
             .addHiddenParents(Research.INFO_INTRODUCTION)
             .setAutoUnlock()
             .register();
-        registerVirtual(Research.PERMISSION_ROOT,
+        registerVirtual(
+            Research.PERMISSION_ROOT,
             Research.PERMISSION_ASSEMBLE_CREEPER,
             Research.PERMISSION_ASSEMBLE_SKELETON,
             Research.PERMISSION_ASSEMBLE_ZOMBIE,

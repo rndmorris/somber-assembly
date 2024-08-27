@@ -40,6 +40,6 @@ tc.research_name.somberassembly:INFO_CREEPER_ASSEMBLY=Explosive Assem- Disassemb
 tc.research_text.somberassembly:INFO_CREEPER_ASSEMBLY=How to (very temporarily) reanimate creepers
 tc.research_page.somberassembly:INFO_CREEPER_ASSEMBLY.1="Zap a pile of dangerous explosives, perhaps it will form a creeper! What could possibly go wrong?"<BR>It certainly worked, but I do not know what other outcome I might have been expecting. What a waste of TNT.
 
-tc.research_name.somberassembly:INFO_DECAYING_FLESH=Artificially Decaying Flesh
-tc.research_text.somberassembly:INFO_DECAYING_FLESH=Smelly disguise
-tc.research_page.somberassembly:INFO_DECAYING_FLESH.1=This rotten flesh is so soggy and smelly, it practically falls apart in my hands. Villagers and their golems seem to hate the smell of it, but zombies seem to ignore me. I suppose there are some advantages to smelling of death.<BR>Decaying flesh seems to drop from zombies only rarely, but with alchemy I can cause normal rotten flesh to begin decaying.
+tc.research_name.somberassembly:INFO_DECAYING_FLESH=Alchemical Decaying Flesh
+tc.research_text.somberassembly:INFO_DECAYING_FLESH=Manufactured Decay
+tc.research_page.somberassembly:INFO_DECAYING_FLESH.1=This flesh is soggy, smelly, and practically falls apart in my hands. Villagers and their golems hate the smell of it, but zombies appear to ignore me while it is on my person. I suppose there are some advantages to smelling of death.<BR>Decaying flesh appears to drop from zombies only sometimes, but I have devised a simple recipe to manufacture more should I need it.

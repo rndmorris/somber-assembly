@@ -97,7 +97,7 @@ public class SomberRecipes {
     private static void alchemyRecipes() {
         decayingFleshRecipe = new CrucibleRecipe(
             SomberResearch.Research.PERMISSION_CRAFT_DECAYING_FLESH,
-            SomberItem.decayingFlesh(),
+            SomberItem.decayingFlesh(1),
             new ItemStack(Items.rotten_flesh, 1),
             new AspectList().add(Aspect.ENTROPY, 8)
                 .add(Aspect.SENSES, 6));
