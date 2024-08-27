@@ -6,9 +6,9 @@ import dev.rndmorris.somberassembly.blocks.BoneBlock;
 
 public class SomberBlocks {
 
-    public static Block bone_block;
+    public static Block boneBlock;
 
     public static void init() {
-        bone_block = new BoneBlock();
+        boneBlock = new BoneBlock();
     }
 }

@@ -15,7 +15,7 @@ public class SkeletonNecromancyTrigger implements IWandTriggerManager {
 
     public SkeletonNecromancyTrigger() {
         final int boneBlockMetadata = 0;
-        var boneBlock = SomberBlocks.bone_block;
+        var boneBlock = SomberBlocks.boneBlock;
         WandNecromancyManager.CreateEntity createSkeleton = (world) -> {
             var skeleton = new EntitySkeleton(world);
             for (var slot = 0; slot <= 4; ++slot) {
