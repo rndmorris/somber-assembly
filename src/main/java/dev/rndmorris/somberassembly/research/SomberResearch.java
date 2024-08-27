@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import dev.rndmorris.somberassembly.SomberAssembly;
-import dev.rndmorris.somberassembly.blocks.SomberBlocks;
+import dev.rndmorris.somberassembly.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.recipes.SomberRecipes;
 import joptsimple.internal.Objects;
 import thaumcraft.api.ItemApi;
@@ -29,7 +29,7 @@ public class SomberResearch {
     /**
      * Somber Assembly's research category
      */
-    public final static String CATEGORY = SomberAssembly.MODID.toUpperCase();
+    public final static String CATEGORY = SomberAssembly.prefixModid("root");
 
     // Icons
     private static ResourceLocation iconSinisterStone;
@@ -57,13 +57,15 @@ public class SomberResearch {
         HOW_TO_ASSEMBLE_SKELETONS,
         HOW_TO_ASSEMBLE_ZOMBIES,
 
+        ROOT_EXPERIENCE,
+
         // Performed action flags
         ASSEMBLED_A_CREEPER,
         ASSEMBLED_A_SKELETON,
         ASSEMBLED_A_ZOMBIE,
 
         // Scanned flags
-        ROOT_SCAN_RESEARCH,
+        ROOT_SCAN,
 
         // Item scan flags
         SCANNED_BLOCK_BONE,
@@ -97,7 +99,8 @@ public class SomberResearch {
         registerEarlyMobAssembly();
 
         // Always run this last to avoid false conflicts with other research
-        registerVirutalResearch();
+        registerExperienceResearch();
+        registerScanningResearch();
     }
 
     private static void initializeIconsAndItems() {
@@ -107,7 +110,7 @@ public class SomberResearch {
         iconSkullWither = new ResourceLocation("minecraft", "textures/items/skull_wither.png");
         iconSkullZombie = new ResourceLocation("minecraft", "textures/items/skull_zombie.png");
 
-        blockBone = new ItemStack(SomberBlocks.boneBlock);
+        blockBone = new ItemStack(SomberBlock.boneBlock);
         blockFlesh = ItemApi.getBlock("blockTaint", 2);
         blockTnt = new ItemStack(Blocks.tnt);
         itemFocusShock = ItemApi.getItem("itemFocusShock", 0);
@@ -129,7 +132,7 @@ public class SomberResearch {
 
         ResearchItemBuilder.forKey(Research.BONE_BLOCKS)
             .position(0, -2)
-            .display(new ItemStack(SomberBlocks.boneBlock))
+            .display(new ItemStack(SomberBlock.boneBlock))
             .addTextPage(1)
             .addRecipePage(SomberRecipes.boneBlockRecipe)
             .addRecipePage(SomberRecipes.boneBlockUncraftRecipe)
@@ -195,8 +198,22 @@ public class SomberResearch {
             .register();
     }
 
-    private static void registerVirutalResearch() {
-        ResearchItemBuilder.forKey(Research.ROOT_SCAN_RESEARCH)
+    /**
+     * Research unlocked by experiencing things.
+     */
+    private static void registerExperienceResearch() {
+        ResearchItemBuilder.forKey(Research.ROOT_EXPERIENCE)
+            .makeVirtual()
+            .makeAutoUnlock()
+            .addHiddenParents(Research.INTRO_TO_SOMBER_ASSEMBLY);
+        addBehaviorResearch(Research.ASSEMBLED_A_CREEPER, Research.ASSEMBLED_A_SKELETON, Research.ASSEMBLED_A_ZOMBIE);
+    }
+
+    /**
+     * Research unlocked by scanning things
+     */
+    private static void registerScanningResearch() {
+        ResearchItemBuilder.forKey(Research.ROOT_SCAN)
             .makeVirtual()
             .makeAutoUnlock()
             .addHiddenParents(Research.INTRO_TO_SOMBER_ASSEMBLY)
@@ -215,7 +232,7 @@ public class SomberResearch {
     private static void addEntityScanResearch(@Nonnull Predicate<Entity> predicate, Research... research) {
         for (var newResearch : research) {
             ResearchItemBuilder.forKey(newResearch)
-                .addHiddenParents(Research.ROOT_SCAN_RESEARCH)
+                .addHiddenParents(Research.ROOT_SCAN)
                 .makeVirtual()
                 .register();
         }
@@ -233,7 +250,7 @@ public class SomberResearch {
 
         for (var newResearch : research) {
             ResearchItemBuilder.forKey(newResearch)
-                .addHiddenParents(Research.ROOT_SCAN_RESEARCH)
+                .addHiddenParents(Research.ROOT_SCAN)
                 .makeVirtual()
                 .register();
         }
@@ -244,6 +261,15 @@ public class SomberResearch {
                     unlockResearch(event.scanningPlayer(), research);
                 }
             });
+    }
+
+    private static void addBehaviorResearch(Research... research) {
+        for (var newResearch : research) {
+            ResearchItemBuilder.forKey(newResearch)
+                .addHiddenParents(Research.ROOT_EXPERIENCE)
+                .makeVirtual()
+                .register();
+        }
     }
 
     // Public methods
