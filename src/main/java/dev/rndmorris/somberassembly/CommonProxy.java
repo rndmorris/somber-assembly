@@ -7,13 +7,13 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import dev.rndmorris.somberassembly.blocks.SomberBlocks;
+import dev.rndmorris.somberassembly.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.configs.Config;
 import dev.rndmorris.somberassembly.data.events.IEventManager;
 import dev.rndmorris.somberassembly.data.events.SimpleEventManager;
 import dev.rndmorris.somberassembly.data.events.SuccessfulScanEvent;
-import dev.rndmorris.somberassembly.items.SomberItems;
-import dev.rndmorris.somberassembly.potions.SomberPotions;
+import dev.rndmorris.somberassembly.items.SomberItem;
+import dev.rndmorris.somberassembly.potions.SomberPotion;
 import dev.rndmorris.somberassembly.recipes.SomberRecipes;
 import dev.rndmorris.somberassembly.recipes.WandTriggerManager;
 import dev.rndmorris.somberassembly.research.SomberResearch;
@@ -32,18 +32,18 @@ public class CommonProxy {
     // GameRegistry."
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
-        SomberBlocks.init();
+        SomberBlock.init();
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes."
     public void init(FMLInitializationEvent ignoredEvent) {
-        SomberItems.init();
+        SomberItem.init();
         SomberRecipes.init();
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this."
     public void postInit(FMLPostInitializationEvent ignoredEvent) {
-        SomberPotions.init();
+        SomberPotion.init();
         WandTriggerManager.init();
         SomberResearch.init();
     }

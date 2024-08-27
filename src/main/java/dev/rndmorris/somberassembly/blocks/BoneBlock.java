@@ -1,23 +1,19 @@
 package dev.rndmorris.somberassembly.blocks;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import dev.rndmorris.somberassembly.SomberAssembly;
 
-public class BoneBlock extends Block {
+public class BoneBlock extends SomberBlock {
 
-    private static final String name = "bone_block";
+    private static final String name = "block_bone";
 
     public BoneBlock() {
         super(Material.rock);
 
-        // to-do: set block sounds. Borrow TC4's jar sounds?
-
         this.setBlockName(name);
-        this.setBlockTextureName(SomberAssembly.prefixModid(name));
+        this.setBlockTextureName(name);
         this.setCreativeTab(CreativeTabs.tabBlock);
         GameRegistry.registerBlock(this, name);
     }

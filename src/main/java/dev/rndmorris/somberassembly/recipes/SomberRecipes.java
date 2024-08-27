@@ -8,7 +8,7 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import dev.rndmorris.somberassembly.blocks.SomberBlocks;
+import dev.rndmorris.somberassembly.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.lib.ArrayUtil;
 import dev.rndmorris.somberassembly.lib.CollectionUtil;
 import thaumcraft.api.ItemApi;
@@ -43,10 +43,10 @@ public class SomberRecipes {
             3,
             3,
             ArrayUtil.fillFromInitializer(new ItemStack[9], (index) -> new ItemStack(Items.bone)),
-            new ItemStack(SomberBlocks.boneBlock));
+            new ItemStack(SomberBlock.boneBlock));
         boneBlockUncraftRecipe = new ShapelessRecipes(
             new ItemStack(Items.bone, 9),
-            CollectionUtil.listOf(new ItemStack(SomberBlocks.boneBlock)));
+            CollectionUtil.listOf(new ItemStack(SomberBlock.boneBlock)));
 
         GameRegistry.addRecipe(boneBlockRecipe);
         GameRegistry.addRecipe(boneBlockUncraftRecipe);
@@ -69,7 +69,7 @@ public class SomberRecipes {
             .aspectCost(Aspect.ORDER, 10);
         assembleSkeleton = CompoundRecipe.start()
             .blueprint(() -> {
-                final var bone = new ItemStack(SomberBlocks.boneBlock);
+                final var bone = new ItemStack(SomberBlock.boneBlock);
                 return new ItemStack[][][] { { { bone, }, { null, }, }, { { bone, }, { basicWand, } },
                     { { bone, }, { null, } }, };
             })
@@ -79,7 +79,7 @@ public class SomberRecipes {
             .aspectCost(Aspect.ORDER, 5);
         assembleZombie = CompoundRecipe.start()
             .blueprint(() -> {
-                final var fleshBlock = SomberBlocks.Thaumcraft.fleshBlockItemStack();
+                final var fleshBlock = SomberBlock.Thaumcraft.fleshBlockItemStack();
                 return new ItemStack[][][] { { { fleshBlock, }, { null, }, }, { { fleshBlock, }, { basicWand, } },
                     { { fleshBlock, }, { null, } }, };
             })

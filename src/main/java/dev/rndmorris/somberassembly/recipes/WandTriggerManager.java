@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import dev.rndmorris.somberassembly.blocks.SomberBlocks;
+import dev.rndmorris.somberassembly.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.research.SomberResearch.Research;
 import thaumcraft.api.wands.IWandTriggerManager;
 import thaumcraft.api.wands.WandTriggerRegistry;
@@ -83,7 +83,7 @@ public class WandTriggerManager implements IWandTriggerManager {
     }
 
     private MobAssemblyService buildSkeletonService() {
-        final var assembleSkeletonBlock = SomberBlocks.boneBlock;
+        final var assembleSkeletonBlock = SomberBlock.boneBlock;
         final var assembleSkeletonMetadata = 0;
 
         WandTriggerRegistry
@@ -111,8 +111,8 @@ public class WandTriggerManager implements IWandTriggerManager {
     }
 
     private MobAssemblyService buildZombieService() {
-        final var assembleZombieBlock = SomberBlocks.Thaumcraft.fleshBlock();
-        final var assembleZombieMetadata = SomberBlocks.Thaumcraft.fleshBlockDamage();
+        final var assembleZombieBlock = SomberBlock.Thaumcraft.fleshBlock();
+        final var assembleZombieMetadata = SomberBlock.Thaumcraft.fleshBlockDamage();
 
         WandTriggerRegistry
             .registerWandBlockTrigger(this, ASSEMBLE_ZOMBIE_EVENT, assembleZombieBlock, assembleZombieMetadata);
