@@ -27,45 +27,64 @@ public class WandTriggerManager implements IWandTriggerManager {
         // Creeper assembly
         final var assembleCreeperBlock = Blocks.tnt;
         final var assembleCreeperMetadata = 0;
-        creeperAssemblyService = new MobAssemblyService(assembleCreeperBlock, assembleCreeperMetadata, (args) -> {
-            var creeper = new EntityCreeper(args.world());
-            creeper.setCreeperState(1);
-            NBTTagCompound tagCompound = new NBTTagCompound();
-            creeper.writeEntityToNBT(tagCompound);
+        creeperAssemblyService = MobAssemblyService.configure()
+            .expectedBlockType(assembleCreeperBlock)
+            .expectedBlockMetadata(assembleCreeperMetadata)
+            .createEntityClosure((args) -> {
+                var creeper = new EntityCreeper(args.world());
+                creeper.setCreeperState(1);
+                NBTTagCompound tagCompound = new NBTTagCompound();
+                creeper.writeEntityToNBT(tagCompound);
 
-            tagCompound.setShort("Fuse", (short) 1);
+                tagCompound.setShort("Fuse", (short) 1);
 
-            creeper.readEntityFromNBT(tagCompound);
-            return creeper;
-        }, SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED, SomberRecipes.assembleCreeper.aspectCost());
+                creeper.readEntityFromNBT(tagCompound);
+                return creeper;
+            })
+            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED)
+            .visCost(SomberRecipes.assembleCreeper.aspectCost())
+            .build();
         WandTriggerRegistry
             .registerWandBlockTrigger(this, ASSEMBLE_CREEPER_EVENT, assembleCreeperBlock, assembleCreeperMetadata);
 
         // Skeleton assembly
         final var assembleSkeletonBlock = SomberBlocks.boneBlock;
         final var assembleSkeletonMetadata = 0;
-        skeletonAssemblyService = new MobAssemblyService(assembleSkeletonBlock, assembleSkeletonMetadata, (args) -> {
-            var skeleton = new EntitySkeleton(args.world());
-            for (var slot = 0; slot <= 4; ++slot) {
-                skeleton.setCurrentItemOrArmor(slot, null);
-            }
-            skeleton.setCanPickUpLoot(true);
-            return skeleton;
-        }, SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED, SomberRecipes.assembleSkeleton.aspectCost());
-        WandTriggerRegistry
-            .registerWandBlockTrigger(this, ASSEMBLE_SKELETON_EVENT, assembleSkeletonBlock, assembleSkeletonMetadata);
+        skeletonAssemblyService = MobAssemblyService.configure()
+            .expectedBlockType(assembleSkeletonBlock)
+            .expectedBlockMetadata(assembleSkeletonMetadata)
+            .createEntityClosure((args) -> {
+                var skeleton = new EntitySkeleton(args.world());
+                for (var slot = 0; slot <= 4; ++slot) {
+                    skeleton.setCurrentItemOrArmor(slot, null);
+                }
+                skeleton.setCanPickUpLoot(true);
+                return skeleton;
+            })
+            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED)
+            .visCost(SomberRecipes.assembleSkeleton.aspectCost())
+            .build();
 
         // Zombie assembly
         final var assembleZombieBlock = SomberBlocks.Thaumcraft.fleshBlock();
         final var assembleZombieMetadata = SomberBlocks.Thaumcraft.fleshBlockDamage();
-        zombieAssemblyService = new MobAssemblyService(assembleZombieBlock, assembleZombieMetadata, (args) -> {
-            var zombie = new EntityZombie(args.world());
-            for (var slot = 0; slot <= 4; ++slot) {
-                zombie.setCurrentItemOrArmor(slot, null);
-            }
-            zombie.setCanPickUpLoot(true);
-            return zombie;
-        }, SomberResearch.ASSEMBLE_ZOMBIE, SomberRecipes.assembleZombie.aspectCost());
+        zombieAssemblyService = MobAssemblyService.configure()
+            .expectedBlockType(assembleZombieBlock)
+            .expectedBlockMetadata(assembleZombieMetadata)
+            .createEntityClosure((args) -> {
+                var zombie = new EntityZombie(args.world());
+                for (var slot = 0; slot <= 4; ++slot) {
+                    zombie.setCurrentItemOrArmor(slot, null);
+                }
+                zombie.setCanPickUpLoot(true);
+                return zombie;
+            })
+            .requiredResearch(SomberResearch.ASSEMBLE_ZOMBIE)
+            .visCost(SomberRecipes.assembleZombie.aspectCost())
+            .teachesResearch(SomberResearch.ASSEMBLE_ZOMBIE_PERFORMED)
+            .givesWarpSticky(1)
+            .givesWarpTemp(2)
+            .build();
         WandTriggerRegistry
             .registerWandBlockTrigger(this, ASSEMBLE_ZOMBIE_EVENT, assembleZombieBlock, assembleZombieMetadata);
     }
