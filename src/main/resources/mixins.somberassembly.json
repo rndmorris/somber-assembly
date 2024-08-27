@@ -6,7 +6,9 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ITaskOwner",
     "MixinEntityAINearestAttackableTarget$1",
+    "MixinEntityIronGolem",
     "MixinEntityVillager",
     "MixinWorld"
   ],
