@@ -211,10 +211,10 @@ public class SomberResearch {
                 .makeVirtual()
                 .register();
         }
-        SomberAssembly.proxy.entityScannedEventRegistrar()
-            .registerEventListener((event) -> {
-                if (predicate.test(event.scannedObject())) {
-                    unlockResearch(event.byPlayer(), research);
+        SomberAssembly.proxy.getScanEventManager()
+            .registerHandler((event) -> {
+                if (event.isEntityScan() && predicate.test(event.getScannedEntity())) {
+                    unlockResearch(event.scanningPlayer(), research);
                 }
             });
     }
@@ -230,10 +230,10 @@ public class SomberResearch {
                 .register();
         }
 
-        SomberAssembly.proxy.itemScannedEventRegistrar()
-            .registerEventListener((event) -> {
-                if (predicate.test(event.scannedObject())) {
-                    unlockResearch(event.byPlayer(), research);
+        SomberAssembly.proxy.getScanEventManager()
+            .registerHandler((event) -> {
+                if (event.isObjectScan() && predicate.test(event.getScannedItem())) {
+                    unlockResearch(event.scanningPlayer(), research);
                 }
             });
     }

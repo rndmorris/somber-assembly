@@ -7,22 +7,18 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import dev.rndmorris.somberassembly.messages.EntityScannedEvent;
-import dev.rndmorris.somberassembly.messages.IEventListenerRegistrar;
-import dev.rndmorris.somberassembly.messages.IEventRegistrarManager;
-import dev.rndmorris.somberassembly.messages.ItemScannedEvent;
-import dev.rndmorris.somberassembly.messages.ThaumcraftEventSnooper;
-import dev.rndmorris.somberassembly.messages.registrars.EventListenerRegistrar;
+import dev.rndmorris.somberassembly.events.IEventManager;
+import dev.rndmorris.somberassembly.events.SimpleEventManager;
+import dev.rndmorris.somberassembly.events.SuccessfulScanEvent;
 
-public class CommonProxy implements IEventRegistrarManager {
+public class CommonProxy {
 
     private WandTriggerManager wandTriggerManager;
 
-    private final IEventListenerRegistrar<EntityScannedEvent> entityScannedEventRegistrar = new EventListenerRegistrar<>();
-    private final IEventListenerRegistrar<ItemScannedEvent> itemScannedEventIEventListenerRegistrar = new EventListenerRegistrar<>();
+    private final IEventManager<SuccessfulScanEvent> scanEventManager = new SimpleEventManager<>();
 
-    public WandTriggerManager wandTriggerManager() {
-        return this.wandTriggerManager;
+    public IEventManager<SuccessfulScanEvent> getScanEventManager() {
+        return this.scanEventManager;
     }
 
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
@@ -39,7 +35,6 @@ public class CommonProxy implements IEventRegistrarManager {
 
     // postInit "Handle interaction with other mods, complete your setup based on this."
     public void postInit(FMLPostInitializationEvent ignoredEvent) {
-        ThaumcraftEventSnooper.init();
         wandTriggerManager = new WandTriggerManager();
 
         SomberResearch.init();
@@ -65,15 +60,5 @@ public class CommonProxy implements IEventRegistrarManager {
             playSoundAtEntity(atPlayer, "Thaumcraft:write", 2.0f, 1F + (world.rand.nextFloat() * 0.5F));
             playSoundAtEntity(atPlayer, "Thaumcraft:learn", 2.0f, 1F + (world.rand.nextFloat() * 0.5F));
         }
-    }
-
-    @Override
-    public IEventListenerRegistrar<EntityScannedEvent> entityScannedEventRegistrar() {
-        return this.entityScannedEventRegistrar;
-    }
-
-    @Override
-    public IEventListenerRegistrar<ItemScannedEvent> itemScannedEventRegistrar() {
-        return this.itemScannedEventIEventListenerRegistrar;
     }
 }
