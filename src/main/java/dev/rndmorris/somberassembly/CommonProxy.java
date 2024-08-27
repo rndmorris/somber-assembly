@@ -9,9 +9,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import dev.rndmorris.somberassembly.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.configs.Config;
-import dev.rndmorris.somberassembly.data.events.IEventManager;
-import dev.rndmorris.somberassembly.data.events.SimpleEventManager;
-import dev.rndmorris.somberassembly.data.events.SuccessfulScanEvent;
 import dev.rndmorris.somberassembly.items.SomberItem;
 import dev.rndmorris.somberassembly.potions.SomberPotion;
 import dev.rndmorris.somberassembly.recipes.SomberRecipes;
@@ -20,20 +17,13 @@ import dev.rndmorris.somberassembly.research.SomberResearch;
 
 public class CommonProxy {
 
-    private WandTriggerManager wandTriggerManager;
-
-    private final IEventManager<SuccessfulScanEvent> scanEventManager = new SimpleEventManager<>();
-
-    public IEventManager<SuccessfulScanEvent> getScanEventManager() {
-        return this.scanEventManager;
-    }
-
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
     // GameRegistry."
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         SomberBlock.init();
         SomberItem.init();
+        EntityEvents.init();
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes."

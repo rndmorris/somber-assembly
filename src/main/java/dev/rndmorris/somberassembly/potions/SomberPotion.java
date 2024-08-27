@@ -15,7 +15,7 @@ import dev.rndmorris.somberassembly.lib.ArrayUtil;
 public abstract class SomberPotion extends Potion {
 
     private static final int customPotionCount = 1;
-    public static PotionDeathStench deathMask;
+    public static PotionDeathStench deathStench;
 
     protected SomberPotion(int p_i1573_1_, boolean p_i1573_2_, int p_i1573_3_) {
         super(p_i1573_1_, p_i1573_2_, p_i1573_3_);
@@ -41,8 +41,8 @@ public abstract class SomberPotion extends Potion {
 
         var potionIdIndex = 0;
         var potionId = availableIds.get(potionIdIndex++);
-        deathMask = new PotionDeathStench(potionId);
-        potionList.set(potionId, deathMask);
+        deathStench = new PotionDeathStench(potionId);
+        potionList.set(potionId, deathStench);
 
         updatePotionArray(potionList);
     }

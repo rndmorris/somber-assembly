@@ -9,13 +9,12 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 
 import dev.rndmorris.somberassembly.recipes.CompoundRecipe;
-import dev.rndmorris.somberassembly.research.SomberResearch.Research;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 
-public class ResearchItemBuilder {
+public class ResearchBuilder {
 
     private static String configuredCategory = null;
 
@@ -47,7 +46,7 @@ public class ResearchItemBuilder {
     private final List<String> entityTriggers = new ArrayList<>();
     private final List<Aspect> aspectTriggers = new ArrayList<>();
 
-    private ResearchItemBuilder(String key) {
+    private ResearchBuilder(String key) {
         this.key = key;
         this.category = configuredCategory;
     }
@@ -62,8 +61,8 @@ public class ResearchItemBuilder {
      * @param key The unique key identifying this research.
      * @return The new research builder.
      */
-    public static ResearchItemBuilder forKey(Research key) {
-        return new ResearchItemBuilder(key.toString());
+    public static ResearchBuilder forKey(String key) {
+        return new ResearchBuilder(key);
     }
 
     /**
@@ -74,7 +73,7 @@ public class ResearchItemBuilder {
      * @param cost   How much it will cost.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder addAspectCost(Aspect aspect, int cost) {
+    public ResearchBuilder addAspectCost(Aspect aspect, int cost) {
         aspectCosts.add(aspect, cost);
         return this;
     }
@@ -85,7 +84,7 @@ public class ResearchItemBuilder {
      * @param displayIcon A ResourceLocation to the image to display.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder display(ResourceLocation displayIcon) {
+    public ResearchBuilder setImage(ResourceLocation displayIcon) {
         this.displayIcon = displayIcon;
         return this;
     }
@@ -96,7 +95,7 @@ public class ResearchItemBuilder {
      * @param display A stack containing the item to use.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder display(ItemStack display) {
+    public ResearchBuilder setImage(ItemStack display) {
         this.displayItem = display;
         return this;
     }
@@ -108,13 +107,13 @@ public class ResearchItemBuilder {
      * @param displayRow    The row in which the research will appear.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder position(int displayColumn, int displayRow) {
+    public ResearchBuilder setPosition(int displayColumn, int displayRow) {
         this.displayColumn = displayColumn;
         this.displayRow = displayRow;
         return this;
     }
 
-    public ResearchItemBuilder setComplexity(int complexity) {
+    public ResearchBuilder setComplexity(int complexity) {
         this.complexity = complexity;
         return this;
     }
@@ -124,13 +123,12 @@ public class ResearchItemBuilder {
      *
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder makeSpecial() {
+    public ResearchBuilder setSpecial() {
         this.special = true;
         return this;
     }
 
-    @SuppressWarnings("unused")
-    public ResearchItemBuilder makeStub() {
+    public ResearchBuilder setStub() {
         this.stub = true;
         return this;
     }
@@ -141,19 +139,17 @@ public class ResearchItemBuilder {
      *
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder makeLost() {
+    public ResearchBuilder setLost() {
         this.lost = true;
         return this;
     }
 
-    @SuppressWarnings("unused")
-    public ResearchItemBuilder makeConcealed() {
+    public ResearchBuilder setConcealed() {
         this.concealed = true;
         return this;
     }
 
-    @SuppressWarnings("unused")
-    public ResearchItemBuilder makeHidden() {
+    public ResearchBuilder setHidden() {
         this.hidden = true;
         return this;
     }
@@ -164,7 +160,7 @@ public class ResearchItemBuilder {
      *
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder makeVirtual() {
+    public ResearchBuilder setVirtual() {
         this.virtual = true;
         return this;
     }
@@ -174,7 +170,7 @@ public class ResearchItemBuilder {
      *
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder makeAutoUnlock() {
+    public ResearchBuilder setAutoUnlock() {
         this.autoUnlock = true;
         return this;
     }
@@ -185,41 +181,51 @@ public class ResearchItemBuilder {
      * @return The builder, for chaining.
      */
     @SuppressWarnings("unused")
-    public ResearchItemBuilder makeRound() {
+    public ResearchBuilder setRound() {
         this.round = true;
         return this;
     }
 
+    /**
+     * Make the research buyable with research points by default.
+     *
+     * @return The builder, for chaining.
+     */
     @SuppressWarnings("unused")
-    public ResearchItemBuilder makeSecondary() {
+    public ResearchBuilder setSecondary() {
         this.secondary = true;
         return this;
     }
 
-    public ResearchItemBuilder addParents(Research... parents) {
-        return addParents(Research.toStrings(parents));
-    }
-
-    public ResearchItemBuilder addParents(String... parents) {
+    /**
+     * Add visible prerequisite research.
+     *
+     * @param parents The prerequsite research.
+     * @return The builder, for chaining.
+     */
+    public ResearchBuilder addParents(String... parents) {
         Collections.addAll(this.parents, parents);
         return this;
     }
 
-    public ResearchItemBuilder addHiddenParents(Research... hiddenParents) {
-        return addHiddenParents(Research.toStrings(hiddenParents));
-    }
-
-    public ResearchItemBuilder addHiddenParents(String... hiddenParents) {
+    /**
+     * Add hidden prerequisite research.
+     *
+     * @param hiddenParents The prerequsite research.
+     * @return The builder, for chaining.
+     */
+    public ResearchBuilder addHiddenParents(String... hiddenParents) {
         Collections.addAll(this.hiddenParents, hiddenParents);
         return this;
     }
 
-    @SuppressWarnings("unused")
-    public ResearchItemBuilder addSiblings(Research... siblings) {
-        return addSiblings(Research.toStrings(siblings));
-    }
-
-    public ResearchItemBuilder addSiblings(String... siblings) {
+    /**
+     * Add research that will be unlocked when this research is.
+     *
+     * @param siblings The sibling research keys.
+     * @return The builder, for chaining.
+     */
+    public ResearchBuilder addSiblings(String... siblings) {
         Collections.addAll(this.siblings, siblings);
         return this;
     }
@@ -230,7 +236,7 @@ public class ResearchItemBuilder {
      * @param pageNumber The number of the page to add.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder addTextPage(int pageNumber) {
+    public ResearchBuilder addTextPage(int pageNumber) {
         this.pages.add(new ResearchPage(unlocalizedTextKey(pageNumber)));
         return this;
     }
@@ -242,7 +248,7 @@ public class ResearchItemBuilder {
      * @param endPageNumber   The number of the last page to add
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder addTextPage(int startPageNumber, int endPageNumber) {
+    public ResearchBuilder addTextPage(int startPageNumber, int endPageNumber) {
         for (var pageNumber = startPageNumber; pageNumber <= endPageNumber; ++pageNumber) {
             this.pages.add(new ResearchPage(unlocalizedTextKey(pageNumber)));
         }
@@ -256,7 +262,7 @@ public class ResearchItemBuilder {
      * @return The builder, for chaining.
      */
     @SuppressWarnings("unused")
-    public ResearchItemBuilder addTextPage(String pageName) {
+    public ResearchBuilder addTextPage(String pageName) {
         this.pages.add(new ResearchPage(unlocalizedTextKey(pageName)));
         return this;
     }
@@ -268,7 +274,7 @@ public class ResearchItemBuilder {
      * @param pageName         The name of the page to add.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder addSecretPage(String requiredResearch, String pageName) {
+    public ResearchBuilder addSecretPage(String requiredResearch, String pageName) {
         this.pages.add(new ResearchPage(requiredResearch, unlocalizedTextKey(pageName)));
         return this;
     }
@@ -280,20 +286,8 @@ public class ResearchItemBuilder {
      * @param requiredResearch The research the page depends on.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder addSecretPage(Research requiredResearch) {
-        return addSecretPage(requiredResearch, requiredResearch.toString());
-    }
-
-    /**
-     * Add a page of text that will appear only after the required secondary research is unlocked.
-     *
-     * @param requiredResearch The research the page depends on.
-     * @param pageName         The name of the page to add.
-     * @return The builder, for chaining.
-     */
-    public ResearchItemBuilder addSecretPage(Research requiredResearch, String pageName) {
-        addSecretPage(requiredResearch.toString(), pageName);
-        return this;
+    public ResearchBuilder addSecretPage(String requiredResearch) {
+        return addSecretPage(requiredResearch, requiredResearch);
     }
 
     /**
@@ -304,7 +298,7 @@ public class ResearchItemBuilder {
      * @return The builder, for chaining.
      */
     @SuppressWarnings("unused")
-    public ResearchItemBuilder addSecretPage(String requiredResearch, int pageNumber) {
+    public ResearchBuilder addSecretPage(String requiredResearch, int pageNumber) {
         this.pages.add(new ResearchPage(requiredResearch, unlocalizedTextKey(pageNumber)));
         return this;
     }
@@ -315,35 +309,35 @@ public class ResearchItemBuilder {
      * @param recipe The compound recipe to display.
      * @return The builder, for chaining.
      */
-    public ResearchItemBuilder addCompoundRecipePage(CompoundRecipe recipe) {
+    public ResearchBuilder addCompoundRecipePage(CompoundRecipe recipe) {
         this.pages.add(new ResearchPage(recipe.toRecipeList()));
         return this;
     }
 
-    public ResearchItemBuilder addRecipePage(IRecipe... recipe) {
+    public ResearchBuilder addRecipePage(IRecipe... recipe) {
         this.pages.add(new ResearchPage(recipe));
         return this;
     }
 
     @SuppressWarnings("unused")
-    public ResearchItemBuilder addItemTrigger(ItemStack itemTrigger) {
+    public ResearchBuilder addItemTrigger(ItemStack itemTrigger) {
         this.itemTriggers.add(itemTrigger);
         return this;
     }
 
     @SuppressWarnings("unused")
-    public ResearchItemBuilder addEntityTrigger(String entityTrigger) {
+    public ResearchBuilder addEntityTrigger(String entityTrigger) {
         this.entityTriggers.add(entityTrigger);
         return this;
     }
 
     @SuppressWarnings("unused")
-    public ResearchItemBuilder addAspectTrigger(Aspect aspectTrigger) {
+    public ResearchBuilder addAspectTrigger(Aspect aspectTrigger) {
         this.aspectTriggers.add(aspectTrigger);
         return this;
     }
 
-    public ResearchItem register() {
+    public void register() {
         final var researchItem = initializeResearchItem();
 
         if (this.special) {
@@ -396,8 +390,6 @@ public class ResearchItemBuilder {
         }
 
         researchItem.registerResearchItem();
-
-        return researchItem;
     }
 
     private ResearchItem initializeResearchItem() {
@@ -411,14 +403,17 @@ public class ResearchItemBuilder {
                 this.complexity,
                 this.displayItem);
         }
-        return new ResearchItem(
-            this.key,
-            this.category,
-            this.aspectCosts,
-            this.displayColumn,
-            this.displayRow,
-            this.complexity,
-            this.displayIcon);
+        if (this.displayIcon != null) {
+            return new ResearchItem(
+                this.key,
+                this.category,
+                this.aspectCosts,
+                this.displayColumn,
+                this.displayRow,
+                this.complexity,
+                this.displayIcon);
+        }
+        return new ResearchItem(this.key, this.category);
     }
 
     // Internal utility

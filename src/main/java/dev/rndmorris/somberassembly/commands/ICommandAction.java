@@ -21,4 +21,6 @@ public interface ICommandAction {
     boolean matchesName(String query);
 
     String getActionUsage();
+
+    List<String> addTabCompletionOptions(ICommandSender sender, String[] args);
 }

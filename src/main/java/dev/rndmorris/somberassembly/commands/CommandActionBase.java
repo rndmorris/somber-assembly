@@ -90,7 +90,7 @@ public abstract class CommandActionBase<C extends CommandBase> implements IComma
 
     /**
      * Combine all arguments after startIndex into a single space-separated string
-     * 
+     *
      * @param args       The action arguments
      * @param startIndex The index from which to start collecting search text.
      * @return The search text if any exists, otherwise null.
@@ -100,6 +100,10 @@ public abstract class CommandActionBase<C extends CommandBase> implements IComma
             final var subList = args.subList(startIndex, args.size());
             return Strings.join(subList, " ");
         }
+        return null;
+    }
+
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         return null;
     }
 }

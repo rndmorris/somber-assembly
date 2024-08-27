@@ -11,31 +11,31 @@ msg.somberassembly.decaying_flesh_rotted=Some decaying flesh has rotted away.
 potion.somberassembly:death_stench=Stench of Death
 
 # Research
-tc.research_category.somberassembly:root=Necromancy
+tc.research_category.somberassembly:root_category=Necromancy
 
-tc.research_name.INTRO_TO_SOMBER_ASSEMBLY=Somber Assembly
-tc.research_text.INTRO_TO_SOMBER_ASSEMBLY=An introduction to formalized necromancy
-tc.research_page.INTRO_TO_SOMBER_ASSEMBLY.1=I have heard a tablet that forms new creatures from nearby aspects of creatures' souls. Deep in the earth I have found cages that, in my presence, conjure hordes to slay me. There are rumors of thaumaturges infusing more wrathful versions of those cages that can conjure beings by consuming the wrath of the Nether. I have even learned to shape dead flesh into a small, but subservient, golem.
-tc.research_page.INTRO_TO_SOMBER_ASSEMBLY.2=As far as necromancy goes, however, these options leave something to be desired. My only options thus far leave me lacking in either size, ferocity, or obedience. To that end, I have devised a new category of research that I will call Somber Assembly. It shall encompass the formal study and practice of constructing and reanimating the dead.<LINE>Since this is uncharted territory, I fear new discoveries will elude me until I create, try, and scan EVERYTHING that might be relevant. I will document my findings here, with observations and updates whe
+tc.research_name.somberassembly:INTRO_TO_SOMBER_ASSEMBLY=Somber Assembly
+tc.research_text.somberassembly:INTRO_TO_SOMBER_ASSEMBLY=An introduction to formalized necromancy
+tc.research_page.somberassembly:INTRO_TO_SOMBER_ASSEMBLY.1=I have heard a tablet that forms new creatures from nearby aspects of creatures' souls. Deep in the earth I have found cages that, in my presence, conjure hordes to slay me. There are rumors of thaumaturges infusing more wrathful versions of those cages that can conjure beings by consuming the wrath of the Nether. I have even learned to shape dead flesh into a small, but subservient, golem.
+tc.research_page.somberassembly:INTRO_TO_SOMBER_ASSEMBLY.2=As far as necromancy goes, however, these options leave something to be desired. My only options thus far leave me lacking in either size, ferocity, or obedience. To that end, I have devised a new category of research that I will call Somber Assembly. It shall encompass the formal study and practice of constructing and reanimating the dead.<LINE>Since this is uncharted territory, I fear new discoveries will elude me until I create, try, and scan EVERYTHING that might be relevant. I will document my findings here, with observations and updates whe
 
-tc.research_name.BONE_BLOCKS=Block of Bones
-tc.research_text.BONE_BLOCKS=Exactly what it says on the tin
-tc.research_page.BONE_BLOCKS.1=I have had the disappointingly obvious idea of binding bones together into a solid block. Given their unappealing appearence, I do not forsee myself using them for any purpose other than more compactly storing bones.
-tc.research_page.BONE_BLOCKS.HOW_TO_ASSEMBLE_SKELETONS=Addendum: It would appear that blocks of bones provide enough raw material for the assembly of skeletons. The blocks are still quite hideous, however.
+tc.research_name.somberassembly:BONE_BLOCKS=Block of Bones
+tc.research_text.somberassembly:BONE_BLOCKS=Exactly what it says on the tin
+tc.research_page.somberassembly:BONE_BLOCKS.1=I have had the disappointingly obvious idea of binding bones together into a solid block. Given their unappealing appearence, I do not forsee myself using them for any purpose other than more compactly storing bones.
+tc.research_page.somberassembly:BONE_BLOCKS.somberassembly:HOW_TO_ASSEMBLE_SKELETONS=Addendum: It would appear that blocks of bones provide enough raw material for the assembly of skeletons. The blocks are still quite hideous, however.
 
-tc.research_name.SHOCK_FOCUS_ASSEMBLY=Observations: Shock Foci
-tc.research_text.SHOCK_FOCUS_ASSEMBLY=A shocking hypothesis
-tc.research_page.SHOCK_FOCUS_ASSEMBLY.1=Lighting in this world sometimes has strange effects. Villagers struck by it spontaneously learn to brew and weaponize potions, and pigs struck by die and are reanimated as bipedal pig people.<BR>The bolts produced from a shock focus are, as a general rule, much weaker than those produced by nature. After some study and minor adjustments to its design, however, I can temporarily bypass its safety mechanisms to channel larger bursts of lightning, augmented with other forms of vis, into a touched surface. I hope this ability might prove useful in th
+tc.research_name.somberassembly:SHOCK_FOCUS_ASSEMBLY=Observations: Shock Foci
+tc.research_text.somberassembly:SHOCK_FOCUS_ASSEMBLY=A shocking hypothesis
+tc.research_page.somberassembly:SHOCK_FOCUS_ASSEMBLY.1=Lighting in this world sometimes has strange effects. Villagers struck by it spontaneously learn to brew and weaponize potions, and pigs struck by die and are reanimated as bipedal pig people.<BR>The bolts produced from a shock focus are, as a general rule, much weaker than those produced by nature. After some study and minor adjustments to its design, however, I can temporarily bypass its safety mechanisms to channel larger bursts of lightning, augmented with other forms of vis, into a touched surface. I hope this ability might prove useful in th
 
-tc.research_name.HOW_TO_ASSEMBLE_ZOMBIES=Fleshy Assembly
-tc.research_text.HOW_TO_ASSEMBLE_ZOMBIES=How to reanimate zombies
-tc.research_page.HOW_TO_ASSEMBLE_ZOMBIES.1=After some examination, rotten flesh is marvelously full of muscle, nerves, and other biological components that would be difficult to acquire otherwise. I believe this is partly what makes flesh golems so effective. With this in mind, reanimating a zombie seems to be a reasonable first goal.<LINE>By discharging vis-laden lightning into a pile of flesh with my modified shock focus, I believe I can encourage those muscles, nerve endings, and so on to rearrange themselves into a functional zombie.
-tc.research_page.HOW_TO_ASSEMBLE_ZOMBIES.ASSEMBLED_A_ZOMBIE=Addendum: It worked! It actually worked! It is a shame the resulting zombie was just as aggressive towards me as those encountered in the wild. Its eagerness to pick up anything it could use against me is even more surprising, as that requires a level of cognition most wild zombies simply don't have. Perhaps I will discover a way to render them docile, or maybe even helpful, in the future.<LINE>I wonder what other creatures I might be able to reanimate in this way? By scanning the creatures I wish to assemble, and the materials I might assemble them with, I may learn to reanimate others in 
+tc.research_name.somberassembly:HOW_TO_ASSEMBLE_ZOMBIES=Fleshy Assembly
+tc.research_text.somberassembly:HOW_TO_ASSEMBLE_ZOMBIES=How to reanimate zombies
+tc.research_page.somberassembly:HOW_TO_ASSEMBLE_ZOMBIES.1=After some examination, rotten flesh is marvelously full of muscle, nerves, and other biological components that would be difficult to acquire otherwise. I believe this is partly what makes flesh golems so effective. With this in mind, reanimating a zombie seems to be a reasonable first goal.<LINE>By discharging vis-laden lightning into a pile of flesh with my modified shock focus, I believe I can encourage those muscles, nerve endings, and so on to rearrange themselves into a functional zombie.
+tc.research_page.somberassembly:HOW_TO_ASSEMBLE_ZOMBIES.somberassembly:ASSEMBLED_A_ZOMBIE=Addendum: It worked! It actually worked! It is a shame the resulting zombie was just as aggressive towards me as those encountered in the wild. Its eagerness to pick up anything it could use against me is even more surprising, as that requires a level of cognition most wild zombies simply don't have. Perhaps I will discover a way to render them docile, or maybe even helpful, in the future.<LINE>I wonder what other creatures I might be able to reanimate in this way? By scanning the creatures I wish to assemble, and the materials I might assemble them with, I may learn to reanimate others in 
 
-tc.research_name.HOW_TO_ASSEMBLE_SKELETONS=Boney Assembly
-tc.research_text.HOW_TO_ASSEMBLE_SKELETONS=How to reanimate skeletons
-tc.research_page.HOW_TO_ASSEMBLE_SKELETONS.1=Reanimating skeletons, it turns out, is a much more complicated process than reanimating zombies. Unlike the flesh used for zombies, bones don't have any muscles, ligaments, or any of the other biological mechanisms required for movement. Ignis vis is required, to weld their bones into a stable formation, additional Aer vis is required to jolt them awake, and their movements were directionless until I provided them with Ordo. The result is a fairly unstable skeleton, which seems to shake itself back into pieces shortly after animation. That instability does nothing to quell their murderous rage, however.<BR>There is definitely room for improvement.  
+tc.research_name.somberassembly:HOW_TO_ASSEMBLE_SKELETONS=Boney Assembly
+tc.research_text.somberassembly:HOW_TO_ASSEMBLE_SKELETONS=How to reanimate skeletons
+tc.research_page.somberassembly:HOW_TO_ASSEMBLE_SKELETONS.1=Reanimating skeletons, it turns out, is a much more complicated process than reanimating zombies. Unlike the flesh used for zombies, bones don't have any muscles, ligaments, or any of the other biological mechanisms required for movement. Ignis vis is required, to weld their bones into a stable formation, additional Aer vis is required to jolt them awake, and their movements were directionless until I provided them with Ordo. The result is a fairly unstable skeleton, which seems to shake itself back into pieces shortly after animation. That instability does nothing to quell their murderous rage, however.<BR>There is definitely room for improvement.  
 
-tc.research_name.HOW_TO_ASSEMBLE_CREEPERS=Explosive Assem- Disassembly
-tc.research_text.HOW_TO_ASSEMBLE_CREEPERS=How to (very temporarily) reanimate creepers
-tc.research_page.HOW_TO_ASSEMBLE_CREEPERS.1="Zap a pile of dangerous explosives, perhaps it will form a creeper! What could possibly go wrong?"<BR>It certainly worked, but I do not know what other outcome I might have been expecting.
+tc.research_name.somberassembly:HOW_TO_ASSEMBLE_CREEPERS=Explosive Assem- Disassembly
+tc.research_text.somberassembly:HOW_TO_ASSEMBLE_CREEPERS=How to (very temporarily) reanimate creepers
+tc.research_page.somberassembly:HOW_TO_ASSEMBLE_CREEPERS.1="Zap a pile of dangerous explosives, perhaps it will form a creeper! What could possibly go wrong?"<BR>It certainly worked, but I do not know what other outcome I might have been expecting. What a waste of TNT.

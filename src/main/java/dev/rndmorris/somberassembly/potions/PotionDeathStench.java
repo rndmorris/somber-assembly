@@ -43,11 +43,11 @@ public class PotionDeathStench extends SomberPotion {
             return;
         }
         final var range = 8D;
-        final var entitiesToHarm = affected.worldObj.selectEntitiesWithinAABB(
+        final var entitiesToAggro = affected.worldObj.selectEntitiesWithinAABB(
             EntityLivingBase.class,
             affected.boundingBox.expand(range, range, range),
             PotionDeathStench::makesHostile);
-        for (final var entity : entitiesToHarm) {
+        for (final var entity : entitiesToAggro) {
             if (entity.getAITarget() == null) {
                 entity.setRevengeTarget(affected);
             }

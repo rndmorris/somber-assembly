@@ -13,6 +13,7 @@ import net.minecraft.util.ChatComponentText;
 import dev.rndmorris.somberassembly.commands.actions.ActionForgetResearch;
 import dev.rndmorris.somberassembly.commands.actions.ActionHelp;
 import dev.rndmorris.somberassembly.commands.actions.ActionListPotions;
+import dev.rndmorris.somberassembly.commands.actions.ActionListResearch;
 import dev.rndmorris.somberassembly.commands.actions.ActionResetScanned;
 import dev.rndmorris.somberassembly.lib.CollectionUtil;
 
@@ -40,6 +41,7 @@ public class SomberAssemblyCommand extends CommandBase {
             new ActionForgetResearch(this),
             new ActionForgetResearch(this),
             new ActionListPotions(this),
+            new ActionListResearch(this),
             new ActionResetScanned(this));
         this.commandUsage = String
             .format("Command usage: /%1s <%2s> [<arg1>, <arg2>, ...]", COMMAND_NAME, listActionNames(" | "));
@@ -95,6 +97,20 @@ public class SomberAssemblyCommand extends CommandBase {
         final var actionArgs = Arrays.asList(args)
             .subList(1, args.length);
         actionOption.execute(sender, actionArgs);
+    }
+
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+        if (args.length == 1) {
+            return actions.stream()
+                .map(ICommandAction::getName)
+                .collect(Collectors.toList());
+        }
+        final var foundAction = findAction(args[0]);
+        if (foundAction != null) {
+            return foundAction.addTabCompletionOptions(sender, args);
+        }
+        return null;
     }
 
     // Communication

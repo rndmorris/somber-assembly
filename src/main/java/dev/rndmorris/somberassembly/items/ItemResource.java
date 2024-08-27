@@ -71,9 +71,9 @@ public class ItemResource extends SomberItem {
         if (stack.stackSize < 1) {
             return;
         }
-        final var effect = player.getActivePotionEffect(SomberPotion.deathMask);
+        final var effect = player.getActivePotionEffect(SomberPotion.deathStench);
         if (effect == null || (effect.getDuration() < (effectDuration - refreshInterval))) {
-            var newEffect = new PotionEffect(SomberPotion.deathMask.id, effectDuration, 0, false);
+            var newEffect = new PotionEffect(SomberPotion.deathStench.id, effectDuration, 0, false);
             player.addPotionEffect(newEffect);
             if (!player.capabilities.isCreativeMode && Randoms.nextPercentile(player.worldObj.rand) <= decayChance) {
                 // Why reinvent the wheel if we know this is going to be here anyway?
