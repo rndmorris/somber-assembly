@@ -86,7 +86,7 @@ public class WandNecromancyManager {
         clearBlocks(world, x, y, z);
         spawnMob(world, x, y, z);
         doEffects(world, player, x, y, z);
-        return false;
+        return true;
     }
 
     private void drainVis(ItemStack wand, EntityPlayer player) {
