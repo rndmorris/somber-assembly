@@ -1,5 +1,6 @@
 package dev.rndmorris.somberassembly.wandtriggers;
 
+import com.github.bsideup.jabel.Desugar;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,25 +28,29 @@ public class WandNecromancyManager {
         this.visCost = visCost;
     }
 
-    public boolean tryCreateEntity(World world, ItemStack wand, EntityPlayer player, int x, int y, int z, int event) {
-        if (checkPredicates(world, wand, player, x, y, z, event)) {
-            return spawnEntity(world, wand, player, x, y, z);
+    public boolean tryCreateEntity(World world, ItemStack wand, EntityPlayer player, int x, int y, int z, int side,
+        int event) {
+        var args = new WandNecromancyManager.TriggerEventArgs(world, wand, player, x, y, z, side, event);
+        if (checkPredicates(args)) {
+            return spawnEntity(args);
         }
         return true;
     }
 
-    private boolean checkPredicates(World world, ItemStack wand, EntityPlayer player, int x, int y, int z, int event) {
-        return event == 1 && checkResearch(player) && checkBlockStructure(world, x, y, z) && checkWand(wand, player);
+    private boolean checkPredicates(TriggerEventArgs args) {
+        return checkResearch(args) && checkBlockStructure(args) && checkWand(args);
     }
 
-    private boolean checkResearch(EntityPlayer player) {
+    private boolean checkResearch(TriggerEventArgs args) {
         if (this.requiredResearch == null) {
             return true;
         }
-        return ResearchManager.isResearchComplete(player.getCommandSenderName(), this.requiredResearch);
+        return ResearchManager.isResearchComplete(args.player.getCommandSenderName(), this.requiredResearch);
     }
 
-    private boolean checkBlockStructure(World world, int x, int y, int z) {
+    private boolean checkBlockStructure(TriggerEventArgs args) {
+        var world = args.world;
+        int x = args.x, y = args.y, z = args.z;
         return checkBlock(world, x, y, z) && checkBlock(world, x, y - 1, z);
     }
 
@@ -55,23 +60,28 @@ public class WandNecromancyManager {
         return this.expectedBlockType.equals(block) && this.expectedBlockMetadata == metadata;
     }
 
-    private boolean checkWand(ItemStack wand, EntityPlayer player) {
-        if (!(wand.getItem() instanceof ItemWandCasting castingWand)) {
+    private boolean checkWand(TriggerEventArgs args) {
+        if (!(args.wand.getItem() instanceof ItemWandCasting castingWand)) {
             return false;
         }
         if (this.visCost == null) {
             return true;
         }
-        return castingWand.consumeAllVisCrafting(wand, player, this.visCost, false);
+        return castingWand.consumeAllVisCrafting(args.wand, args.player, this.visCost, false);
     }
 
-    private boolean spawnEntity(World world, ItemStack wand, EntityPlayer player, int x, int y, int z) {
-        if (world.isRemote) {
+    private boolean spawnEntity(TriggerEventArgs args) {
+        var world = args.world;
+        var player = args.player;
+        int x = args.x, y = args.y, z = args.z;
+
+        if (args.world.isRemote) {
             return false;
         }
-        drainVis(wand, player);
+
+        drainVis(args.wand, player);
         clearBlocks(world, x, y, z);
-        spawnMob(world, x, y, z);
+        spawnMob(args);
         doEffects(world, player, x, y, z);
         return true;
     }
@@ -89,10 +99,10 @@ public class WandNecromancyManager {
         world.setBlockToAir(x, y - 1, z);
     }
 
-    private void spawnMob(World world, int x, int y, int z) {
-        var newEntity = this.createEntityClosure.create(world);
-        newEntity.setPosition(x + .5D, y - 1D, z + .5D);
-        world.spawnEntityInWorld(newEntity);
+    private void spawnMob(TriggerEventArgs args) {
+        var newEntity = this.createEntityClosure.create(args);
+        newEntity.setPosition(args.x + .5D, args.y - 1D, args.z + .5D);
+        args.world.spawnEntityInWorld(newEntity);
     }
 
     private void doEffects(World world, EntityPlayer player, int x, int y, int z) {
@@ -106,8 +116,12 @@ public class WandNecromancyManager {
         player.swingItem();
     }
 
+    @Desugar
+    public record TriggerEventArgs(World world, ItemStack wand, EntityPlayer player, int x, int y, int z, int side,
+        int event) {}
+
     public interface CreateEntity {
 
-        EntityLiving create(World world);
+        EntityLiving create(TriggerEventArgs args);
     }
 }

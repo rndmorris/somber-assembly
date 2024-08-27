@@ -19,7 +19,7 @@ public class CommonProxy {
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes."
-    public void init(FMLInitializationEvent event) {
+    public void init(FMLInitializationEvent ignoredEvent) {
         SomberRecipes.preInit();
     }
 

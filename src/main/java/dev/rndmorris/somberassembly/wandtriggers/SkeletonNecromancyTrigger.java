@@ -16,11 +16,12 @@ public class SkeletonNecromancyTrigger implements IWandTriggerManager {
     public SkeletonNecromancyTrigger() {
         final int boneBlockMetadata = 0;
         var boneBlock = SomberBlocks.boneBlock;
-        WandNecromancyManager.CreateEntity createSkeleton = (world) -> {
-            var skeleton = new EntitySkeleton(world);
+        WandNecromancyManager.CreateEntity createSkeleton = (args) -> {
+            var skeleton = new EntitySkeleton(args.world());
             for (var slot = 0; slot <= 4; ++slot) {
                 skeleton.setCurrentItemOrArmor(slot, null);
             }
+            skeleton.setCanPickUpLoot(true);
             return skeleton;
         };
         this.manager = new WandNecromancyManager(boneBlock, boneBlockMetadata, createSkeleton, null, null);
@@ -30,6 +31,6 @@ public class SkeletonNecromancyTrigger implements IWandTriggerManager {
     @Override
     public boolean performTrigger(World world, ItemStack wand, EntityPlayer player, int x, int y, int z, int side,
         int event) {
-        return manager.tryCreateEntity(world, wand, player, x, y, z, event);
+        return manager.tryCreateEntity(world, wand, player, x, y, z, side, event);
     }
 }
