@@ -1,47 +1,39 @@
 package dev.rndmorris.somberassembly.commands.actions;
 
-import dev.rndmorris.somberassembly.commands.CommandActionBase;
-import dev.rndmorris.somberassembly.commands.SomberAssemblyCommand;
-import dev.rndmorris.somberassembly.lib.CollectionUtil;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.potion.Potion;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ActionListPotions extends CommandActionBase<SomberAssemblyCommand>
-{
-    public ActionListPotions(SomberAssemblyCommand owningCommand)
-    {
+import net.minecraft.command.ICommandSender;
+import net.minecraft.potion.Potion;
+
+import dev.rndmorris.somberassembly.commands.CommandActionBase;
+import dev.rndmorris.somberassembly.commands.SomberAssemblyCommand;
+import dev.rndmorris.somberassembly.lib.CollectionUtil;
+
+public class ActionListPotions extends CommandActionBase<SomberAssemblyCommand> {
+
+    public ActionListPotions(SomberAssemblyCommand owningCommand) {
         super(owningCommand, "listPotions");
     }
 
     @Override
-    public String getDescription()
-    {
+    public String getDescription() {
         return "List all potion effects and their ids";
     }
 
     @Override
-    public String getArgumentsExample()
-    {
+    public String getArgumentsExample() {
         return "[<searchText>]";
     }
 
     @Override
-    public List<String> getArgumentDescriptions()
-    {
-        return CollectionUtil.listOf(
-            "<searchText>: Optional. Only return potions containing this text."
-        );
+    public List<String> getArgumentDescriptions() {
+        return CollectionUtil.listOf("<searchText>: Optional. Only return potions containing this text.");
     }
 
     @Override
-    public int getMinimumArguments()
-    {
+    public int getMinimumArguments() {
         return 0;
     }
 
@@ -52,11 +44,15 @@ public class ActionListPotions extends CommandActionBase<SomberAssemblyCommand>
         }
         final var searchText = collectSearchText(args, 0);
 
-        var potions = Arrays.stream(Potion.potionTypes).filter(Objects::nonNull);
+        var potions = Arrays.stream(Potion.potionTypes)
+            .filter(Objects::nonNull);
 
         if (searchText != null && !searchText.isEmpty()) {
             final var search = searchText.toUpperCase();
-            potions = potions.filter(p -> p.getName().toUpperCase().contains(search));
+            potions = potions.filter(
+                p -> p.getName()
+                    .toUpperCase()
+                    .contains(search));
         }
 
         final var potionList = potions.map(p -> String.format("%1s (%2d)", p.getName(), p.id));

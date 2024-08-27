@@ -6,13 +6,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import dev.rndmorris.somberassembly.commands.actions.ActionListPotions;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
 import dev.rndmorris.somberassembly.commands.actions.ActionForgetResearch;
 import dev.rndmorris.somberassembly.commands.actions.ActionHelp;
+import dev.rndmorris.somberassembly.commands.actions.ActionListPotions;
 import dev.rndmorris.somberassembly.commands.actions.ActionResetScanned;
 import dev.rndmorris.somberassembly.lib.CollectionUtil;
 

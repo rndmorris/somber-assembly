@@ -1,10 +1,12 @@
 # Blocks
 tile.bone_block.name=Block of Bones
 
-# Misc
-tc.research_category.SOMBERASSEMBLY=Necromancy
+# Potions
+potion.deathmask=Death Mask
 
 # Research
+tc.research_category.SOMBERASSEMBLY=Necromancy
+
 tc.research_name.INTRO_TO_SOMBER_ASSEMBLY=Somber Assembly
 tc.research_text.INTRO_TO_SOMBER_ASSEMBLY=An introduction to formalized necromancy
 tc.research_page.INTRO_TO_SOMBER_ASSEMBLY.1=I have heard a tablet that forms new creatures from nearby aspects of creatures' souls. Deep in the earth I have found cages that, in my presence, conjure hordes to slay me. There are rumors of thaumaturges infusing more wrathful versions of those cages that can conjure beings by consuming the wrath of the Nether. I have even learned to shape dead flesh into a small, but subservient, golem.

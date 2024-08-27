@@ -12,6 +12,7 @@ import dev.rndmorris.somberassembly.configs.Config;
 import dev.rndmorris.somberassembly.data.events.IEventManager;
 import dev.rndmorris.somberassembly.data.events.SimpleEventManager;
 import dev.rndmorris.somberassembly.data.events.SuccessfulScanEvent;
+import dev.rndmorris.somberassembly.potions.SomberPotions;
 import dev.rndmorris.somberassembly.recipes.SomberRecipes;
 import dev.rndmorris.somberassembly.recipes.WandTriggerManager;
 import dev.rndmorris.somberassembly.research.SomberResearch;
@@ -40,6 +41,7 @@ public class CommonProxy {
 
     // postInit "Handle interaction with other mods, complete your setup based on this."
     public void postInit(FMLPostInitializationEvent ignoredEvent) {
+        SomberPotions.init();
         WandTriggerManager.init();
         SomberResearch.init();
     }
