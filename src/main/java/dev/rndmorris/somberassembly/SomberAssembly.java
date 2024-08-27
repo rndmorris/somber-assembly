@@ -2,6 +2,7 @@ package dev.rndmorris.somberassembly;
 
 import javax.annotation.Nonnull;
 
+import dev.rndmorris.somberassembly.common.CommonProxy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,7 +12,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import dev.rndmorris.somberassembly.commands.SomberAssemblyCommand;
+import dev.rndmorris.somberassembly.common.commands.SomberAssemblyCommand;
 
 @Mod(
     modid = SomberAssembly.MODID,
@@ -28,8 +29,8 @@ public class SomberAssembly {
     public static final String VERSION = "1.7.10-A1";
 
     @SidedProxy(
-        clientSide = "dev.rndmorris.somberassembly.ClientProxy",
-        serverSide = "dev.rndmorris.somberassembly.CommonProxy")
+        clientSide = "dev.rndmorris.somberassembly.client.ClientProxy",
+        serverSide = "dev.rndmorris.somberassembly.common.CommonProxy")
     public static CommonProxy proxy;
 
     @Mod.EventHandler
