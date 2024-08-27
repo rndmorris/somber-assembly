@@ -143,6 +143,7 @@ public class SomberResearch {
             .display(itemFocusShock)
             .addTextPage(1)
             .addParents(Research.INTRO_TO_SOMBER_ASSEMBLY)
+            .addParents(VanillaResearch.FOCUSSHOCK.toString())
             .addHiddenParents(Research.SCANNED_ITEM_SHOCK_FOCUS)
             .addAspectCost(Aspect.WEATHER, 5)
             .addAspectCost(Aspect.CRAFT, 8)
