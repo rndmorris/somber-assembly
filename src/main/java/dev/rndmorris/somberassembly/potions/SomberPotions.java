@@ -15,7 +15,7 @@ import dev.rndmorris.somberassembly.lib.ArrayUtil;
 public class SomberPotions {
 
     private static final int customPotionCount = 1;
-    public static PotionDeathMask deathMask;
+    public static PotionDeathStench deathMask;
 
     public static void init() {
         final var availableIds = findEmptyPotionIds();
@@ -31,7 +31,7 @@ public class SomberPotions {
 
         var potionIdIndex = 0;
         var potionId = availableIds.get(potionIdIndex++);
-        deathMask = new PotionDeathMask(potionId);
+        deathMask = new PotionDeathStench(potionId);
         potionList.set(potionId, deathMask);
 
         updatePotionArray(potionList);
@@ -73,9 +73,5 @@ public class SomberPotions {
             }
         }
         return null;
-    }
-
-    private interface PotionInit {
-
     }
 }

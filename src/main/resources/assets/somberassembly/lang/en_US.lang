@@ -1,8 +1,11 @@
 # Blocks
 tile.bone_block.name=Block of Bones
 
+# Items
+item.ItemSomberResource.0.name=Decaying Flesh
+
 # Potions
-potion.deathmask=Death Mask
+potion.deathmask=Stench of Death
 
 # Research
 tc.research_category.SOMBERASSEMBLY=Necromancy

@@ -1,6 +1,5 @@
 package dev.rndmorris.somberassembly.mixins.early;
 
-import dev.rndmorris.somberassembly.potions.SomberPotions;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -12,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import dev.rndmorris.somberassembly.potions.PotionDeathMask;
+import dev.rndmorris.somberassembly.potions.PotionDeathStench;
+import dev.rndmorris.somberassembly.potions.SomberPotions;
 
 @Mixin(EntityAITarget.class)
 public abstract class MixinEntityAITarget extends EntityAIBase {
@@ -29,7 +29,7 @@ public abstract class MixinEntityAITarget extends EntityAIBase {
             return;
         }
         final var targetDeathMask = target.getActivePotionEffect(SomberPotions.deathMask);
-        if (PotionDeathMask.affectsEntity(taskOwner) && targetDeathMask != null) {
+        if (PotionDeathStench.affectsEntity(taskOwner) && targetDeathMask != null) {
             cir.setReturnValue(false);
             cir.cancel();
         }

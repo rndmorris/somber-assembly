@@ -8,12 +8,12 @@ import net.minecraft.potion.Potion;
 /**
  * Potion effect to prevent zombies and skeletons from attacking affected creatures on sight.
  */
-public class PotionDeathMask extends Potion {
+public class PotionDeathStench extends Potion {
 
     public static final String NAME = "potion.deathmask";
 
-    public PotionDeathMask(int potionId) {
-        super(potionId, false, 0x000000);
+    public PotionDeathStench(int potionId) {
+        super(potionId, false, 0x008000);
         setPotionName(NAME);
         setEffectiveness(1D);
     }
