@@ -1,14 +1,9 @@
 package dev.rndmorris.somberassembly;
 
-import java.util.List;
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.gtnewhorizon.gtnhmixins.IEarlyMixinLoader;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -17,7 +12,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import dev.rndmorris.somberassembly.commands.SomberAssemblyCommand;
-import dev.rndmorris.somberassembly.lib.CollectionUtil;
 
 @Mod(
     modid = SomberAssembly.MODID,
@@ -25,7 +19,7 @@ import dev.rndmorris.somberassembly.lib.CollectionUtil;
     name = SomberAssembly.NAME,
     dependencies = SomberAssembly.DEPS,
     acceptedMinecraftVersions = "[1.7.10]")
-public class SomberAssembly implements IEarlyMixinLoader {
+public class SomberAssembly {
 
     public static final String NAME = "Somber Assembly";
     public static final String DEPS = "after:Thaumcraft";
@@ -67,17 +61,5 @@ public class SomberAssembly implements IEarlyMixinLoader {
 
     public static String prefixModid(@Nonnull String toPrefix) {
         return MODID + ":" + toPrefix;
-    }
-
-    // IEarlyMixinLoader implementation
-
-    @Override
-    public String getMixinConfig() {
-        return "mixins." + SomberAssembly.MODID + ".json";
-    }
-
-    @Override
-    public List<String> getMixins(Set<String> loadedCoreMods) {
-        return CollectionUtil.listOf("MixinWorld", "MixinEntityAINearestAttackableTarget$1");
     }
 }
