@@ -1,6 +1,5 @@
 package dev.rndmorris.somberassembly.items;
 
-import dev.rndmorris.somberassembly.lib.Randoms;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +13,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import dev.rndmorris.somberassembly.SomberAssembly;
+import dev.rndmorris.somberassembly.lib.Randoms;
 import dev.rndmorris.somberassembly.potions.SomberPotion;
 import thaumcraft.common.lib.utils.InventoryUtils;
 
