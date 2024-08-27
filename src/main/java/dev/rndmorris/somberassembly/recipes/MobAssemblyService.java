@@ -77,6 +77,9 @@ public class MobAssemblyService {
         if (config.wandPredicate != null && !config.wandPredicate.evalutate(args.wand, castingWand)) {
             return false;
         }
+        if (args.player.capabilities.isCreativeMode) {
+            return true;
+        }
         return castingWand.consumeAllVisCrafting(args.wand, args.player, this.config.visCost, false);
     }
 
@@ -113,6 +116,9 @@ public class MobAssemblyService {
     }
 
     private void drainVis(ItemStack wand, EntityPlayer player) {
+        if (player.capabilities.isCreativeMode) {
+            return;
+        }
         var castingWand = (ItemWandCasting) wand.getItem();
         Objects.requireNonNull(castingWand)
             .consumeAllVisCrafting(wand, player, this.config.visCost, true);
@@ -144,11 +150,6 @@ public class MobAssemblyService {
             "Thaumcraft:shock",
             1.0F,
             args.world.rand.nextFloat() * 0.4F + 0.8F);
-    }
-
-    @SuppressWarnings("unused")
-    private void playSoundAtPlayer(EventArgs args, String soundName) {
-        SomberAssembly.proxy.playSoundAtEntity(args.player, soundName, 1.0F, args.world.rand.nextFloat() * 0.4F + 0.8F);
     }
 
     @Desugar
