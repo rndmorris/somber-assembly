@@ -162,7 +162,6 @@ public class SomberResearch {
             .addAspectCost(Aspect.MAN, 8)
             .addAspectCost(Aspect.EXCHANGE, 8)
             .setComplexity(2)
-            .addTextPage(1)
             .addCompoundRecipePage(SomberRecipes.assembleZombie)
             .addSecretPage(Research.ASSEMBLED_A_ZOMBIE)
             .register();
@@ -177,7 +176,6 @@ public class SomberResearch {
                 Research.SCANNED_ENTITY_SKELETON,
                 Research.SCANNED_BLOCK_BONE)
             .setComplexity(2)
-            .addTextPage(1)
             .addCompoundRecipePage(SomberRecipes.assembleSkeleton)
             .makeLost()
             .register();
@@ -189,7 +187,6 @@ public class SomberResearch {
             .addParents(Research.SHOCK_FOCUS_ASSEMBLY)
             .addHiddenParents(Research.ASSEMBLED_A_CREEPER, Research.SCANNED_ENTITY_CREEPER, Research.SCANNED_BLOCK_TNT)
             .setComplexity(2)
-            .addTextPage(1)
             .addCompoundRecipePage(SomberRecipes.assembleCreeper)
             .makeLost()
             .register();
