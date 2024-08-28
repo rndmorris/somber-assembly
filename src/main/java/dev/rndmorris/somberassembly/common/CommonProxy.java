@@ -1,6 +1,5 @@
 package dev.rndmorris.somberassembly.common;
 
-import dev.rndmorris.somberassembly.common.events.EntityEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -10,6 +9,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import dev.rndmorris.somberassembly.common.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.common.configs.Config;
+import dev.rndmorris.somberassembly.common.events.EntityEvents;
 import dev.rndmorris.somberassembly.common.items.SomberItem;
 import dev.rndmorris.somberassembly.common.potions.SomberPotion;
 import dev.rndmorris.somberassembly.common.recipes.SomberRecipes;

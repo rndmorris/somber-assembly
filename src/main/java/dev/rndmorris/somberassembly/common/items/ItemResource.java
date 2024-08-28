@@ -13,8 +13,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import dev.rndmorris.somberassembly.SomberAssembly;
-import dev.rndmorris.somberassembly.utils.Randoms;
 import dev.rndmorris.somberassembly.common.potions.SomberPotion;
+import dev.rndmorris.somberassembly.utils.Randoms;
 import thaumcraft.common.lib.utils.InventoryUtils;
 
 public class ItemResource extends SomberItem {

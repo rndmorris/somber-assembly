@@ -1,6 +1,5 @@
 package dev.rndmorris.somberassembly.common.events;
 
-import dev.rndmorris.somberassembly.SomberAssembly;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
@@ -9,6 +8,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import dev.rndmorris.somberassembly.SomberAssembly;
 import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.items.SomberItem;
 import dev.rndmorris.somberassembly.common.potions.SomberPotion;
