@@ -39,12 +39,12 @@ public abstract class SomberPotion extends Potion {
             potionList.add(null);
         }
 
+        updatePotionArray(potionList);
+
         var potionIdIndex = 0;
         var potionId = availableIds.get(potionIdIndex++);
         deathStench = new PotionDeathStench(potionId);
         potionList.set(potionId, deathStench);
-
-        updatePotionArray(potionList);
     }
 
     private static List<Integer> findEmptyPotionIds() {
