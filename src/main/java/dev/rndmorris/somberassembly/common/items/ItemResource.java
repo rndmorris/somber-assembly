@@ -27,10 +27,8 @@ public class ItemResource extends SomberItem {
     public final IIcon[] icons = new IIcon[VARIANT_COUNT];
 
     public ItemResource() {
-        this.setMaxStackSize(64);
-        this.setHasSubtypes(true);
-        this.setMaxDamage(0);
-        this.setUnlocalizedName(NAME);
+        setHasSubtypes(true);
+        setUnlocalizedName(NAME);
 
         GameRegistry.registerItem(this, NAME, SomberAssembly.MODID);
     }

@@ -1,6 +1,9 @@
 # Blocks
 tile.somberassembly:block_bone.name=Block of Bones
 
+# Creative Tabs
+itemGroup.somberassembly=Somber Assembly
+
 # Items
 item.somberassembly:item_resource.0.name=Decaying Flesh
 

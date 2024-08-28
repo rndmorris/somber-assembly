@@ -2,6 +2,9 @@ package dev.rndmorris.somberassembly;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,7 +13,10 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import dev.rndmorris.somberassembly.common.CommonProxy;
+import dev.rndmorris.somberassembly.common.blocks.SomberBlock;
 
 @Mod(
     modid = SomberAssembly.MODID,
@@ -25,6 +31,15 @@ public class SomberAssembly {
     public static final String MODID = "somberassembly";
     public static final Logger LOG = LogManager.getLogger(MODID);
     public static final String VERSION = "1.7.10-A1";
+
+    public static final CreativeTabs creativeTab = new CreativeTabs(MODID) {
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Item getTabIconItem() {
+            return Item.getItemFromBlock(SomberBlock.boneBlock);
+        }
+    };
 
     @SidedProxy(
         clientSide = "dev.rndmorris.somberassembly.client.ClientProxy",

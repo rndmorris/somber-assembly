@@ -14,11 +14,12 @@ public abstract class SomberBlock extends Block {
 
     public static void preInit() {
         boneBlock = new BoneBlock();
-        GameRegistry.registerBlock(boneBlock, BoneBlock.NAME);
     }
 
     protected SomberBlock(Material materialIn) {
         super(materialIn);
+
+        this.setCreativeTab(SomberAssembly.creativeTab);
     }
 
     @Override

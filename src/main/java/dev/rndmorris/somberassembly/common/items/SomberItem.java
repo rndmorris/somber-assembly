@@ -12,6 +12,10 @@ public abstract class SomberItem extends Item {
 
     public static ItemResource itemResource;
 
+    public SomberItem() {
+        this.setCreativeTab(SomberAssembly.creativeTab);
+    }
+
     public static void preInit() {
         itemResource = new ItemResource();
     }
