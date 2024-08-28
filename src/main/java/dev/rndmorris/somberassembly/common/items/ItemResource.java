@@ -13,6 +13,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import dev.rndmorris.somberassembly.SomberAssembly;
+import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.potions.SomberPotion;
 import dev.rndmorris.somberassembly.utils.Randoms;
 import thaumcraft.common.lib.utils.InventoryUtils;
@@ -65,7 +66,7 @@ public class ItemResource extends SomberItem {
         // Give the player the Stench of Death, or refresh it if needed
         final var effectDuration = 260;
         final var refreshInterval = 200;
-        final var decayChance = 50;
+        final var decayChance = Config.decayingFleshDecayChance;
         if (stack.stackSize < 1) {
             return;
         }
@@ -73,7 +74,8 @@ public class ItemResource extends SomberItem {
         if (effect == null || (effect.getDuration() < (effectDuration - refreshInterval))) {
             var newEffect = new PotionEffect(SomberPotion.deathStench.id, effectDuration, 0, false);
             player.addPotionEffect(newEffect);
-            if (!player.capabilities.isCreativeMode && Randoms.nextPercentile(player.worldObj.rand) <= decayChance) {
+            if (!player.capabilities.isCreativeMode && (decayChance == 100
+                || (decayChance != 0 && Randoms.nextPercentile(player.worldObj.rand) <= decayChance))) {
                 // Why reinvent the wheel if we know this is going to be here anyway?
                 InventoryUtils.consumeInventoryItem(player, stack.getItem(), stack.getItemDamage());
                 player.addChatMessage(new ChatComponentTranslation("msg.somberassembly.decaying_flesh_rotted"));
