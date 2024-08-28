@@ -72,7 +72,7 @@ public class SomberResearch {
         public final static String GOLEMFLESH = "GOLEMFLESH";
     }
 
-    public static void init() {
+    public static void postInit() {
         ResearchBuilder.setCategory(CATEGORY_BASIC);
         registerCategory();
         automaticResearch();
@@ -246,7 +246,6 @@ public class SomberResearch {
         for (var key : researchKeys) {
             if (!ResearchManager.isResearchComplete(playerName, key)) {
                 Thaumcraft.proxy.researchManager.completeResearch(player, key);
-                SomberAssembly.proxy.playDiscoverySounds(player);
             }
         }
     }

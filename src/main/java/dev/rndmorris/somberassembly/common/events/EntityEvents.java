@@ -17,7 +17,7 @@ public class EntityEvents {
 
     public static EntityEvents INSTANCE;
 
-    public static void init() {
+    public static void preInit() {
         INSTANCE = new EntityEvents();
         MinecraftForge.EVENT_BUS.register(INSTANCE);
     }

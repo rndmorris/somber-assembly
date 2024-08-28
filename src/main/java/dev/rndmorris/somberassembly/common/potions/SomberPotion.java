@@ -27,7 +27,7 @@ public abstract class SomberPotion extends Potion {
         return this;
     }
 
-    public static void init() {
+    public static void postInit() {
         final var availableIds = findEmptyPotionIds();
 
         final var potionList = new ArrayList<>(Arrays.asList(Potion.potionTypes));

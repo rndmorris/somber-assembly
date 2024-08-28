@@ -1,7 +1,5 @@
 package dev.rndmorris.somberassembly.common;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -22,9 +20,9 @@ public class CommonProxy {
     // GameRegistry."
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
-        SomberBlock.init();
-        SomberItem.initItems();
-        EntityEvents.init();
+        SomberBlock.preInit();
+        SomberItem.preInit();
+        EntityEvents.preInit();
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes."
@@ -34,31 +32,14 @@ public class CommonProxy {
 
     // postInit "Handle interaction with other mods, complete your setup based on this."
     public void postInit(FMLPostInitializationEvent ignoredEvent) {
-        SomberPotion.init();
-        WandTriggerManager.init();
-        SomberResearch.init();
-        SomberItem.initItemAspects();
-    }
-
-    public void playSound(World world, double x, double y, double z, String soundName, float volume, float pitch,
-        boolean distanceDelay) {
-        world.playSound(x, y, z, soundName, volume, pitch, distanceDelay);
+        SomberPotion.postInit();
+        WandTriggerManager.postInit();
+        SomberResearch.postInit();
+        SomberItem.postInit();
     }
 
     public void playSoundEffect(World world, double x, double y, double z, String soundName, float volume,
         float pitch) {
         world.playSoundEffect(x, y, z, soundName, volume, pitch);
-    }
-
-    public void playSoundAtEntity(Entity entity, String soundName, float volume, float pitch) {
-        entity.worldObj.playSoundAtEntity(entity, soundName, volume, pitch);
-    }
-
-    public void playDiscoverySounds(EntityPlayer atPlayer) {
-        final var world = atPlayer.worldObj;
-        if (world.isRemote) {
-            playSoundAtEntity(atPlayer, "Thaumcraft:write", 2.0f, 1F + (world.rand.nextFloat() * 0.5F));
-            playSoundAtEntity(atPlayer, "Thaumcraft:learn", 2.0f, 1F + (world.rand.nextFloat() * 0.5F));
-        }
     }
 }

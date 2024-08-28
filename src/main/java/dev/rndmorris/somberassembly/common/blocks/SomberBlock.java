@@ -12,7 +12,7 @@ public abstract class SomberBlock extends Block {
 
     public static Block boneBlock;
 
-    public static void init() {
+    public static void preInit() {
         boneBlock = new BoneBlock();
         GameRegistry.registerBlock(boneBlock, BoneBlock.NAME);
     }

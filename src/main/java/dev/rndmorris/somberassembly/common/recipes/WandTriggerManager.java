@@ -36,7 +36,7 @@ public class WandTriggerManager implements IWandTriggerManager {
     private final MobAssemblyService skeletonAssemblyService;
     private final MobAssemblyService zombieAssemblyService;
 
-    public static void init() {
+    public static void postInit() {
         INSTANCE = new WandTriggerManager();
     }
 

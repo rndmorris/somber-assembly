@@ -12,11 +12,11 @@ public abstract class SomberItem extends Item {
 
     public static ItemResource itemResource;
 
-    public static void initItems() {
+    public static void preInit() {
         itemResource = new ItemResource();
     }
 
-    public static void initItemAspects() {
+    public static void postInit() {
         ThaumcraftApi.registerObjectTag(
             decayingFlesh(0),
             new AspectList().add(Aspect.MAN, 1)
