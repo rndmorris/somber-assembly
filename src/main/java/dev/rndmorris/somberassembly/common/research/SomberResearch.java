@@ -3,6 +3,7 @@ package dev.rndmorris.somberassembly.common.research;
 import java.util.Arrays;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -22,16 +23,6 @@ public class SomberResearch {
      * Somber Assembly's research category
      */
     public final static String CATEGORY_BASIC = SomberAssembly.prefixModid("category_basic");
-
-    // Icons
-    private static ResourceLocation iconSinisterStone;
-    private static ResourceLocation iconSkullCreeper;
-    private static ResourceLocation iconSkullSkeleton;
-    private static ResourceLocation iconSkullWither;
-    private static ResourceLocation iconSkullZombie;
-
-    // ItemStacks
-    private static ItemStack itemFocusShock;
 
     // Research Keys
     public static class Research {
@@ -82,42 +73,28 @@ public class SomberResearch {
     }
 
     public static void init() {
-        initializeIconsAndItems();
-
         ResearchBuilder.setCategory(CATEGORY_BASIC);
         registerCategory();
-        registerStarterResearch();
-
-        // Register wand mob assembly research
-        registerEarlyMobAssembly();
-
-        // Register item research
-        registerItemResearch();
-
-        // Always add virtual research last to avoid false conflicts with other research
-        registerPermissionResearch();
-        registerBehaviorResearch();
-    }
-
-    private static void initializeIconsAndItems() {
-        iconSinisterStone = new ResourceLocation("thaumcraft", "textures/items/sinister_stone.png");
-        iconSkullCreeper = new ResourceLocation("minecraft", "textures/items/skull_creeper.png");
-        iconSkullSkeleton = new ResourceLocation("minecraft", "textures/items/skull_skeleton.png");
-        iconSkullWither = new ResourceLocation("minecraft", "textures/items/skull_wither.png");
-        iconSkullZombie = new ResourceLocation("minecraft", "textures/items/skull_zombie.png");
-
-        itemFocusShock = ItemApi.getItem("itemFocusShock", 0);
+        automaticResearch();
+        earlyMobAssembly();
+        itemResearch();
+        permissionResearch();
+        triggeredResearch();
     }
 
     private static void registerCategory() {
         final var background = new ResourceLocation("thaumcraft", "textures/gui/gui_researchbackeldritch.png");
-        ResearchCategories.registerCategory(CATEGORY_BASIC, iconSkullWither, background);
+        final var witherSkull = new ResourceLocation("minecraft", "textures/items/skull_wither.png");
+        ResearchCategories.registerCategory(CATEGORY_BASIC, witherSkull, background);
     }
 
-    private static void registerStarterResearch() {
+    /**
+     * Research unlocked automatically (intro, bone blocks, etc)
+     */
+    private static void automaticResearch() {
         ResearchBuilder.forKey(Research.INFO_INTRODUCTION)
             .setPosition(0, 0)
-            .setImage(iconSinisterStone)
+            .setImage(ItemApi.getItem("itemCompassStone", 0))
             .addTextPage(1, 2)
             .setAutoUnlock()
             .setSpecial()
@@ -136,7 +113,11 @@ public class SomberResearch {
             .register();
     }
 
-    private static void registerEarlyMobAssembly() {
+    /**
+     * Research for building mobs with a shock focus
+     */
+    private static void earlyMobAssembly() {
+        final var itemFocusShock = ItemApi.getItem("itemFocusShock", 0);
         ResearchBuilder.forKey(Research.INFO_SHOCK_FOCUS)
             .setPosition(0, 3)
             .setImage(itemFocusShock)
@@ -152,12 +133,12 @@ public class SomberResearch {
 
         ResearchBuilder.forKey(Research.INFO_ZOMBIE_ASSEMBLY)
             .setPosition(3, 1)
-            .setImage(iconSkullZombie)
+            .setImage(new ItemStack(Items.skull, 0, 2))
             .addTextPage(1)
             .addParents(Research.INFO_SHOCK_FOCUS)
             .addHiddenParents(VanillaResearch.GOLEMFLESH)
             .addSiblings(Research.PERMISSION_ASSEMBLE_ZOMBIE)
-            .setHidden()
+            .setConcealed()
             .addEntityTrigger("Zombie")
             .addAspectCost(Aspect.UNDEAD, 8)
             .addAspectCost(Aspect.ENERGY, 8)
@@ -170,11 +151,11 @@ public class SomberResearch {
 
         ResearchBuilder.forKey(Research.INFO_SKELETON_ASSEMBLY)
             .setPosition(3, 3)
-            .setImage(iconSkullSkeleton)
+            .setImage(new ItemStack(Items.skull, 0, 0))
             .addTextPage(1)
             .addParents(Research.INFO_SHOCK_FOCUS)
             .addHiddenParents(Research.ACTION_ASSEMBLED_A_SKELETON)
-            .setHidden()
+            .setConcealed()
             .addEntityTrigger("Skeleton")
             .setComplexity(2)
             .addCompoundRecipePage(SomberRecipes.assembleSkeleton)
@@ -182,7 +163,7 @@ public class SomberResearch {
 
         ResearchBuilder.forKey(Research.INFO_CREEPER_ASSEMBLY)
             .setPosition(3, 5)
-            .setImage(iconSkullCreeper)
+            .setImage(new ItemStack(Items.skull, 0, 4))
             .addTextPage(1)
             .addParents(Research.INFO_SHOCK_FOCUS)
             .addHiddenParents(Research.ACTION_ASSEMBLED_A_CREEPER)
@@ -193,7 +174,10 @@ public class SomberResearch {
             .register();
     }
 
-    private static void registerItemResearch() {
+    /**
+     * Informational research about crafting items
+     */
+    private static void itemResearch() {
         ResearchBuilder.forKey(Research.INFO_DECAYING_FLESH)
             .addParents(Research.INFO_INTRODUCTION)
             .setHidden()
@@ -210,20 +194,33 @@ public class SomberResearch {
             .register();
     }
 
-    private static void registerPermissionResearch() {
+    /**
+     * Research used to determine whether an action or recipe can be performed
+     */
+    private static void permissionResearch() {
         ResearchBuilder.forKey(Research.PERMISSION_ROOT)
             .addHiddenParents(Research.INFO_INTRODUCTION)
             .setAutoUnlock()
             .register();
-        registerVirtual(
-            Research.PERMISSION_ROOT,
+        registerPermission(
             Research.PERMISSION_ASSEMBLE_CREEPER,
             Research.PERMISSION_ASSEMBLE_SKELETON,
             Research.PERMISSION_ASSEMBLE_ZOMBIE,
             Research.PERMISSION_CRAFT_DECAYING_FLESH);
     }
 
-    private static void registerBehaviorResearch() {
+    private static void registerPermission(String... researchKeys) {
+        for (var key : researchKeys) {
+            ResearchBuilder.forKey(key)
+                .addHiddenParents(Research.PERMISSION_ROOT)
+                .register();
+        }
+    }
+
+    /**
+     * Research given upon performing some action
+     */
+    private static void triggeredResearch() {
         ResearchBuilder.forKey(Research.ACTION_ROOT)
             .setAutoUnlock()
             .addHiddenParents(Research.INFO_INTRODUCTION)
@@ -237,14 +234,6 @@ public class SomberResearch {
         ResearchBuilder.forKey(Research.ACTION_ASSEMBLED_A_SKELETON)
             .addSiblings(Research.INFO_SKELETON_ASSEMBLY)
             .register();
-    }
-
-    private static void registerVirtual(String forParent, String... researchKeys) {
-        for (var key : researchKeys) {
-            ResearchBuilder.forKey(key)
-                .addHiddenParents(forParent)
-                .register();
-        }
     }
 
     // Public methods
