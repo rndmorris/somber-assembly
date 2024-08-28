@@ -37,7 +37,7 @@ public class EntityEvents {
     }
 
     @SubscribeEvent
-    public void onLivingDrops(LivingDropsEvent event) throws InterruptedException {
+    public void onLivingDrops(LivingDropsEvent event) {
         zombieDeath(event);
     }
 
