@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8.5-GTNH",
+  "package": "dev.rndmorris.somberassembly.mixins.early",
+  "refmap": "mixins.somberassembly.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ITaskOwner",
+    "MixinEntityAINearestAttackableTarget$1"
+  ],
+  "client": [],
+  "server": []
+}

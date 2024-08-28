@@ -1,4 +1,6 @@
-package dev.rndmorris.somberassembly;
+package dev.rndmorris.somberassembly.client;
+
+import dev.rndmorris.somberassembly.common.CommonProxy;
 
 public class ClientProxy extends CommonProxy {
 
