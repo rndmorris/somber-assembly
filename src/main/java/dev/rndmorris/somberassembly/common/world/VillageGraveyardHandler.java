@@ -3,17 +3,22 @@ package dev.rndmorris.somberassembly.common.world;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.world.structure.VillageGraveyardSmall;
 
 public class VillageGraveyardHandler implements VillagerRegistry.IVillageCreationHandler {
 
     @Override
     public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int i) {
-        return new StructureVillagePieces.PieceWeight(VillageGraveyardSmall.class, 100, 4);
+        return new StructureVillagePieces.PieceWeight(
+            VillageGraveyardSmall.class,
+            Config.graveyardSmallWeight,
+            MathHelper.getRandomIntegerInRange(random, 0, Config.graveyardSmallLimit));
     }
 
     @Override
