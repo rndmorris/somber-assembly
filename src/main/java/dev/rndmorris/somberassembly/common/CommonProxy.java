@@ -36,6 +36,7 @@ public class CommonProxy {
         WandTriggerManager.postInit();
         SomberResearch.postInit();
         SomberItem.postInit();
+        LootGeneration.init();
     }
 
     public void playSoundEffect(World world, double x, double y, double z, String soundName, float volume,
