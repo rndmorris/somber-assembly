@@ -1,5 +1,7 @@
 package dev.rndmorris.somberassembly.common.world.structure;
 
+import static net.minecraft.init.Blocks.dirt;
+import static net.minecraft.init.Blocks.flower_pot;
 import static net.minecraft.init.Blocks.gravel;
 import static net.minecraft.init.Blocks.iron_bars;
 import static net.minecraft.init.Blocks.log;
@@ -13,6 +15,7 @@ import static net.minecraft.init.Blocks.wooden_slab;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -28,15 +31,25 @@ public class VillageGraveyardSmall extends SomberVillage {
     public static final int height = 5;
     public static final int zLength = 9;
 
-    public static final int yShift = -1;
+    public static final int yShift = -2;
 
     private final ChestGenHooks graveChestHooks;
+    private final boolean isFlowerVariant;
 
     public VillageGraveyardSmall(Start start, int componentType, Random random, StructureBoundingBox boundingBox,
         int coordBaseMode) {
         super(start, componentType, random, boundingBox, coordBaseMode);
         graveChestHooks = LootGeneration.graveChestGenHooks(10, 10);
+        isFlowerVariant = random.nextBoolean();
     }
+
+    public int structureHeight() {
+        return height;
+    }
+
+    public int yAdjustment() {
+        return yShift;
+    };
 
     public static VillageGraveyardSmall build(StructureVillagePieces.Start start, List<StructureComponent> pieces,
         Random rand, int x, int y, int z, int coordBaseMode, int componentType) {
@@ -50,41 +63,36 @@ public class VillageGraveyardSmall extends SomberVillage {
 
     @Override
     public boolean addComponentParts(World world, Random rand, StructureBoundingBox boundingBox) {
-        if (!canWorkWithAverageGroundLevel(world, boundingBox, height, yShift)) {
+        if (!canWorkWithAverageGroundLevel(world, boundingBox)) {
             return true;
         }
 
-        final var painter = new Painter(world, boundingBox, rand);
+        painter = new Painter(world, boundingBox, rand);
 
-        painter.set(0, 1, 0, planks, this.coordBaseMode);
+        buildWalls();
+        buildPosts();
+        buildGraves();
+        buildPath();
 
-        paintWalls(painter);
-        paintPosts(painter);
-        paintGraves(painter);
-        paintPath(painter);
-
-        painter.set(5, 1, 4, log);
-        painter.set(6, 1, 3, log);
-        painter.set(6, 1, 5, log);
-        painter.set(6, 1, 4, torch, getMetadataWithOffset(torch, 4));
+        painter.set(6, 3, 4, torch, 0);
 
         return true;
     }
 
-    private void paintWalls(Painter painter) {
-        paintWall(painter, 1, 1, 3, 0);
-        paintWall(painter, 1, 7, 5, 0);
-        paintWall(painter, 1, 1, 0, 5);
-        paintWall(painter, 7, 1, 0, 5);
+    private void buildWalls() {
+        paintWall(1, 1, 3, 0);
+        paintWall(1, 7, 5, 0);
+        paintWall(1, 1, 0, 5);
+        paintWall(7, 1, 0, 5);
     }
 
-    private void paintWall(Painter painter, int x, int z, int deltaX, int deltaZ) {
-        painter.fill(x, 1, z, deltaX, 0, deltaZ, planks);
-        painter.fill(x, 2, z, deltaX, 0, deltaZ, iron_bars);
-        painter.fill(x, 3, z, deltaX, 0, deltaZ, wooden_slab);
+    private void paintWall(int x, int z, int deltaX, int deltaZ) {
+        painter.fill(x, 2, z, deltaX, 0, deltaZ, planks);
+        painter.fill(x, 3, z, deltaX, 0, deltaZ, iron_bars);
+        painter.fill(x, 4, z, deltaX, 0, deltaZ, wooden_slab);
     }
 
-    private void paintPosts(Painter painter) {
+    private void buildPosts() {
         for (var xx = 0; xx < 3; ++xx) {
             for (var zz = 0; zz < 3; ++zz) {
                 if (xx == 1 && zz == 1) {
@@ -92,36 +100,50 @@ public class VillageGraveyardSmall extends SomberVillage {
                 }
                 final var x = 1 + (xx * 3);
                 final var z = 1 + (zz * 3);
-                paintPost(painter, x, z);
+                paintPost(x, z);
             }
         }
     }
 
-    private void paintPost(Painter painter, int x, int z) {
-        final var y = 1;
+    private void paintPost(int x, int z) {
+        final var y = 2;
         painter.fill(x, y, z, 0, 2, 0, log);
         painter.set(x, y + 3, z, wooden_slab);
     }
 
-    private void paintGraves(Painter painter) {
+    private void buildGraves() {
         for (var zz = 0; zz < 3; ++zz) {
-            paintGrave(painter, 2 + (zz * 2));
+            paintGrave(2 + (zz * 2));
         }
     }
 
-    private void paintGrave(Painter painter, int z) {
-        painter.set(2, 1, z, stonebrick);
-        painter.set(2, 2, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 0));
+    private void paintGrave(int z) {
+        painter.set(2, 2, z, stonebrick);
+        painter.set(2, 3, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 0));
 
-        painter.set(3, 1, z, stone_slab);
-        painter.generateChest(3, 0, z, graveChestHooks);
+        if (isFlowerVariant) {
+            painter.set(3, 1, z, dirt, 1);
+            painter.generateChest(3, 0, z, graveChestHooks);
+            painter.set(4, 1, z, dirt, 1);
+            painter.generateChest(4, 0, z, graveChestHooks);
 
-        painter.set(4, 1, z, stone_slab);
-        painter.generateChest(4, 0, z, graveChestHooks);
+            painter.setTileEntity(3, 2, z, flower_pot, (te) -> {
+                if (te instanceof TileEntityFlowerPot flowerPot) {
+                    final var flower = LootGeneration.randomFlower(painter.random);
+                    flowerPot.func_145964_a(flower.getItem(), flower.getItemDamage());
+                    flowerPot.markDirty();
+                }
+            });
+        } else {
+            painter.set(3, 2, z, stone_slab);
+            painter.generateChest(3, 1, z, graveChestHooks);
+            painter.set(4, 2, z, stone_slab);
+            painter.generateChest(4, 1, z, graveChestHooks);
+        }
     }
 
-    private void paintPath(Painter painter) {
-        painter.fill(5, 0, 0, 1, 0, 5, gravel);
-        painter.set(5, 0, 6, gravel);
+    private void buildPath() {
+        painter.fill(5, 1, 0, 1, 0, 5, gravel);
+        painter.set(5, 1, 6, gravel);
     }
 }
