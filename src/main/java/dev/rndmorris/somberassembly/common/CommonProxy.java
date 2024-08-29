@@ -1,10 +1,13 @@
 package dev.rndmorris.somberassembly.common;
 
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.VillagerRegistry;
+import dev.rndmorris.somberassembly.SomberAssembly;
 import dev.rndmorris.somberassembly.common.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.events.EntityEvents;
@@ -13,6 +16,9 @@ import dev.rndmorris.somberassembly.common.potions.SomberPotion;
 import dev.rndmorris.somberassembly.common.recipes.SomberRecipes;
 import dev.rndmorris.somberassembly.common.recipes.WandTriggerManager;
 import dev.rndmorris.somberassembly.common.research.SomberResearch;
+import dev.rndmorris.somberassembly.common.world.LootGeneration;
+import dev.rndmorris.somberassembly.common.world.VillageGraveyardHandler;
+import dev.rndmorris.somberassembly.common.world.structure.VillageGraveyardSmall;
 
 public class CommonProxy {
 
@@ -23,11 +29,19 @@ public class CommonProxy {
         SomberBlock.preInit();
         SomberItem.preInit();
         EntityEvents.preInit();
+        try {
+            MapGenStructureIO.func_143031_a(VillageGraveyardSmall.class, "SAGraveyardSmallR");
+            SomberAssembly.LOG.info("Registered graveyards.");
+        } catch (Throwable err) {
+            SomberAssembly.LOG.error("Could not register graveyards.", err);
+        }
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes."
     public void init(FMLInitializationEvent ignoredEvent) {
         SomberRecipes.init();
+        VillagerRegistry.instance()
+            .registerVillageCreationHandler(new VillageGraveyardHandler());
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this."
