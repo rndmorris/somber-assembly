@@ -35,6 +35,7 @@
  */
 dependencies {
     runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.5.4-GTNH:dev")
-    runtimeOnly ('com.github.GTNewHorizons:Baubles:1.0.4:dev')
+    runtimeOnlyNonPublishable('com.github.GTNewHorizons:Baubles:1.0.4:dev')
+    runtimeOnlyNonPublishable('com.github.GTNewHorizons:waila:1.8.1:dev')
     api ('thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev')
 }
