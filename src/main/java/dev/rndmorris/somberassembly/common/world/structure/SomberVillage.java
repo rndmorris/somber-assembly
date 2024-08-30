@@ -2,13 +2,17 @@ package dev.rndmorris.somberassembly.common.world.structure;
 
 import java.util.Random;
 
+import dev.rndmorris.somberassembly.common.world.LootGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Village;
 import net.minecraftforge.common.ChestGenHooks;
+
+import static net.minecraft.init.Blocks.flower_pot;
 
 public abstract class SomberVillage extends Village {
 
@@ -129,6 +133,19 @@ public abstract class SomberVillage extends Village {
                     }
                 }
             }
+        }
+
+        /**
+         * Create a flower pot with a random flower at the given coordinates
+         */
+        public void createFlowerPot(int x, int y, int z) {
+            setTileEntity(x, y, z, flower_pot, (te) -> {
+                if (te instanceof TileEntityFlowerPot flowerPot) {
+                    final var flower = LootGeneration.randomFlower(painter.random);
+                    flowerPot.func_145964_a(flower.getItem(), flower.getItemDamage());
+                    flowerPot.markDirty();
+                }
+            });
         }
     }
 }

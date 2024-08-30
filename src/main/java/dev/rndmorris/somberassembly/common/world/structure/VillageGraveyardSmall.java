@@ -127,13 +127,7 @@ public class VillageGraveyardSmall extends SomberVillage {
             painter.set(4, 1, z, dirt, 1);
             painter.generateChest(4, 0, z, graveChestHooks);
 
-            painter.setTileEntity(3, 2, z, flower_pot, (te) -> {
-                if (te instanceof TileEntityFlowerPot flowerPot) {
-                    final var flower = LootGeneration.randomFlower(painter.random);
-                    flowerPot.func_145964_a(flower.getItem(), flower.getItemDamage());
-                    flowerPot.markDirty();
-                }
-            });
+            painter.createFlowerPot(3, 2, z);
         } else {
             painter.set(3, 2, z, stone_slab);
             painter.generateChest(3, 1, z, graveChestHooks);
