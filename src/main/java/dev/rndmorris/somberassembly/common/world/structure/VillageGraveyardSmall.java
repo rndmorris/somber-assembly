@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
+import dev.rndmorris.somberassembly.utils.ArrayUtil;
 import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -35,11 +36,14 @@ public class VillageGraveyardSmall extends SomberVillage {
     public static final int yShift = -2;
 
     private final ChestGenHooks graveChestHooks;
+    private final Boolean[] graveIsFlowery;
 
     public VillageGraveyardSmall(Start start, int componentType, Random random, StructureBoundingBox boundingBox,
         int coordBaseMode) {
         super(start, componentType, random, boundingBox, coordBaseMode);
         graveChestHooks = LootGeneration.graveChestGenHooks(10, 10);
+        graveIsFlowery = new Boolean[3];
+        ArrayUtil.fillFromInitializer(graveIsFlowery, i -> random.nextBoolean());
     }
 
     public int structureHeight() {
@@ -112,15 +116,13 @@ public class VillageGraveyardSmall extends SomberVillage {
 
     private void buildGraves() {
         for (var zz = 0; zz < 3; ++zz) {
-            paintGrave(2 + (zz * 2));
+            paintGrave(2 + (zz * 2), graveIsFlowery[zz]);
         }
     }
 
-    private void paintGrave(int z) {
+    private void paintGrave(int z, boolean isFlowerVariant) {
         painter.set(2, 2, z, stonebrick);
         painter.set(2, 3, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 0));
-
-        final var isFlowerVariant = painter.random.nextBoolean();
 
         if (isFlowerVariant) {
             final var coarseDirt = BlockHelper.coarseDirt();

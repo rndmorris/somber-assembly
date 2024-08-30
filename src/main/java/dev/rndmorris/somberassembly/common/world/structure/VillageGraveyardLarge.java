@@ -3,6 +3,7 @@ package dev.rndmorris.somberassembly.common.world.structure;
 import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
 import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
+import dev.rndmorris.somberassembly.utils.ArrayUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -40,6 +41,7 @@ public class VillageGraveyardLarge extends SomberVillage
     private final boolean hasBasement;
 
     private final ItemStack carpet;
+    private final Boolean[] graveIsFlowery;
 
     public VillageGraveyardLarge(Start start, int componentType, Random random, StructureBoundingBox boundingBox, int coodBaseMode)
     {
@@ -48,6 +50,8 @@ public class VillageGraveyardLarge extends SomberVillage
         hasBasement = Config.graveyardLargeBasementFrequency != -1
             && MathHelper.getRandomIntegerInRange(random, 0, Config.graveyardLargeBasementFrequency) == 0;
         carpet = BlockHelper.carpet(random);
+        graveIsFlowery = new Boolean[8];
+        ArrayUtil.fillFromInitializer(graveIsFlowery, i -> random.nextBoolean());
     }
 
     @Override
@@ -132,13 +136,11 @@ public class VillageGraveyardLarge extends SomberVillage
 
     private void buildLeftGraves() {
         for (var zz = 0; zz < 5; ++zz) {
-            buildLeftGrave(3 + (zz * 2));
+            buildLeftGrave(3 + (zz * 2), graveIsFlowery[zz]);
         }
     }
 
-    private void buildLeftGrave(int z) {
-        final var isFlowerGrave = painter.random.nextBoolean();
-
+    private void buildLeftGrave(int z, boolean isFlowerGrave) {
         painter.set(3, groundLevel + 1, z, stonebrick);
         painter.set(3, groundLevel + 2, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 0));
 
@@ -160,13 +162,11 @@ public class VillageGraveyardLarge extends SomberVillage
 
     private void buildRightGraves() {
         for (int zz = 0; zz < 3; ++zz) {
-            buildRightGrave(3 + (zz * 2));
+            buildRightGrave(3 + (zz * 2), graveIsFlowery[zz + 5]);
         }
     }
 
-    private void buildRightGrave(int z) {
-        final var isFlowerGrave = painter.random.nextBoolean();
-
+    private void buildRightGrave(int z, boolean isFlowerGrave) {
         painter.set(11, groundLevel + 1, z, stonebrick);
         painter.set(11, groundLevel + 2, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 1));
 
