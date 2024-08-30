@@ -1,7 +1,5 @@
 package dev.rndmorris.somberassembly.common.world.structure;
 
-import static net.minecraft.init.Blocks.dirt;
-import static net.minecraft.init.Blocks.flower_pot;
 import static net.minecraft.init.Blocks.gravel;
 import static net.minecraft.init.Blocks.iron_bars;
 import static net.minecraft.init.Blocks.log;
@@ -15,9 +13,6 @@ import static net.minecraft.init.Blocks.wooden_slab;
 import java.util.List;
 import java.util.Random;
 
-import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
-import dev.rndmorris.somberassembly.utils.ArrayUtil;
-import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -25,7 +20,9 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
 import net.minecraftforge.common.ChestGenHooks;
 
+import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
+import dev.rndmorris.somberassembly.utils.ArrayUtil;
 
 public class VillageGraveyardSmall extends SomberVillage {
 

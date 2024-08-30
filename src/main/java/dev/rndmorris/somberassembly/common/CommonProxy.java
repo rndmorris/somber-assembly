@@ -1,6 +1,5 @@
 package dev.rndmorris.somberassembly.common;
 
-import dev.rndmorris.somberassembly.common.world.structure.VillageGraveyardLarge;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 
@@ -19,6 +18,7 @@ import dev.rndmorris.somberassembly.common.recipes.WandTriggerManager;
 import dev.rndmorris.somberassembly.common.research.SomberResearch;
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
 import dev.rndmorris.somberassembly.common.world.VillageGraveyardHandler;
+import dev.rndmorris.somberassembly.common.world.structure.VillageGraveyardLarge;
 import dev.rndmorris.somberassembly.common.world.structure.VillageGraveyardSmall;
 
 public class CommonProxy {

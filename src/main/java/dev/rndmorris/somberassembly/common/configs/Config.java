@@ -42,24 +42,21 @@ public class Config {
             graveyardLargeBasementFrequency,
             -1,
             999999,
-            "Higher is less frequent. 0 = always, -1 = never."
-        );
+            "Higher is less frequent. 0 = always, -1 = never.");
         graveyardLargeLimit = configuration.getInt(
             "Large Graveyard Generation Limit",
             categoryVillages,
             graveyardLargeLimit,
             -1,
             999999,
-            "Maximum number of large graveyards that can generate in a village."
-        );
+            "Maximum number of large graveyards that can generate in a village.");
         graveyardLargeWeight = configuration.getInt(
             "Large Graveyard Generation Weight",
             categoryVillages,
             graveyardLargeWeight,
             -1,
             999999,
-            "Likelihood of a large graveyard generating in a village."
-        );
+            "Likelihood of a large graveyard generating in a village.");
 
         graveyardSmallLimit = configuration.getInt(
             "Small Graveyard Generation Limit",
