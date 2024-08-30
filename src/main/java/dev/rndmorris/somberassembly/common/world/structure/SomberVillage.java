@@ -1,8 +1,9 @@
 package dev.rndmorris.somberassembly.common.world.structure;
 
+import static net.minecraft.init.Blocks.flower_pot;
+
 import java.util.Random;
 
-import dev.rndmorris.somberassembly.common.world.LootGeneration;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -14,8 +15,7 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Village;
 import net.minecraftforge.common.ChestGenHooks;
 
-import static net.minecraft.init.Blocks.flower_pot;
-import static net.minecraft.init.Blocks.oak_stairs;
+import dev.rndmorris.somberassembly.common.world.LootGeneration;
 
 public abstract class SomberVillage extends Village {
 
@@ -126,6 +126,16 @@ public abstract class SomberVillage extends Village {
                 final var tileEntity = getTileEntityAtCurrentPosition(world, x, y, z, boundingBox);
                 callback.execute(tileEntity);
             }
+        }
+
+        public void setTileEntity(int x, int y, int z, ItemStack blockItemStack, TileEntityCallback callback) {
+            final var item = blockItemStack.getItem();
+            if (item == null) {
+                throw new IllegalArgumentException("blockItemStack.getItem() returned null");
+            }
+            final var block = Block.getBlockFromItem(item);
+            final var metadata = blockItemStack.getItemDamage();
+            setTileEntity(x, y, z, block, metadata, callback);
         }
 
         public interface TileEntityCallback {
