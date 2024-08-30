@@ -1,10 +1,9 @@
 package dev.rndmorris.somberassembly.common.world.structure;
 
-import dev.rndmorris.somberassembly.SomberAssembly;
 import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
 import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import static net.minecraft.init.Blocks.air;
+import static net.minecraft.init.Blocks.glowstone;
 import static net.minecraft.init.Blocks.iron_bars;
 import static net.minecraft.init.Blocks.log;
 import static net.minecraft.init.Blocks.planks;
@@ -37,13 +37,15 @@ public class VillageGraveyardLarge extends SomberVillage
     private final ChestGenHooks graveChestHooks;
     private final boolean hasBasement;
 
+    private final ItemStack carpet;
+
     public VillageGraveyardLarge(Start start, int componentType, Random random, StructureBoundingBox boundingBox, int coodBaseMode)
     {
         super(start, componentType, random, boundingBox, coodBaseMode);
-
         graveChestHooks = LootGeneration.graveChestGenHooks(10, 10);
         hasBasement = Config.graveyardLargeBasementFrequency != -1
             && MathHelper.getRandomIntegerInRange(random, 0, Config.graveyardLargeBasementFrequency) == 0;
+        carpet = BlockHelper.carpet(random);
     }
 
     @Override
@@ -81,6 +83,8 @@ public class VillageGraveyardLarge extends SomberVillage
         buildWallPosts();
         buildLeftGraves();
         buildRightGraves();
+
+        buildTower();
 
         if (hasBasement) {
             buildBasement();
@@ -178,6 +182,26 @@ public class VillageGraveyardLarge extends SomberVillage
             painter.generateChest(9, groundLevel, z, graveChestHooks);
             painter.generateChest(10, groundLevel, z, graveChestHooks);
         }
+    }
+
+    private void buildTower() {
+        // floor
+        painter.fill(10, groundLevel + 1, 10, 2, 0, 2, stonebrick);
+        painter.set(10, groundLevel + 1, 11, glowstone);
+        painter.fill(10, groundLevel + 2, 10, 2, 0, 2, carpet);
+
+        // walls
+        painter.fill(9, groundLevel + 1, 10, 0, 8, 2, stonebrick);
+        painter.fill(13, groundLevel + 1, 10, 0, 8, 2, stonebrick);
+        painter.fill(10, groundLevel + 1, 9, 2, 8, 0, stonebrick);
+        painter.fill(10, groundLevel + 1, 13, 2, 8, 0, stonebrick);
+
+        // Tower door
+        final var doorX = 9;
+        final var doorZ = 11;
+        painter.set(doorX, groundLevel + 2, doorZ, air);
+        painter.set(doorX, groundLevel + 3, doorZ, air);
+        painter.placeWoodenDoor(9, groundLevel + 2, 11, 2);
     }
 
     private void buildBasement() {
