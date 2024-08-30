@@ -18,7 +18,9 @@ import java.util.Random;
 
 import static net.minecraft.init.Blocks.air;
 import static net.minecraft.init.Blocks.cobblestone_wall;
+import static net.minecraft.init.Blocks.glass_pane;
 import static net.minecraft.init.Blocks.glowstone;
+import static net.minecraft.init.Blocks.gravel;
 import static net.minecraft.init.Blocks.iron_bars;
 import static net.minecraft.init.Blocks.log;
 import static net.minecraft.init.Blocks.oak_stairs;
@@ -90,7 +92,10 @@ public class VillageGraveyardLarge extends SomberVillage
         buildLeftGraves();
         buildRightGraves();
 
+        buildPath();
+
         buildTower();
+        buildTowerRoof();
 
         if (hasBasement) {
             buildBasement();
@@ -186,6 +191,14 @@ public class VillageGraveyardLarge extends SomberVillage
         }
     }
 
+    private void buildPath() {
+        painter.fill(6, groundLevel, 0, 2, 0, 1, gravel);
+        painter.fill(6, groundLevel, 2, 1, 0, 4, gravel);
+        painter.fill(7, groundLevel, 7, 1, 0, 2, gravel);
+        painter.set(6, groundLevel, 10, gravel);
+        painter.fill(7, groundLevel, 10, 0, 0, 1, gravel);
+    }
+
     private void buildTower() {
         // floor
         painter.fill(10, groundLevel + 1, 10, 2, 0, 2, stonebrick);
@@ -212,6 +225,18 @@ public class VillageGraveyardLarge extends SomberVillage
         painter.set(stepsX, groundLevel + 1, 10, oak_stairs, getMetadataWithOffset(oak_stairs, 3));
         painter.set(stepsX, groundLevel + 1, 11, oak_stairs, getMetadataWithOffset(oak_stairs, 0));
         painter.set(stepsX, groundLevel + 1, 12, oak_stairs, getMetadataWithOffset(oak_stairs, 0));
+
+        // windows
+        painter.set(11, groundLevel + 3, 9, glass_pane);
+        final var windowY = groundLevel + 6;
+        painter.fill(9, windowY, 11, 0, 1, 0, glass_pane);
+        painter.fill(13, windowY, 11, 0, 1, 0, glass_pane);
+        painter.fill(11, windowY, 9, 0, 1, 0, glass_pane);
+        painter.fill(11, windowY, 13, 0, 1, 0, glass_pane);
+    }
+
+    private void buildTowerRoof() {
+
     }
 
     private void buildBasement() {
