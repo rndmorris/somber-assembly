@@ -1,23 +1,9 @@
 package dev.rndmorris.somberassembly.common.world.structure;
 
-import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
-import dev.rndmorris.somberassembly.common.configs.Config;
-import dev.rndmorris.somberassembly.common.world.LootGeneration;
-import dev.rndmorris.somberassembly.utils.ArrayUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
-import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
-import net.minecraftforge.common.ChestGenHooks;
-
-import java.util.List;
-import java.util.Random;
-
 import static net.minecraft.init.Blocks.air;
 import static net.minecraft.init.Blocks.cobblestone_wall;
+import static net.minecraft.init.Blocks.fence;
+import static net.minecraft.init.Blocks.fence_gate;
 import static net.minecraft.init.Blocks.glass;
 import static net.minecraft.init.Blocks.glass_pane;
 import static net.minecraft.init.Blocks.glowstone;
@@ -31,8 +17,28 @@ import static net.minecraft.init.Blocks.stone_slab;
 import static net.minecraft.init.Blocks.stonebrick;
 import static net.minecraft.init.Blocks.wooden_slab;
 
-public class VillageGraveyardLarge extends SomberVillage
-{
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
+import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
+import net.minecraftforge.common.ChestGenHooks;
+
+import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
+import dev.rndmorris.somberassembly.common.configs.Config;
+import dev.rndmorris.somberassembly.common.world.LootGeneration;
+import dev.rndmorris.somberassembly.utils.ArrayUtil;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.common.tiles.TileBanner;
+
+public class VillageGraveyardLarge extends SomberVillage {
+
     public static final int xLength = 15;
     public static final int height = 18;
     public static final int zLength = 15;
@@ -46,8 +52,8 @@ public class VillageGraveyardLarge extends SomberVillage
     private final ItemStack carpet;
     private final Boolean[] graveIsFlowery;
 
-    public VillageGraveyardLarge(Start start, int componentType, Random random, StructureBoundingBox boundingBox, int coodBaseMode)
-    {
+    public VillageGraveyardLarge(Start start, int componentType, Random random, StructureBoundingBox boundingBox,
+        int coodBaseMode) {
         super(start, componentType, random, boundingBox, coodBaseMode);
         graveChestHooks = LootGeneration.graveChestGenHooks(10, 10);
         hasBasement = Config.graveyardLargeBasementFrequency != -1
@@ -58,30 +64,27 @@ public class VillageGraveyardLarge extends SomberVillage
     }
 
     @Override
-    protected int structureHeight()
-    {
+    protected int structureHeight() {
         return height;
     }
 
     @Override
-    protected int yAdjustment()
-    {
+    protected int yAdjustment() {
         return yShift;
     }
 
     public static VillageGraveyardLarge build(StructureVillagePieces.Start start, List<StructureComponent> pieces,
-                                              Random rand, int x, int y, int z, int coordBaseMode, int componentType) {
+        Random rand, int x, int y, int z, int coordBaseMode, int componentType) {
         StructureBoundingBox structureboundingbox = StructureBoundingBox
             .getComponentToAddBoundingBox(x, y, z, 0, 0, 0, xLength, height, zLength, coordBaseMode);
         return canVillageGoDeeper(structureboundingbox)
             && StructureComponent.findIntersecting(pieces, structureboundingbox) == null
-            ? new VillageGraveyardLarge(start, componentType, rand, structureboundingbox, coordBaseMode)
-            : null;
+                ? new VillageGraveyardLarge(start, componentType, rand, structureboundingbox, coordBaseMode)
+                : null;
     }
 
     @Override
-    public boolean addComponentParts(World world, Random rand, StructureBoundingBox boundingBox)
-    {
+    public boolean addComponentParts(World world, Random rand, StructureBoundingBox boundingBox) {
         if (!canWorkWithAverageGroundLevel(world, boundingBox)) {
             return true;
         }
@@ -97,6 +100,7 @@ public class VillageGraveyardLarge extends SomberVillage
 
         buildTower();
         buildTowerRoof();
+        buildTowerContents();
 
         if (hasBasement) {
             buildBasement();
@@ -157,8 +161,7 @@ public class VillageGraveyardLarge extends SomberVillage
             painter.generateChest(4, groundLevel - 1, z, graveChestHooks);
             painter.generateChest(5, groundLevel - 1, z, graveChestHooks);
             painter.createFlowerPot(4, groundLevel + 1, z);
-        }
-        else {
+        } else {
             painter.set(4, groundLevel + 1, z, stone_slab);
             painter.set(5, groundLevel + 1, z, stone_slab);
             painter.generateChest(4, groundLevel, z, graveChestHooks);
@@ -183,8 +186,7 @@ public class VillageGraveyardLarge extends SomberVillage
             painter.generateChest(9, groundLevel - 1, z, graveChestHooks);
             painter.generateChest(10, groundLevel - 1, z, graveChestHooks);
             painter.createFlowerPot(10, groundLevel + 1, z);
-        }
-        else {
+        } else {
             painter.set(9, groundLevel + 1, z, stone_slab);
             painter.set(10, groundLevel + 1, z, stone_slab);
             painter.generateChest(9, groundLevel, z, graveChestHooks);
@@ -252,10 +254,10 @@ public class VillageGraveyardLarge extends SomberVillage
         painter.fill(9, roofLevel, 14, 4, 0, 0, stairS);
         painter.fill(8, roofLevel, 9, 0, 0, 4, stairE);
         painter.fill(14, roofLevel, 9, 0, 0, 4, stairW);
-        painter.set( 9, roofLevel, 9, planks);
-        painter.set( 9, roofLevel, 13, planks);
-        painter.set( 13, roofLevel, 9, planks);
-        painter.set( 13, roofLevel, 13, planks);
+        painter.set(9, roofLevel, 9, planks);
+        painter.set(9, roofLevel, 13, planks);
+        painter.set(13, roofLevel, 9, planks);
+        painter.set(13, roofLevel, 13, planks);
 
         painter.fill(10, roofLevel, 10, 2, 0, 0, stairUS);
         painter.fill(10, roofLevel, 12, 2, 0, 0, stairUN);
@@ -279,6 +281,37 @@ public class VillageGraveyardLarge extends SomberVillage
         painter.set(10, roofLevel, 11, stairE);
         painter.set(12, roofLevel, 11, stairW);
         painter.set(11, roofLevel, 11, glass);
+    }
+
+    private void buildTowerContents() {
+        final var altarX = 12;
+        painter.set(altarX, groundLevel + 2, 11, BlockHelper.chiseledStoneBrick());
+        painter.fill(altarX, groundLevel + 3, 11, 0, 3, 0, fence);
+        final var gateMd = getMetadataWithOffset(fence_gate, 3);
+        painter.set(altarX, groundLevel + 5, 10, fence_gate, gateMd);
+        painter.set(altarX, groundLevel + 5, 12, fence_gate, gateMd);
+
+        final var banner = BlockHelper.Thaumcraft.banner();
+        final var setBannerData = new Painter.TileEntityCallback() {
+
+            @Override
+            public void execute(TileEntity tileEntity) {
+                if (!(tileEntity instanceof TileBanner banner)) {
+                    return;
+                }
+                banner.setColor((byte) 4);
+                banner.setAspect(Aspect.LIGHT);
+                banner.setWall(true);
+                if (coordBaseMode == 0 || coordBaseMode == 2) {
+                    banner.setFacing((byte) 4);
+                } else {
+                    banner.setFacing((byte) 8);
+                }
+                banner.markDirty();
+            }
+        };
+        painter.setTileEntity(altarX, groundLevel + 4, 10, banner, setBannerData);
+        painter.setTileEntity(altarX, groundLevel + 4, 12, banner, setBannerData);
     }
 
     private void buildBasement() {
