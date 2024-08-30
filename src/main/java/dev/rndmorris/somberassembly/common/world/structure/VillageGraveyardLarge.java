@@ -91,8 +91,8 @@ public class VillageGraveyardLarge extends SomberVillage
 
     private void buildWalls() {
         buildWall(1, 1, 0, 11);
-        buildWall(13, 1, 0, 11);
-        buildWall(1, 13, 11, 0);
+        buildWall(13, 1, 0, 7);
+        buildWall(1, 13, 7, 0);
         buildWall(2, 1, 2, 0);
         buildWall(10, 1, 2, 0);
 
@@ -110,7 +110,7 @@ public class VillageGraveyardLarge extends SomberVillage
         for (var zz = 0; zz < 4; ++zz) {
             buildWallPost(1, 1 + (zz * 4));
         }
-        for (var zz = 0; zz < 4; ++zz) {
+        for (var zz = 0; zz < 3; ++zz) {
             buildWallPost(13, 1 + (zz * 4));
         }
         buildWallPost(5, 1);
