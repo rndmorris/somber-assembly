@@ -146,6 +146,16 @@ public abstract class SomberVillage extends Village {
             }
         }
 
+        public void fill(int x, int y, int z, int deltaX, int deltaY, int deltaZ, ItemStack blockItemStack) {
+            final var item = blockItemStack.getItem();
+            if (item == null) {
+                throw new IllegalArgumentException("blockItemStack.getItem() returned null");
+            }
+            final var block = Block.getBlockFromItem(item);
+            final var metadata = blockItemStack.getItemDamage();
+            fill(x, y, z, deltaX, deltaY, deltaZ, block, metadata);
+        }
+
         /**
          * Create a flower pot with a random flower at the given coordinates
          */
