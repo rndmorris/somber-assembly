@@ -18,6 +18,7 @@ import java.util.Random;
 
 import static net.minecraft.init.Blocks.air;
 import static net.minecraft.init.Blocks.cobblestone_wall;
+import static net.minecraft.init.Blocks.glass;
 import static net.minecraft.init.Blocks.glass_pane;
 import static net.minecraft.init.Blocks.glowstone;
 import static net.minecraft.init.Blocks.gravel;
@@ -236,7 +237,48 @@ public class VillageGraveyardLarge extends SomberVillage
     }
 
     private void buildTowerRoof() {
+        final var stairE = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 0));
+        final var stairW = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 1));
+        final var stairS = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 2));
+        final var stairN = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 3));
 
+        final var stairUE = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 4));
+        final var stairUW = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 5));
+        final var stairUS = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 6));
+        final var stairUN = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 7));
+
+        var roofLevel = groundLevel + 9;
+        painter.fill(9, roofLevel, 8, 4, 0, 0, stairN);
+        painter.fill(9, roofLevel, 14, 4, 0, 0, stairS);
+        painter.fill(8, roofLevel, 9, 0, 0, 4, stairE);
+        painter.fill(14, roofLevel, 9, 0, 0, 4, stairW);
+        painter.set( 9, roofLevel, 9, planks);
+        painter.set( 9, roofLevel, 13, planks);
+        painter.set( 13, roofLevel, 9, planks);
+        painter.set( 13, roofLevel, 13, planks);
+
+        painter.fill(10, roofLevel, 10, 2, 0, 0, stairUS);
+        painter.fill(10, roofLevel, 12, 2, 0, 0, stairUN);
+        painter.set(10, roofLevel, 11, stairUW);
+        painter.set(12, roofLevel, 11, stairUE);
+
+        roofLevel += 1;
+        painter.fill(9, roofLevel, 9, 4, 0, 0, stairN);
+        painter.fill(9, roofLevel, 13, 4, 0, 0, stairS);
+        painter.fill(9, roofLevel, 10, 0, 0, 2, stairE);
+        painter.fill(13, roofLevel, 10, 0, 0, 2, stairW);
+
+        painter.set(10, roofLevel, 10, planks);
+        painter.set(12, roofLevel, 10, planks);
+        painter.set(10, roofLevel, 12, planks);
+        painter.set(12, roofLevel, 12, planks);
+
+        roofLevel += 1;
+        painter.fill(10, roofLevel, 10, 2, 0, 0, stairN);
+        painter.fill(10, roofLevel, 12, 2, 0, 0, stairS);
+        painter.set(10, roofLevel, 11, stairE);
+        painter.set(12, roofLevel, 11, stairW);
+        painter.set(11, roofLevel, 11, glass);
     }
 
     private void buildBasement() {
