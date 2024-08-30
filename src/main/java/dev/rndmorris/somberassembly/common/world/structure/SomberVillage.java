@@ -7,6 +7,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
@@ -33,25 +34,41 @@ public abstract class SomberVillage extends Village {
 
     protected abstract int yAdjustment();
 
-    /**
-     * Check that the structure can be with the given average ground level
-     *
-     * @param world               The world in which the structure will be built
-     * @param functionBoundingBox The bounding box passed into the `addComponentParts` method, *not* `this.boundingBox`
-     * @return True if the average level is workable, false otherwise.
-     */
-    protected boolean canWorkWithAverageGroundLevel(World world, StructureBoundingBox functionBoundingBox) {
+    protected void func_143012_a(NBTTagCompound p_143012_1_)
+    {
+        super.func_143012_a(p_143012_1_);
+        writeToNBT(p_143012_1_);
+    }
+
+    protected void func_143011_b(NBTTagCompound p_143011_1_)
+    {
+        super.func_143011_b(p_143011_1_);
+        readFromNBT(p_143011_1_);
+    }
+
+    protected abstract void writeToNBT(NBTTagCompound tagCompound);
+
+    protected abstract void readFromNBT(NBTTagCompound tagCompound);
+
+    @Override
+    public boolean addComponentParts(World world, Random rand, StructureBoundingBox boundingBox) {
         if (this.averageGroundLevel < 0) {
-            this.averageGroundLevel = this.getAverageGroundLevel(world, functionBoundingBox);
+            this.averageGroundLevel = this.getAverageGroundLevel(world, boundingBox);
             if (this.averageGroundLevel < 0) {
-                return false;
+                return true;
             }
         }
 
         this.boundingBox
             .offset(0, this.averageGroundLevel - this.boundingBox.maxY + structureHeight() - 1 + yAdjustment(), 0);
+
+        painter = new Painter(world, boundingBox, rand);
+        buildStructure();
+
         return true;
     }
+
+    protected abstract void buildStructure();
 
     protected TileEntity getTileEntityAtCurrentPosition(World world, int x, int y, int z,
         StructureBoundingBox boundingBox) {
@@ -86,25 +103,65 @@ public abstract class SomberVillage extends Village {
             this.random = random;
         }
 
-        public void set(int x, int y, int z, Block block) {
-            set(x, y, z, block, 0);
+        /**
+         *
+         * @param x The relative x coordinate
+         * @param y The relative y coordinate.
+         * @param z The relative z coordinate.
+         * @param block The block to place.
+         * @return True if the block was placed, false otherwise.
+         */
+        public boolean set(int x, int y, int z, Block block) {
+            return set(x, y, z, block, 0);
         }
 
-        public void set(int x, int y, int z, Block block, int md) {
+        /**
+         *
+         * @param x The relative x coordinate.
+         * @param y The relative y coordinate.
+         * @param z The relative z coordinate.
+         * @param block The block to place.
+         * @param md The metadata of the block to place.
+         * @return True if the block was placed, false otherwise.
+         */
+        public boolean set(int x, int y, int z, Block block, int md) {
+            if (!boundingBox.isVecInside(x, y, z)) {
+                return false;
+            }
             placeBlockAtCurrentPosition(world, block, md, x, y, z, boundingBox);
+            return true;
         }
 
-        public void set(int x, int y, int z, ItemStack blockItemStack) {
+        /**
+         * Place a block in the world.
+         * @param x The relative x coordinate.
+         * @param y The relative y coordinate.
+         * @param z The relative z coordinate.
+         * @param blockItemStack The block and damage value to place.
+         * @return True if the block was placed, false otherwise.
+         */
+        public boolean set(int x, int y, int z, ItemStack blockItemStack) {
             final var item = blockItemStack.getItem();
             if (item == null) {
                 throw new IllegalArgumentException("blockItemStack.getItem() returned null");
             }
             final var block = Block.getBlockFromItem(item);
             final var metadata = blockItemStack.getItemDamage();
-            set(x, y, z, block, metadata);
+            return set(x, y, z, block, metadata);
         }
 
-        public void generateChest(int x, int y, int z, ChestGenHooks chestGenHooks) {
+        /**
+         * Create a chest at the given location, populated by the given chest generation hooks.
+         * @param x The relative x coordinate.
+         * @param y The relative y coordinate.
+         * @param z The relative z coordinate.
+         * @param chestGenHooks The hooks used to populate the chest's contents
+         * @return True if the block was placed, false otherwise.
+         */
+        public boolean generateChest(int x, int y, int z, ChestGenHooks chestGenHooks) {
+            if (!boundingBox.isVecInside(x, y, z)) {
+                return false;
+            }
             generateStructureChestContents(
                 world,
                 boundingBox,
@@ -114,28 +171,60 @@ public abstract class SomberVillage extends Village {
                 z,
                 chestGenHooks.getItems(random),
                 chestGenHooks.getCount(random));
+            return true;
         }
 
-        public void setTileEntity(int x, int y, int z, Block block, TileEntityCallback callback) {
-            setTileEntity(x, y, z, block, 0, callback);
+        /**
+         * Place a block in the world, attempt to get its tile entity, then configure it with a callback.
+         * @param x The relative x coordinate.
+         * @param y The relative y coordinate.
+         * @param z The relative z coordinate.
+         * @param block The block to place.
+         * @param callback A callback used to configure the created tile entity.
+         * @return True if the block was placed, false otherwise.
+         */
+        public boolean setTileEntity(int x, int y, int z, Block block, TileEntityCallback callback) {
+            return setTileEntity(x, y, z, block, 0, callback);
         }
 
-        public void setTileEntity(int x, int y, int z, Block block, int md, TileEntityCallback callback) {
-            set(x, y, z, block, md);
+        /**
+         * Place a block in the world, attempt to get its tile entity, then configure it with a callback.
+         * @param x The relative x coordinate.
+         * @param y The relative y coordinate.
+         * @param z The relative z coordinate.
+         * @param block The block to place.
+         * @param md The metadata of the block to place.
+         * @param callback A callback used to configure the created tile entity.
+         * @return True if the block was placed, false otherwise.
+         */
+        public boolean setTileEntity(int x, int y, int z, Block block, int md, TileEntityCallback callback) {
+            if (!set(x, y, z, block, md)) {
+                return false;
+            }
             if (callback != null) {
                 final var tileEntity = getTileEntityAtCurrentPosition(world, x, y, z, boundingBox);
                 callback.execute(tileEntity);
             }
+            return true;
         }
 
-        public void setTileEntity(int x, int y, int z, ItemStack blockItemStack, TileEntityCallback callback) {
+        /**
+         * Place a block in the world, attempt to get its tile entity, then configure it with a callback.
+         * @param x The relative x coordinate.
+         * @param y The relative y coordinate.
+         * @param z The relative z coordinate.
+         * @param blockItemStack The block and damage value to place.
+         * @param callback A callback used to configure the created tile entity.
+         * @return True if the block was placed, false otherwise.
+         */
+        public boolean setTileEntity(int x, int y, int z, ItemStack blockItemStack, TileEntityCallback callback) {
             final var item = blockItemStack.getItem();
             if (item == null) {
                 throw new IllegalArgumentException("blockItemStack.getItem() returned null");
             }
             final var block = Block.getBlockFromItem(item);
             final var metadata = blockItemStack.getItemDamage();
-            setTileEntity(x, y, z, block, metadata, callback);
+            return setTileEntity(x, y, z, block, metadata, callback);
         }
 
         public interface TileEntityCallback {
@@ -143,10 +232,31 @@ public abstract class SomberVillage extends Village {
             void execute(TileEntity tileEntity);
         }
 
+        /**
+         * Place one or more blocks in an area.
+         * @param x The starting relative x coordinate.
+         * @param y The starting relative y coordinate.
+         * @param z The starting relative z coordinate.
+         * @param deltaX The number of additional blocks to place along the x-axis. Can be positive, negative, or zero.
+         * @param deltaY The number of additional blocks to place along the y-axis. Can be positive, negative, or zero.
+         * @param deltaZ The number of additional blocks to place along the z-axis. Can be positive, negative, or zero.
+         * @param block The block to place.
+         */
         public void fill(int x, int y, int z, int deltaX, int deltaY, int deltaZ, Block block) {
             fill(x, y, z, deltaX, deltaY, deltaZ, block, 0);
         }
 
+        /**
+         * Place one or more blocks in an area.
+         * @param x The starting relative x coordinate.
+         * @param y The starting relative y coordinate.
+         * @param z The starting relative z coordinate.
+         * @param deltaX The number of additional blocks to place along the x-axis. Can be positive, negative, or zero.
+         * @param deltaY The number of additional blocks to place along the y-axis. Can be positive, negative, or zero.
+         * @param deltaZ The number of additional blocks to place along the z-axis. Can be positive, negative, or zero.
+         * @param block The block to place.
+         * @param md The metadata of the block to place.
+         */
         public void fill(int x, int y, int z, int deltaX, int deltaY, int deltaZ, Block block, int md) {
             final var x2 = x + deltaX;
             final var y2 = y + deltaY;
@@ -168,6 +278,16 @@ public abstract class SomberVillage extends Village {
             }
         }
 
+        /**
+         * Place one or more blocks in an area.
+         * @param x The starting relative x coordinate.
+         * @param y The starting relative y coordinate.
+         * @param z The starting relative z coordinate.
+         * @param deltaX The number of additional blocks to place along the x-axis. Can be positive, negative, or zero.
+         * @param deltaY The number of additional blocks to place along the y-axis. Can be positive, negative, or zero.
+         * @param deltaZ The number of additional blocks to place along the z-axis. Can be positive, negative, or zero.
+         * @param blockItemStack The block and damage value to place.
+         */
         public void fill(int x, int y, int z, int deltaX, int deltaY, int deltaZ, ItemStack blockItemStack) {
             final var item = blockItemStack.getItem();
             if (item == null) {
@@ -179,10 +299,14 @@ public abstract class SomberVillage extends Village {
         }
 
         /**
-         * Create a flower pot with a random flower at the given coordinates
+         * Create a flower pot with a random flower at the given coordinates.
+         * @param x The relative x coordinate.
+         * @param y The relative y coordinate.
+         * @param z The relative z coordinate.
+         * @return True if the block was placed, false otherwise.
          */
-        public void createFlowerPot(int x, int y, int z) {
-            setTileEntity(x, y, z, flower_pot, (te) -> {
+        public boolean createFlowerPot(int x, int y, int z) {
+            return setTileEntity(x, y, z, flower_pot, (te) -> {
                 if (te instanceof TileEntityFlowerPot flowerPot) {
                     final var flower = LootGeneration.randomFlower(painter.random);
                     flowerPot.func_145964_a(flower.getItem(), flower.getItemDamage());
