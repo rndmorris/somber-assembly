@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.Random;
 
 import static net.minecraft.init.Blocks.air;
+import static net.minecraft.init.Blocks.cobblestone_wall;
 import static net.minecraft.init.Blocks.glowstone;
 import static net.minecraft.init.Blocks.iron_bars;
 import static net.minecraft.init.Blocks.log;
+import static net.minecraft.init.Blocks.oak_stairs;
 import static net.minecraft.init.Blocks.planks;
 import static net.minecraft.init.Blocks.stone_brick_stairs;
 import static net.minecraft.init.Blocks.stone_slab;
@@ -195,6 +197,8 @@ public class VillageGraveyardLarge extends SomberVillage
         painter.fill(13, groundLevel + 1, 10, 0, 8, 2, stonebrick);
         painter.fill(10, groundLevel + 1, 9, 2, 8, 0, stonebrick);
         painter.fill(10, groundLevel + 1, 13, 2, 8, 0, stonebrick);
+        painter.fill(9, groundLevel + 1, 9, 0, 3, 0, cobblestone_wall);
+        painter.fill(13, groundLevel + 1, 13, 0, 3, 0, cobblestone_wall);
 
         // Tower door
         final var doorX = 9;
@@ -202,6 +206,12 @@ public class VillageGraveyardLarge extends SomberVillage
         painter.set(doorX, groundLevel + 2, doorZ, air);
         painter.set(doorX, groundLevel + 3, doorZ, air);
         painter.placeWoodenDoor(9, groundLevel + 2, 11, 2);
+
+        // steps
+        final var stepsX = 8;
+        painter.set(stepsX, groundLevel + 1, 10, oak_stairs, getMetadataWithOffset(oak_stairs, 3));
+        painter.set(stepsX, groundLevel + 1, 11, oak_stairs, getMetadataWithOffset(oak_stairs, 0));
+        painter.set(stepsX, groundLevel + 1, 12, oak_stairs, getMetadataWithOffset(oak_stairs, 0));
     }
 
     private void buildBasement() {
