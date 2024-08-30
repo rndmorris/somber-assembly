@@ -15,6 +15,7 @@ import static net.minecraft.init.Blocks.wooden_slab;
 import java.util.List;
 import java.util.Random;
 
+import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
 import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -122,9 +123,10 @@ public class VillageGraveyardSmall extends SomberVillage {
         final var isFlowerVariant = painter.random.nextBoolean();
 
         if (isFlowerVariant) {
-            painter.set(3, 1, z, dirt, 1);
+            final var coarseDirt = BlockHelper.coarseDirt();
+            painter.set(3, 1, z, coarseDirt);
             painter.generateChest(3, 0, z, graveChestHooks);
-            painter.set(4, 1, z, dirt, 1);
+            painter.set(4, 1, z, coarseDirt);
             painter.generateChest(4, 0, z, graveChestHooks);
 
             painter.createFlowerPot(3, 2, z);

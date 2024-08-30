@@ -4,6 +4,7 @@ import java.util.Random;
 
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
@@ -79,6 +80,16 @@ public abstract class SomberVillage extends Village {
 
         public void set(int x, int y, int z, Block block, int md) {
             placeBlockAtCurrentPosition(world, block, md, x, y, z, boundingBox);
+        }
+
+        public void set(int x, int y, int z, ItemStack blockItemStack) {
+            final var item = blockItemStack.getItem();
+            if (item == null) {
+                throw new IllegalArgumentException("blockItemStack.getItem() returned null");
+            }
+            final var block = Block.getBlockFromItem(item);
+            final var metadata = blockItemStack.getItemDamage();
+            set(x, y, z, block, metadata);
         }
 
         public void generateChest(int x, int y, int z, ChestGenHooks chestGenHooks) {
