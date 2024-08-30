@@ -1,6 +1,7 @@
 package dev.rndmorris.somberassembly.common.world.structure;
 
 import dev.rndmorris.somberassembly.SomberAssembly;
+import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
 import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
 import net.minecraft.init.Blocks;
@@ -19,6 +20,9 @@ import static net.minecraft.init.Blocks.air;
 import static net.minecraft.init.Blocks.iron_bars;
 import static net.minecraft.init.Blocks.log;
 import static net.minecraft.init.Blocks.planks;
+import static net.minecraft.init.Blocks.stone_brick_stairs;
+import static net.minecraft.init.Blocks.stone_slab;
+import static net.minecraft.init.Blocks.stonebrick;
 import static net.minecraft.init.Blocks.wooden_slab;
 
 public class VillageGraveyardLarge extends SomberVillage
@@ -75,6 +79,8 @@ public class VillageGraveyardLarge extends SomberVillage
 
         buildWalls();
         buildWallPosts();
+        buildLeftGraves();
+        buildRightGraves();
 
         if (hasBasement) {
             buildBasement();
@@ -89,6 +95,9 @@ public class VillageGraveyardLarge extends SomberVillage
         buildWall(1, 13, 11, 0);
         buildWall(2, 1, 2, 0);
         buildWall(10, 1, 2, 0);
+
+        painter.fill(6, groundLevel + 4, 1, 2, 0, 0, iron_bars);
+        painter.fill(6, groundLevel + 5, 1, 2, 0, 0, planks);
     }
 
     private void buildWall(int x, int z, int deltaX, int deltaZ) {
@@ -113,6 +122,62 @@ public class VillageGraveyardLarge extends SomberVillage
     private void buildWallPost(int x, int z) {
         painter.fill(x, groundLevel + 1, z, 0, 3, 0, log);
         painter.set(x, groundLevel + 5, z, wooden_slab);
+    }
+
+    private void buildLeftGraves() {
+        for (var zz = 0; zz < 5; ++zz) {
+            buildLeftGrave(3 + (zz * 2));
+        }
+    }
+
+    private void buildLeftGrave(int z) {
+        final var isFlowerGrave = painter.random.nextBoolean();
+
+        painter.set(3, groundLevel + 1, z, stonebrick);
+        painter.set(3, groundLevel + 2, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 0));
+
+        if (isFlowerGrave) {
+            final var coarseDirt = BlockHelper.coarseDirt();
+            painter.set(4, groundLevel, z, coarseDirt);
+            painter.set(5, groundLevel, z, coarseDirt);
+            painter.generateChest(4, groundLevel - 1, z, graveChestHooks);
+            painter.generateChest(5, groundLevel - 1, z, graveChestHooks);
+            painter.createFlowerPot(4, groundLevel + 1, z);
+        }
+        else {
+            painter.set(4, groundLevel + 1, z, stone_slab);
+            painter.set(5, groundLevel + 1, z, stone_slab);
+            painter.generateChest(4, groundLevel, z, graveChestHooks);
+            painter.generateChest(5, groundLevel, z, graveChestHooks);
+        }
+    }
+
+    private void buildRightGraves() {
+        for (int zz = 0; zz < 3; ++zz) {
+            buildRightGrave(3 + (zz * 2));
+        }
+    }
+
+    private void buildRightGrave(int z) {
+        final var isFlowerGrave = painter.random.nextBoolean();
+
+        painter.set(11, groundLevel + 1, z, stonebrick);
+        painter.set(11, groundLevel + 2, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 1));
+
+        if (isFlowerGrave) {
+            final var coarseDirt = BlockHelper.coarseDirt();
+            painter.set(9, groundLevel, z, coarseDirt);
+            painter.set(10, groundLevel, z, coarseDirt);
+            painter.generateChest(9, groundLevel - 1, z, graveChestHooks);
+            painter.generateChest(10, groundLevel - 1, z, graveChestHooks);
+            painter.createFlowerPot(10, groundLevel + 1, z);
+        }
+        else {
+            painter.set(9, groundLevel + 1, z, stone_slab);
+            painter.set(10, groundLevel + 1, z, stone_slab);
+            painter.generateChest(9, groundLevel, z, graveChestHooks);
+            painter.generateChest(10, groundLevel, z, graveChestHooks);
+        }
     }
 
     private void buildBasement() {
