@@ -4,6 +4,7 @@ import java.util.Random;
 
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFlowerPot;
@@ -14,6 +15,7 @@ import net.minecraft.world.gen.structure.StructureVillagePieces.Village;
 import net.minecraftforge.common.ChestGenHooks;
 
 import static net.minecraft.init.Blocks.flower_pot;
+import static net.minecraft.init.Blocks.oak_stairs;
 
 public abstract class SomberVillage extends Village {
 
@@ -57,6 +59,16 @@ public abstract class SomberVillage extends Village {
         int i1 = this.getYWithOffset(y);
         int j1 = this.getZWithOffset(x, z);
         return !boundingBox.isVecInside(l, i1, j1) ? null : world.getTileEntity(l, i1, j1);
+    }
+
+    protected int getMetadataWithOffset(Block block, int metadata) {
+        if (block == Blocks.oak_stairs) {
+            if (metadata >= 4) {
+                // upside-down stairs are just +4
+                return super.getMetadataWithOffset(block, metadata - 4) + 4;
+            }
+        }
+        return super.getMetadataWithOffset(block, metadata);
     }
 
     /**
