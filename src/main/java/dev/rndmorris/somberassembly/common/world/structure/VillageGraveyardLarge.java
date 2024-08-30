@@ -15,6 +15,7 @@ import static net.minecraft.init.Blocks.planks;
 import static net.minecraft.init.Blocks.stone_brick_stairs;
 import static net.minecraft.init.Blocks.stone_slab;
 import static net.minecraft.init.Blocks.stonebrick;
+import static net.minecraft.init.Blocks.torch;
 import static net.minecraft.init.Blocks.wooden_slab;
 
 import java.util.List;
@@ -101,6 +102,8 @@ public class VillageGraveyardLarge extends SomberVillage {
         buildTower();
         buildTowerRoof();
         buildTowerContents();
+
+        addTorches();
 
         if (hasBasement) {
             buildBasement();
@@ -312,6 +315,19 @@ public class VillageGraveyardLarge extends SomberVillage {
         };
         painter.setTileEntity(altarX, groundLevel + 4, 10, banner, setBannerData);
         painter.setTileEntity(altarX, groundLevel + 4, 12, banner, setBannerData);
+    }
+
+    private void addTorches() {
+        final var y = groundLevel + 3;
+        painter.set(5, y, 2, torch);
+        painter.set(9, y, 2, torch);
+
+        painter.set(5, y, 12, torch);
+
+        painter.set(2, y, 5, torch);
+        painter.set(2, y, 9, torch);
+
+        painter.set(12, y, 5, torch);
     }
 
     private void buildBasement() {
