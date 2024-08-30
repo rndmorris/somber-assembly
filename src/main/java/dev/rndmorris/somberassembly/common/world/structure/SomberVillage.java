@@ -168,5 +168,9 @@ public abstract class SomberVillage extends Village {
                 }
             });
         }
+
+        public void placeWoodenDoor(int x, int y, int z, int metadata) {
+            placeDoorAtCurrentPosition(world, boundingBox, random, x, y, z, metadata);
+        }
     }
 }
