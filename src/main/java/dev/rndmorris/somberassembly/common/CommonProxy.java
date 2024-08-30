@@ -1,5 +1,6 @@
 package dev.rndmorris.somberassembly.common;
 
+import dev.rndmorris.somberassembly.common.world.structure.VillageGraveyardLarge;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 
@@ -30,10 +31,11 @@ public class CommonProxy {
         SomberItem.preInit();
         EntityEvents.preInit();
         try {
-            MapGenStructureIO.func_143031_a(VillageGraveyardSmall.class, "SAGraveyardSmallR");
-            SomberAssembly.LOG.info("Registered graveyards.");
+            MapGenStructureIO.func_143031_a(VillageGraveyardSmall.class, "SAGraveyardSmall");
+            MapGenStructureIO.func_143031_a(VillageGraveyardLarge.class, "SAGraveyardLarge");
+            SomberAssembly.LOG.info("Registered village graveyards.");
         } catch (Throwable err) {
-            SomberAssembly.LOG.error("Could not register graveyards.", err);
+            SomberAssembly.LOG.error("Could not register village graveyards.", err);
         }
     }
 
@@ -41,7 +43,9 @@ public class CommonProxy {
     public void init(FMLInitializationEvent ignoredEvent) {
         SomberRecipes.init();
         VillagerRegistry.instance()
-            .registerVillageCreationHandler(new VillageGraveyardHandler());
+            .registerVillageCreationHandler(new VillageGraveyardHandler.SmallGraveyard());
+        VillagerRegistry.instance()
+            .registerVillageCreationHandler(new VillageGraveyardHandler.LargeGraveyard());
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this."

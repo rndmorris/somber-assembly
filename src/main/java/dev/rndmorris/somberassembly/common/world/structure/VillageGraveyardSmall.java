@@ -34,13 +34,11 @@ public class VillageGraveyardSmall extends SomberVillage {
     public static final int yShift = -2;
 
     private final ChestGenHooks graveChestHooks;
-    private final boolean isFlowerVariant;
 
     public VillageGraveyardSmall(Start start, int componentType, Random random, StructureBoundingBox boundingBox,
         int coordBaseMode) {
         super(start, componentType, random, boundingBox, coordBaseMode);
         graveChestHooks = LootGeneration.graveChestGenHooks(10, 10);
-        isFlowerVariant = random.nextBoolean();
     }
 
     public int structureHeight() {
@@ -120,6 +118,8 @@ public class VillageGraveyardSmall extends SomberVillage {
     private void paintGrave(int z) {
         painter.set(2, 2, z, stonebrick);
         painter.set(2, 3, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 0));
+
+        final var isFlowerVariant = painter.random.nextBoolean();
 
         if (isFlowerVariant) {
             painter.set(3, 1, z, dirt, 1);

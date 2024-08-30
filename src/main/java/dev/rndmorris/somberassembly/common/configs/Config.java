@@ -12,6 +12,9 @@ public class Config {
     public static int decayingFleshDecayChance = 50;
     public static int decayingFleshDropRate = 4;
 
+    public static int graveyardLargeBasementFrequency = 3;
+    public static int graveyardLargeLimit = 1;
+    public static int graveyardLargeWeight = 25;
     public static int graveyardSmallLimit = 2;
     public static int graveyardSmallWeight = 25;
 
@@ -32,6 +35,31 @@ public class Config {
             0,
             999999,
             "Higher is less frequent. 0 is guaranteed.");
+
+        graveyardLargeBasementFrequency = configuration.getInt(
+            "Large Graveyard basement frequency",
+            categoryVillages,
+            graveyardLargeBasementFrequency,
+            -1,
+            999999,
+            "Higher is less frequent. 0 = always, -1 = never."
+        );
+        graveyardLargeLimit = configuration.getInt(
+            "Large Graveyard Generation Limit",
+            categoryVillages,
+            graveyardLargeLimit,
+            -1,
+            999999,
+            "Maximum number of large graveyards that can generate in a village."
+        );
+        graveyardLargeWeight = configuration.getInt(
+            "Large Graveyard Generation Weight",
+            categoryVillages,
+            graveyardLargeWeight,
+            -1,
+            999999,
+            "Likelihood of a large graveyard generating in a village."
+        );
 
         graveyardSmallLimit = configuration.getInt(
             "Small Graveyard Generation Limit",
