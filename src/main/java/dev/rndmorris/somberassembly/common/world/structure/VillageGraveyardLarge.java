@@ -40,19 +40,24 @@ import thaumcraft.common.tiles.TileBanner;
 
 public class VillageGraveyardLarge extends SomberVillage {
 
-    public static final int xLength = 15;
-    public static final int height = 18;
-    public static final int zLength = 15;
-
-    public static final int yShift = -8;
+    public static final int structureWidth = 15;
+    public static final int structureHeight = 18;
+    public static final int structureLength = 15;
     private static final int groundLevel = 7;
 
-    private final ChestGenHooks graveChestHooks;
+    private final static int NUMBER_OF_GRAVES = 8;
+    private final static String NBT_FLOWERY_GRAVES = "floweryGraves";
+    private final static String NBT_FLOWERPOT_CREATED = "flowerpotCreated";
+    private final static String NBT_COFFIN_CREATED = "coffinCreated";
+    private final static String NBT_HAS_BASEMENT = "hasBasement";
+    private final static String NBT_CARPET_COLOR = "carpetColor";
 
-    private final boolean hasBasement;
-    private final ItemStack carpet;
-    private final Boolean[] graveIsFlowery = new Boolean[8];
-    private final Boolean[] coffinGenerated = new Boolean[16];
+    private final ChestGenHooks graveChestHooks;
+    private final boolean[] floweryGraves = new boolean[NUMBER_OF_GRAVES];
+    private final boolean[] flowerpotCreated = new boolean[NUMBER_OF_GRAVES];
+    private final boolean[] coffinCreated = new boolean[NUMBER_OF_GRAVES * 2];
+    private boolean hasBasement;
+    private ItemStack carpet;
 
     public VillageGraveyardLarge(Start start, int componentType, Random random, StructureBoundingBox boundingBox,
         int coodBaseMode) {
@@ -61,18 +66,17 @@ public class VillageGraveyardLarge extends SomberVillage {
         hasBasement = Config.graveyardLargeBasementFrequency != -1
             && MathHelper.getRandomIntegerInRange(random, 0, Config.graveyardLargeBasementFrequency) == 0;
         carpet = BlockHelper.carpet(random);
-        ArrayUtil.fillFromInitializer(graveIsFlowery, i -> random.nextBoolean());
-        ArrayUtil.fillFromInitializer(coffinGenerated, i -> false);
+        ArrayUtil.fillFromInitializer(floweryGraves, i -> random.nextBoolean());
     }
 
     @Override
     protected int structureHeight() {
-        return height;
+        return structureHeight;
     }
 
     @Override
     protected int groundLevel() {
-        return yShift;
+        return 7;
     }
 
     @Override
@@ -82,18 +86,71 @@ public class VillageGraveyardLarge extends SomberVillage {
 
     @Override
     protected void readFromNBT(NBTTagCompound tagCompound) {
+        if (tagCompound.hasKey(NBT_CARPET_COLOR)) {
+            carpet = BlockHelper.carpet(tagCompound.getByte(NBT_CARPET_COLOR));
+        }
+        if (tagCompound.hasKey(NBT_HAS_BASEMENT)) {
+            hasBasement = tagCompound.getBoolean(NBT_HAS_BASEMENT);
+        }
 
+        final var hasFloweryGraves = tagCompound.hasKey(NBT_FLOWERY_GRAVES);
+        final var hasFlowerpotsCreated = tagCompound.hasKey(NBT_FLOWERPOT_CREATED);
+        final var hasCoffinCreated = tagCompound.hasKey(NBT_COFFIN_CREATED);
+
+        final var dataFloweryGraves = hasFloweryGraves ? tagCompound.getByte(NBT_FLOWERY_GRAVES) : 0;
+        final var dataFlowerpotsCreated = hasFlowerpotsCreated ? tagCompound.getByte(NBT_FLOWERPOT_CREATED) : 0;
+        final var dataCoffinCreated = hasCoffinCreated ? tagCompound.getShort(NBT_COFFIN_CREATED) : 0;
+
+        if (!(hasFloweryGraves || hasFlowerpotsCreated || hasCoffinCreated)) {
+            return;
+        }
+
+        for (var index = 0; index < NUMBER_OF_GRAVES; ++index) {
+            final var bitIndex = 1 << index;
+            if (hasFloweryGraves) {
+                floweryGraves[index] = (dataFloweryGraves & bitIndex) == bitIndex;
+            }
+            if (hasFlowerpotsCreated) {
+                flowerpotCreated[index] = (dataFlowerpotsCreated & bitIndex) == bitIndex;
+            }
+            if (hasCoffinCreated) {
+                final var cIndex = index * 2;
+                var coffinBitIndex = 1 << (cIndex);
+                coffinCreated[cIndex] = (dataCoffinCreated & coffinBitIndex) == coffinBitIndex;
+
+                coffinBitIndex = 1 << (cIndex + 1);
+                coffinCreated[cIndex + 1] = (dataCoffinCreated & coffinBitIndex) == coffinBitIndex;
+            }
+        }
     }
 
     @Override
     protected void writeToNBT(NBTTagCompound tagCompound) {
+        var dataFloweryGraves = 0;
+        var dataFlowerpotCreated = 0;
+        var dataCoffinCreated = 0;
 
+        for (var index = 0; index < NUMBER_OF_GRAVES; ++index) {
+            dataFloweryGraves = dataFloweryGraves | ((floweryGraves[index] ? 1 : 0) << index);
+            dataFlowerpotCreated = dataFlowerpotCreated | ((flowerpotCreated[index] ? 1 : 0) << index);
+
+            var cIndex = index * 2;
+            dataCoffinCreated = dataCoffinCreated | ((coffinCreated[cIndex] ? 1 : 0) << cIndex);
+            cIndex += 1;
+            dataCoffinCreated = dataCoffinCreated | ((coffinCreated[cIndex] ? 1 : 0) << cIndex);
+        }
+
+        tagCompound.setByte(NBT_CARPET_COLOR, (byte)carpet.getItemDamage());
+        tagCompound.setBoolean(NBT_HAS_BASEMENT, hasBasement);
+        tagCompound.setByte(NBT_FLOWERY_GRAVES, (byte) dataFloweryGraves);
+        tagCompound.setByte(NBT_FLOWERPOT_CREATED, (byte) dataFlowerpotCreated);
+        tagCompound.setShort(NBT_COFFIN_CREATED, (short) dataCoffinCreated);
     }
 
     public static VillageGraveyardLarge build(StructureVillagePieces.Start start, List<StructureComponent> pieces,
         Random rand, int x, int y, int z, int coordBaseMode, int componentType) {
         StructureBoundingBox structureboundingbox = StructureBoundingBox
-            .getComponentToAddBoundingBox(x, y, z, 0, 0, 0, xLength, height, zLength, coordBaseMode);
+            .getComponentToAddBoundingBox(x, y, z, 0, 0, 0, structureWidth, structureHeight, structureLength, coordBaseMode);
         return canVillageGoDeeper(structureboundingbox)
             && StructureComponent.findIntersecting(pieces, structureboundingbox) == null
                 ? new VillageGraveyardLarge(start, componentType, rand, structureboundingbox, coordBaseMode)
@@ -157,7 +214,7 @@ public class VillageGraveyardLarge extends SomberVillage {
 
     private void buildLeftGraves() {
         for (var zz = 0; zz < 5; ++zz) {
-            buildLeftGrave(3 + (zz * 2), graveIsFlowery[zz], zz);
+            buildLeftGrave(3 + (zz * 2), floweryGraves[zz], zz);
         }
     }
 
@@ -169,11 +226,11 @@ public class VillageGraveyardLarge extends SomberVillage {
             final var coarseDirt = BlockHelper.coarseDirt();
             painter.set(4, groundLevel, z, coarseDirt);
             painter.set(5, groundLevel, z, coarseDirt);
-            if (!coffinGenerated[coffinIndex] && painter.generateChest(4, groundLevel - 1, z, graveChestHooks)) {
-                coffinGenerated[coffinIndex] = true;
+            if (!coffinCreated[coffinIndex] && painter.generateChest(4, groundLevel - 1, z, graveChestHooks)) {
+                coffinCreated[coffinIndex] = true;
             }
-            if (!coffinGenerated[coffinIndex + 1] && painter.generateChest(5, groundLevel - 1, z, graveChestHooks)) {
-                coffinGenerated[coffinIndex + 1] = true;
+            if (!coffinCreated[coffinIndex + 1] && painter.generateChest(5, groundLevel - 1, z, graveChestHooks)) {
+                coffinCreated[coffinIndex + 1] = true;
             }
             painter.createFlowerPot(4, groundLevel + 1, z);
         } else {
@@ -186,7 +243,7 @@ public class VillageGraveyardLarge extends SomberVillage {
 
     private void buildRightGraves() {
         for (int zz = 0; zz < 3; ++zz) {
-            buildRightGrave(3 + (zz * 2), graveIsFlowery[zz + 5]);
+            buildRightGrave(3 + (zz * 2), floweryGraves[zz + 5]);
         }
     }
 
