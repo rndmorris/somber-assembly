@@ -28,8 +28,24 @@ public class BlockHelper {
 
     public static class Thaumcraft {
 
+        public static ItemStack arcaneStoneBricks() {
+            return ItemApi.getBlock("blockCosmeticSolid", 7);
+        }
+
+        public static ItemStack arcaneWorktable() {
+            return ItemApi.getBlock("blockTable", 15);
+        }
+
         public static ItemStack banner() {
             return ItemApi.getBlock("blockWoodenDevice", 8);
+        }
+
+        public static ItemStack crucible() {
+            return ItemApi.getBlock("blockMetalDevice", 0);
+        }
+
+        public static ItemStack table(boolean northSouth) {
+            return ItemApi.getBlock("blockTable", northSouth ? 1 : 0);
         }
     }
 }

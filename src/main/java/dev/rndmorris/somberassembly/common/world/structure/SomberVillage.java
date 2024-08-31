@@ -17,6 +17,7 @@ import net.minecraft.world.gen.structure.StructureVillagePieces.Village;
 import net.minecraftforge.common.ChestGenHooks;
 
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
+import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
 
 public abstract class SomberVillage extends Village {
 
@@ -69,7 +70,7 @@ public abstract class SomberVillage extends Village {
     }
 
     protected int getMetadataWithOffset(Block block, int metadata) {
-        if (block == Blocks.oak_stairs) {
+        if (block == Blocks.oak_stairs || block == Blocks.nether_brick_stairs) {
             if (metadata >= 4) {
                 // upside-down stairs are just +4
                 return super.getMetadataWithOffset(block, metadata - 4) + 4;
@@ -88,7 +89,7 @@ public abstract class SomberVillage extends Village {
 
     /**
      * The height of the structure
-     * 
+     *
      * @return An integer
      */
     protected abstract int structureHeight();
@@ -358,6 +359,17 @@ public abstract class SomberVillage extends Village {
 
         public void placeWoodenDoor(int x, int y, int z, int metadata) {
             placeDoorAtCurrentPosition(world, boundingBox, random, x, y, z, metadata);
+        }
+
+        public boolean createAuraNode(int x, int y, int z, boolean silverwood, boolean eerie, boolean small) {
+            if (isOutsideBoundingBox(x, y, z)) {
+                return false;
+            }
+            final var i = getXWithOffset(x, z);
+            final var j = getYWithOffset(y);
+            final var k = getZWithOffset(x, z);
+            ThaumcraftWorldGenerator.createRandomNodeAt(world, i, j, k, random, silverwood, eerie, small);
+            return true;
         }
     }
 }

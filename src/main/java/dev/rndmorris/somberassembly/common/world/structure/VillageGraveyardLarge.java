@@ -1,6 +1,8 @@
 package dev.rndmorris.somberassembly.common.world.structure;
 
 import static net.minecraft.init.Blocks.air;
+import static net.minecraft.init.Blocks.bookshelf;
+import static net.minecraft.init.Blocks.cobblestone;
 import static net.minecraft.init.Blocks.cobblestone_wall;
 import static net.minecraft.init.Blocks.fence;
 import static net.minecraft.init.Blocks.fence_gate;
@@ -9,13 +11,19 @@ import static net.minecraft.init.Blocks.glass_pane;
 import static net.minecraft.init.Blocks.glowstone;
 import static net.minecraft.init.Blocks.gravel;
 import static net.minecraft.init.Blocks.iron_bars;
+import static net.minecraft.init.Blocks.ladder;
 import static net.minecraft.init.Blocks.log;
+import static net.minecraft.init.Blocks.nether_brick;
+import static net.minecraft.init.Blocks.nether_brick_fence;
+import static net.minecraft.init.Blocks.nether_brick_stairs;
 import static net.minecraft.init.Blocks.oak_stairs;
 import static net.minecraft.init.Blocks.planks;
+import static net.minecraft.init.Blocks.redstone_torch;
 import static net.minecraft.init.Blocks.stone_brick_stairs;
 import static net.minecraft.init.Blocks.stone_slab;
 import static net.minecraft.init.Blocks.stonebrick;
 import static net.minecraft.init.Blocks.torch;
+import static net.minecraft.init.Blocks.trapdoor;
 import static net.minecraft.init.Blocks.wooden_slab;
 
 import java.util.List;
@@ -35,6 +43,7 @@ import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
 import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
 import dev.rndmorris.somberassembly.utils.ArrayUtil;
+import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.tiles.TileBanner;
 
@@ -50,11 +59,13 @@ public class VillageGraveyardLarge extends SomberVillage {
     private final static String NBT_COFFIN_CREATED = "coffinCreated";
     private final static String NBT_HAS_BASEMENT = "hasBasement";
     private final static String NBT_CARPET_COLOR = "carpetColor";
+    private final static String NBT_GENERATED_NODE = "generatedNode";
 
     private final ChestGenHooks graveChestHooks;
     private final boolean[] floweryGraves = new boolean[NUMBER_OF_GRAVES];
     private final boolean[] flowerpotCreated = new boolean[NUMBER_OF_GRAVES];
     private final boolean[] coffinCreated = new boolean[NUMBER_OF_GRAVES * 2];
+    private boolean generatedNode;
     private boolean hasBasement;
     private ItemStack carpet;
 
@@ -90,6 +101,9 @@ public class VillageGraveyardLarge extends SomberVillage {
         }
         if (tagCompound.hasKey(NBT_HAS_BASEMENT)) {
             hasBasement = tagCompound.getBoolean(NBT_HAS_BASEMENT);
+        }
+        if (tagCompound.hasKey(NBT_GENERATED_NODE)) {
+            generatedNode = tagCompound.getBoolean(NBT_GENERATED_NODE);
         }
 
         final var hasFloweryGraves = tagCompound.hasKey(NBT_FLOWERY_GRAVES);
@@ -141,6 +155,7 @@ public class VillageGraveyardLarge extends SomberVillage {
 
         tagCompound.setByte(NBT_CARPET_COLOR, (byte) carpet.getItemDamage());
         tagCompound.setBoolean(NBT_HAS_BASEMENT, hasBasement);
+        tagCompound.setBoolean(NBT_GENERATED_NODE, generatedNode);
         tagCompound.setByte(NBT_FLOWERY_GRAVES, (byte) dataFloweryGraves);
         tagCompound.setByte(NBT_FLOWERPOT_CREATED, (byte) dataFlowerpotCreated);
         tagCompound.setShort(NBT_COFFIN_CREATED, (short) dataCoffinCreated);
@@ -420,6 +435,104 @@ public class VillageGraveyardLarge extends SomberVillage {
     }
 
     private void buildBasement() {
+        final int xLength = 8, yLength = 4, zLength = 8;
+        final int originX = 5, originY = 0, originZ = 5;
+        final int endX = originX + xLength, endY = originY + yLength, endZ = originZ + zLength;
 
+        painter.fill(originX, originY, originZ, xLength, yLength, zLength, air);
+
+        // floor
+        final var arcaneStoneBricks = BlockHelper.Thaumcraft.arcaneStoneBricks();
+        painter.fill(originX, originY, originZ, 8, 0, 8, nether_brick);
+        painter.fill(originX + 2, originY, originZ + 2, 0, 0, 4, arcaneStoneBricks);
+        painter.fill(originX + 3, originY, originZ + 2 + 4, 3, 0, 0, arcaneStoneBricks);
+        painter.set(endX - 2, originY, endZ - 1, arcaneStoneBricks);
+
+        // walls
+        final var wallHeight = 3;
+        painter.fill(originX, originY + 1, originZ, 0, wallHeight, zLength, nether_brick);
+        painter.fill(endX, originY + 1, originZ, 0, wallHeight, zLength, nether_brick);
+        painter.fill(originX + 1, originY + 1, originZ, xLength - 2, wallHeight, 0, nether_brick);
+        painter.fill(originX + 1, originY + 1, endZ, xLength - 2, wallHeight, 0, nether_brick);
+
+        // wall grating
+        final var gratingHeight = 2;
+        painter.fill(endX - 1, gratingHeight, originZ, -2, 1, 0, nether_brick_fence);
+        painter.fill(endX, gratingHeight, originZ + 1, 0, 1, 2, nether_brick_fence);
+        painter.fill(endX, gratingHeight, endZ - 2, 0, 1, 0, nether_brick_fence);
+        painter.fill(originX + 3, gratingHeight, endZ, 1, 1, 0, nether_brick_fence);
+        painter.fill(originX, gratingHeight, originZ + 2, 0, 1, 0, nether_brick_fence);
+
+        // small room
+        painter.fill(endX - 4, originY + 1, originZ + 1, 0, wallHeight, 2, nether_brick);
+        painter.fill(endX - 3, originY + 1, originZ + 4, 2, wallHeight, 0, nether_brick);
+        painter.fill(endX - 2, originY + 2, originZ + 4, 0, 1, 0, air);
+
+        // ceiling
+        painter.fill(originX + 4, originY + 4, originZ, 3, 0, 3, nether_brick);
+        final var cobbleY = originY + 5;
+        painter.fill(originX + 1, cobbleY, originZ + 1, 2, 0, 6, cobblestone);
+        painter.fill(originX + 4, cobbleY, originZ + 4, 0, 0, 3, cobblestone);
+        painter.fill(originX + 5, cobbleY, originZ + 5, 2, 0, 2, cobblestone);
+        painter.set(endX - 2, cobbleY, endZ, cobblestone);
+
+        // ladder
+        final int shaftX = endX - 2, shaftZ = endZ - 1;
+        painter.fill(shaftX - 1, cobbleY + 1, shaftZ, 2, 2, 0, cobblestone);
+        painter.fill(shaftX, cobbleY + 1, shaftZ - 1, 0, 2, 2, cobblestone);
+        painter.fill(shaftX, endY, shaftZ, 0, 4, 0, air);
+        painter.fill(shaftX, originY + 1, shaftZ, 0, 6, 0, ladder, getMetadataWithOffset(ladder, 3));
+        painter.set(shaftX, groundLevel(1), shaftZ, trapdoor, getMetadataWithOffset(trapdoor, 9));
+
+        // decorations
+        painter.set(originX + 4, originY + 1, originZ + 4, BlockHelper.Thaumcraft.arcaneWorktable());
+        painter.set(originX + 2, originY + 1, originZ + 1, BlockHelper.Thaumcraft.crucible());
+        painter.set(originX + 1, originY + 1, originZ + 5, ItemApi.getBlock("blockTable", 2));
+        painter.set(originX + 1, originY + 1, originZ + 6, ItemApi.getBlock("blockTable", 7));
+        painter.setTileEntity(endX - 2, originY + 2, endZ - 3, BlockHelper.Thaumcraft.banner(), te -> {
+            if (!(te instanceof TileBanner banner)) {
+                return;
+            }
+            banner.setWall(true);
+            banner.setColor((byte) 15);
+            banner.setAspect(Aspect.UNDEAD);
+            final byte facing = switch (coordBaseMode) {
+                case 0 -> 0; //
+                case 1 -> 4;
+                case 2 -> 8;
+                case 3 -> 12; //
+                default -> -1;
+            };
+            banner.setFacing(facing);
+            banner.markDirty();
+        });
+
+        if (!generatedNode && painter.createAuraNode(originX + 2, originY + 3, originZ + 2, false, true, true)) {
+            generatedNode = true;
+        }
+
+        painter.fill(originX + 1, originY + 1, originZ + 4, 0, 3, 0, bookshelf);
+        painter.fill(originX + 1, originY + 1, originZ + 7, 0, 3, 0, bookshelf);
+        painter.fill(originX + 1, originY + 4, originZ + 5, 0, 0, 1, bookshelf);
+        painter.fill(originX + 1, originY + 3, originZ + 5, 0, 0, 1, oak_stairs, getMetadataWithOffset(oak_stairs, 5));
+        painter.set(originX + 1, originY + 2, originZ + 6, redstone_torch, 5);
+
+        final var brickStairE = new ItemStack(nether_brick_stairs, 0, getMetadataWithOffset(nether_brick_stairs, 4));
+        final var brickStairW = new ItemStack(nether_brick_stairs, 0, getMetadataWithOffset(nether_brick_stairs, 5));
+        final var brickStairS = new ItemStack(nether_brick_stairs, 0, getMetadataWithOffset(nether_brick_stairs, 6));
+        final var brickStairN = new ItemStack(nether_brick_stairs, 0, getMetadataWithOffset(nether_brick_stairs, 7));
+        final var stairY = originY + 4;
+
+        painter.set(originX + 1, stairY, originZ + 1, brickStairW);
+        painter.set(originX + 1, stairY, originZ + 3, brickStairW);
+        painter.set(originX + 3, stairY, originZ + 1, brickStairE);
+        painter.set(originX + 3, stairY, originZ + 3, brickStairE);
+
+        painter.set(endX - 1, stairY, endZ - 1, brickStairN);
+        painter.set(endX - 3, stairY, endZ - 1, brickStairN);
+        painter.set(endX - 5, stairY, endZ - 1, brickStairN);
+
+        painter.set(endX - 1, stairY, endZ - 3, brickStairS);
+        painter.set(endX - 3, stairY, endZ - 3, brickStairS);
     }
 }
