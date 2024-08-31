@@ -41,9 +41,8 @@ import thaumcraft.common.tiles.TileBanner;
 public class VillageGraveyardLarge extends SomberVillage {
 
     public static final int structureWidth = 15;
-    public static final int structureHeight = 18;
+    public static final int structureHeight = 19;
     public static final int structureLength = 15;
-    private static final int groundLevel = 7;
 
     private final static int NUMBER_OF_GRAVES = 8;
     private final static String NBT_FLOWERY_GRAVES = "floweryGraves";
@@ -140,7 +139,7 @@ public class VillageGraveyardLarge extends SomberVillage {
             dataCoffinCreated = dataCoffinCreated | ((coffinCreated[cIndex] ? 1 : 0) << cIndex);
         }
 
-        tagCompound.setByte(NBT_CARPET_COLOR, (byte)carpet.getItemDamage());
+        tagCompound.setByte(NBT_CARPET_COLOR, (byte) carpet.getItemDamage());
         tagCompound.setBoolean(NBT_HAS_BASEMENT, hasBasement);
         tagCompound.setByte(NBT_FLOWERY_GRAVES, (byte) dataFloweryGraves);
         tagCompound.setByte(NBT_FLOWERPOT_CREATED, (byte) dataFlowerpotCreated);
@@ -149,8 +148,17 @@ public class VillageGraveyardLarge extends SomberVillage {
 
     public static VillageGraveyardLarge build(StructureVillagePieces.Start start, List<StructureComponent> pieces,
         Random rand, int x, int y, int z, int coordBaseMode, int componentType) {
-        StructureBoundingBox structureboundingbox = StructureBoundingBox
-            .getComponentToAddBoundingBox(x, y, z, 0, 0, 0, structureWidth, structureHeight, structureLength, coordBaseMode);
+        StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(
+            x,
+            y,
+            z,
+            0,
+            0,
+            0,
+            structureWidth,
+            structureHeight,
+            structureLength,
+            coordBaseMode);
         return canVillageGoDeeper(structureboundingbox)
             && StructureComponent.findIntersecting(pieces, structureboundingbox) == null
                 ? new VillageGraveyardLarge(start, componentType, rand, structureboundingbox, coordBaseMode)
@@ -184,14 +192,14 @@ public class VillageGraveyardLarge extends SomberVillage {
         buildWall(2, 1, 2, 0);
         buildWall(10, 1, 2, 0);
 
-        painter.fill(6, groundLevel + 4, 1, 2, 0, 0, iron_bars);
-        painter.fill(6, groundLevel + 5, 1, 2, 0, 0, planks);
+        painter.fill(6, groundLevel(4), 1, 2, 0, 0, iron_bars);
+        painter.fill(6, groundLevel(5), 1, 2, 0, 0, planks);
     }
 
     private void buildWall(int x, int z, int deltaX, int deltaZ) {
-        painter.fill(x, groundLevel + 1, z, deltaX, 0, deltaZ, planks);
-        painter.fill(x, groundLevel + 2, z, deltaX, 1, deltaZ, iron_bars);
-        painter.fill(x, groundLevel + 4, z, deltaX, 0, deltaZ, wooden_slab);
+        painter.fill(x, groundLevel(1), z, deltaX, 0, deltaZ, planks);
+        painter.fill(x, groundLevel(2), z, deltaX, 1, deltaZ, iron_bars);
+        painter.fill(x, groundLevel(4), z, deltaX, 0, deltaZ, wooden_slab);
     }
 
     private void buildWallPosts() {
@@ -208,102 +216,114 @@ public class VillageGraveyardLarge extends SomberVillage {
     }
 
     private void buildWallPost(int x, int z) {
-        painter.fill(x, groundLevel + 1, z, 0, 3, 0, log);
-        painter.set(x, groundLevel + 5, z, wooden_slab);
+        painter.fill(x, groundLevel(1), z, 0, 3, 0, log);
+        painter.set(x, groundLevel(5), z, wooden_slab);
     }
 
     private void buildLeftGraves() {
         for (var zz = 0; zz < 5; ++zz) {
-            buildLeftGrave(3 + (zz * 2), floweryGraves[zz], zz);
+            buildLeftGrave(3 + (zz * 2), zz, zz * 2);
         }
     }
 
-    private void buildLeftGrave(int z, boolean isFlowerGrave, int coffinIndex) {
-        painter.set(3, groundLevel + 1, z, stonebrick);
-        painter.set(3, groundLevel + 2, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 0));
+    private void buildLeftGrave(int z, int graveIndex, int coffinIndex) {
+        painter.set(3, groundLevel(1), z, stonebrick);
+        painter.set(3, groundLevel(2), z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 0));
 
-        if (isFlowerGrave) {
+        final var isFlowerVariant = floweryGraves[graveIndex];
+        final var coffinY = isFlowerVariant ? groundLevel(-1) : groundLevel();
+
+        if (!coffinCreated[coffinIndex] && painter.generateChest(4, coffinY, z, graveChestHooks)) {
+            coffinCreated[coffinIndex] = true;
+        }
+        if (!coffinCreated[coffinIndex + 1] && painter.generateChest(5, coffinY, z, graveChestHooks)) {
+            coffinCreated[coffinIndex + 1] = true;
+        }
+
+        if (isFlowerVariant) {
             final var coarseDirt = BlockHelper.coarseDirt();
-            painter.set(4, groundLevel, z, coarseDirt);
-            painter.set(5, groundLevel, z, coarseDirt);
-            if (!coffinCreated[coffinIndex] && painter.generateChest(4, groundLevel - 1, z, graveChestHooks)) {
-                coffinCreated[coffinIndex] = true;
+            painter.set(4, groundLevel(), z, coarseDirt);
+            painter.set(5, groundLevel(), z, coarseDirt);
+            if (!flowerpotCreated[graveIndex] && painter.createFlowerPot(4, groundLevel(1), z)) {
+                flowerpotCreated[graveIndex] = true;
             }
-            if (!coffinCreated[coffinIndex + 1] && painter.generateChest(5, groundLevel - 1, z, graveChestHooks)) {
-                coffinCreated[coffinIndex + 1] = true;
-            }
-            painter.createFlowerPot(4, groundLevel + 1, z);
         } else {
-            painter.set(4, groundLevel + 1, z, stone_slab);
-            painter.set(5, groundLevel + 1, z, stone_slab);
-            painter.generateChest(4, groundLevel, z, graveChestHooks);
-            painter.generateChest(5, groundLevel, z, graveChestHooks);
+            painter.set(4, groundLevel(1), z, stone_slab);
+            painter.set(5, groundLevel(1), z, stone_slab);
         }
     }
 
     private void buildRightGraves() {
         for (int zz = 0; zz < 3; ++zz) {
-            buildRightGrave(3 + (zz * 2), floweryGraves[zz + 5]);
+            buildRightGrave(3 + (zz * 2), zz + 5, (zz * 2) + 10);
         }
     }
 
-    private void buildRightGrave(int z, boolean isFlowerGrave) {
-        painter.set(11, groundLevel + 1, z, stonebrick);
-        painter.set(11, groundLevel + 2, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 1));
+    private void buildRightGrave(int z, int graveIndex, int coffinIndex) {
+        painter.set(11, groundLevel(1), z, stonebrick);
+        painter.set(11, groundLevel(2), z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 1));
 
-        if (isFlowerGrave) {
+        final var isFlowerVariant = floweryGraves[graveIndex];
+        final var coffinY = isFlowerVariant ? groundLevel(-1) : groundLevel();
+
+        if (!coffinCreated[coffinIndex] && painter.generateChest(9, coffinY, z, graveChestHooks)) {
+            coffinCreated[coffinIndex] = true;
+        }
+        if (!coffinCreated[coffinIndex + 1] && painter.generateChest(10, coffinY, z, graveChestHooks)) {
+            coffinCreated[coffinIndex + 1] = true;
+        }
+
+        if (isFlowerVariant) {
             final var coarseDirt = BlockHelper.coarseDirt();
-            painter.set(9, groundLevel, z, coarseDirt);
-            painter.set(10, groundLevel, z, coarseDirt);
-            painter.generateChest(9, groundLevel - 1, z, graveChestHooks);
-            painter.generateChest(10, groundLevel - 1, z, graveChestHooks);
-            painter.createFlowerPot(10, groundLevel + 1, z);
+            painter.set(9, groundLevel(), z, coarseDirt);
+            painter.set(10, groundLevel(), z, coarseDirt);
+            if (!flowerpotCreated[graveIndex] && painter.createFlowerPot(10, groundLevel(1), z)) {
+                flowerpotCreated[graveIndex] = true;
+            }
         } else {
-            painter.set(9, groundLevel + 1, z, stone_slab);
-            painter.set(10, groundLevel + 1, z, stone_slab);
-            painter.generateChest(9, groundLevel, z, graveChestHooks);
-            painter.generateChest(10, groundLevel, z, graveChestHooks);
+            painter.set(9, groundLevel(1), z, stone_slab);
+            painter.set(10, groundLevel(1), z, stone_slab);
         }
     }
 
     private void buildPath() {
-        painter.fill(6, groundLevel, 0, 2, 0, 1, gravel);
-        painter.fill(6, groundLevel, 2, 1, 0, 4, gravel);
-        painter.fill(7, groundLevel, 7, 1, 0, 2, gravel);
-        painter.set(6, groundLevel, 10, gravel);
-        painter.fill(7, groundLevel, 10, 0, 0, 1, gravel);
+        painter.fill(6, groundLevel(), 0, 2, 0, 1, gravel);
+        painter.fill(6, groundLevel(), 2, 1, 0, 4, gravel);
+        painter.fill(7, groundLevel(), 7, 1, 0, 2, gravel);
+        painter.set(6, groundLevel(), 10, gravel);
+        painter.fill(7, groundLevel(), 10, 0, 0, 1, gravel);
     }
 
     private void buildTower() {
         // floor
-        painter.fill(10, groundLevel + 1, 10, 2, 0, 2, stonebrick);
-        painter.set(10, groundLevel + 1, 11, glowstone);
-        painter.fill(10, groundLevel + 2, 10, 2, 0, 2, carpet);
+        painter.fill(10, groundLevel(1), 10, 2, 0, 2, stonebrick);
+        painter.set(10, groundLevel(1), 11, glowstone);
+        painter.fill(10, groundLevel(2), 10, 2, 0, 2, carpet);
 
         // walls
-        painter.fill(9, groundLevel + 1, 10, 0, 8, 2, stonebrick);
-        painter.fill(13, groundLevel + 1, 10, 0, 8, 2, stonebrick);
-        painter.fill(10, groundLevel + 1, 9, 2, 8, 0, stonebrick);
-        painter.fill(10, groundLevel + 1, 13, 2, 8, 0, stonebrick);
-        painter.fill(9, groundLevel + 1, 9, 0, 3, 0, cobblestone_wall);
-        painter.fill(13, groundLevel + 1, 13, 0, 3, 0, cobblestone_wall);
+        painter.fill(9, groundLevel(1), 10, 0, 8, 2, stonebrick);
+        painter.fill(13, groundLevel(1), 10, 0, 8, 2, stonebrick);
+        painter.fill(10, groundLevel(1), 9, 2, 8, 0, stonebrick);
+        painter.fill(10, groundLevel(1), 13, 2, 8, 0, stonebrick);
+        painter.fill(9, groundLevel(1), 9, 0, 3, 0, cobblestone_wall);
+        painter.fill(13, groundLevel(1), 13, 0, 3, 0, cobblestone_wall);
 
         // Tower door
         final var doorX = 9;
         final var doorZ = 11;
-        painter.set(doorX, groundLevel + 2, doorZ, air);
-        painter.set(doorX, groundLevel + 3, doorZ, air);
-        painter.placeWoodenDoor(9, groundLevel + 2, 11, 2);
+        painter.set(doorX, groundLevel(2), doorZ, air);
+        painter.set(doorX, groundLevel(3), doorZ, air);
+        painter.placeWoodenDoor(9, groundLevel(2), 11, 2);
 
         // steps
         final var stepsX = 8;
-        painter.set(stepsX, groundLevel + 1, 10, oak_stairs, getMetadataWithOffset(oak_stairs, 3));
-        painter.set(stepsX, groundLevel + 1, 11, oak_stairs, getMetadataWithOffset(oak_stairs, 0));
-        painter.set(stepsX, groundLevel + 1, 12, oak_stairs, getMetadataWithOffset(oak_stairs, 0));
+        painter.set(stepsX, groundLevel(1), 10, oak_stairs, getMetadataWithOffset(oak_stairs, 3));
+        painter.set(stepsX, groundLevel(1), 11, oak_stairs, getMetadataWithOffset(oak_stairs, 0));
+        painter.set(stepsX, groundLevel(1), 12, oak_stairs, getMetadataWithOffset(oak_stairs, 0));
 
         // windows
-        painter.set(11, groundLevel + 3, 9, glass_pane);
-        final var windowY = groundLevel + 6;
+        painter.set(11, groundLevel(3), 9, glass_pane);
+        final var windowY = groundLevel(6);
         painter.fill(9, windowY, 11, 0, 1, 0, glass_pane);
         painter.fill(13, windowY, 11, 0, 1, 0, glass_pane);
         painter.fill(11, windowY, 9, 0, 1, 0, glass_pane);
@@ -321,7 +341,7 @@ public class VillageGraveyardLarge extends SomberVillage {
         final var stairUS = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 6));
         final var stairUN = new ItemStack(oak_stairs, 0, getMetadataWithOffset(oak_stairs, 7));
 
-        var roofLevel = groundLevel + 9;
+        var roofLevel = groundLevel(9);
         painter.fill(9, roofLevel, 8, 4, 0, 0, stairN);
         painter.fill(9, roofLevel, 14, 4, 0, 0, stairS);
         painter.fill(8, roofLevel, 9, 0, 0, 4, stairE);
@@ -357,11 +377,11 @@ public class VillageGraveyardLarge extends SomberVillage {
 
     private void buildTowerContents() {
         final var altarX = 12;
-        painter.set(altarX, groundLevel + 2, 11, BlockHelper.chiseledStoneBrick());
-        painter.fill(altarX, groundLevel + 3, 11, 0, 3, 0, fence);
+        painter.set(altarX, groundLevel(2), 11, BlockHelper.chiseledStoneBrick());
+        painter.fill(altarX, groundLevel(3), 11, 0, 3, 0, fence);
         final var gateMd = getMetadataWithOffset(fence_gate, 3);
-        painter.set(altarX, groundLevel + 5, 10, fence_gate, gateMd);
-        painter.set(altarX, groundLevel + 5, 12, fence_gate, gateMd);
+        painter.set(altarX, groundLevel(5), 10, fence_gate, gateMd);
+        painter.set(altarX, groundLevel(5), 12, fence_gate, gateMd);
 
         final var banner = BlockHelper.Thaumcraft.banner();
         final var setBannerData = new Painter.TileEntityCallback() {
@@ -382,12 +402,12 @@ public class VillageGraveyardLarge extends SomberVillage {
                 banner.markDirty();
             }
         };
-        painter.setTileEntity(altarX, groundLevel + 4, 10, banner, setBannerData);
-        painter.setTileEntity(altarX, groundLevel + 4, 12, banner, setBannerData);
+        painter.setTileEntity(altarX, groundLevel(4), 10, banner, setBannerData);
+        painter.setTileEntity(altarX, groundLevel(4), 12, banner, setBannerData);
     }
 
     private void addTorches() {
-        final var y = groundLevel + 3;
+        final var y = groundLevel(3);
         painter.set(5, y, 2, torch);
         painter.set(9, y, 2, torch);
 
