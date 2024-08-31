@@ -30,25 +30,15 @@ public abstract class SomberVillage extends Village {
         this.boundingBox = boundingBox;
     }
 
-    protected abstract int structureHeight();
-
-    protected abstract int yAdjustment();
-
-    protected void func_143012_a(NBTTagCompound p_143012_1_)
-    {
+    protected void func_143012_a(NBTTagCompound p_143012_1_) {
         super.func_143012_a(p_143012_1_);
         writeToNBT(p_143012_1_);
     }
 
-    protected void func_143011_b(NBTTagCompound p_143011_1_)
-    {
+    protected void func_143011_b(NBTTagCompound p_143011_1_) {
         super.func_143011_b(p_143011_1_);
         readFromNBT(p_143011_1_);
     }
-
-    protected abstract void writeToNBT(NBTTagCompound tagCompound);
-
-    protected abstract void readFromNBT(NBTTagCompound tagCompound);
 
     @Override
     public boolean addComponentParts(World world, Random rand, StructureBoundingBox boundingBox) {
@@ -59,23 +49,23 @@ public abstract class SomberVillage extends Village {
             }
         }
 
-        this.boundingBox
-            .offset(0, this.averageGroundLevel - this.boundingBox.maxY + structureHeight() - 1 + yAdjustment(), 0);
+        this.boundingBox.minY = this.averageGroundLevel + this.yOffset();
+        this.boundingBox.maxY = this.averageGroundLevel + this.yOffset() + this.structureHeight() - 1;
 
-        painter = new Painter(world, boundingBox, rand);
+        painter = new Painter(world, rand);
         buildStructure();
 
         return true;
     }
 
-    protected abstract void buildStructure();
-
-    protected TileEntity getTileEntityAtCurrentPosition(World world, int x, int y, int z,
-        StructureBoundingBox boundingBox) {
+    protected TileEntity getTileEntityAtCurrentPosition(World world, int x, int y, int z) {
+        if (isOutsideBoundingBox(x, y, z)) {
+            return null;
+        }
         int l = this.getXWithOffset(x, z);
-        int i1 = this.getYWithOffset(y);
-        int j1 = this.getZWithOffset(x, z);
-        return !boundingBox.isVecInside(l, i1, j1) ? null : world.getTileEntity(l, i1, j1);
+        int i = this.getYWithOffset(y);
+        int j = this.getZWithOffset(x, z);
+        return world.getTileEntity(l, i, j);
     }
 
     protected int getMetadataWithOffset(Block block, int metadata) {
@@ -88,26 +78,64 @@ public abstract class SomberVillage extends Village {
         return super.getMetadataWithOffset(block, metadata);
     }
 
+    protected boolean isOutsideBoundingBox(int x, int y, int z) {
+        final var i = getXWithOffset(x, z);
+        final var j = getYWithOffset(y);
+        final var k = getZWithOffset(x, z);
+
+        return !boundingBox.isVecInside(i, j, k);
+    }
+
+    /**
+     * The height of the structure
+     * @return An integer
+     */
+    protected abstract int structureHeight();
+
+    /**
+     * The 0-indexed relative y-coordinate the structure treats as solid ground.
+     */
+    protected abstract int groundLevel();
+
+    /**
+     * Get a 0-indexed y-coordinate adjusted for the structure's ground level.
+     *
+     * @param delta The amount above or below ground level to shift.
+     * @return The adjusted coordinate.
+     */
+    protected int groundLevel(int delta) {
+        return groundLevel() + delta;
+    }
+
+    /**
+     * How far above or below the averageGroundLevel + 1 the structure should be built.
+     */
+    protected abstract int yOffset();
+
+    protected abstract void buildStructure();
+
+    protected abstract void writeToNBT(NBTTagCompound tagCompound);
+
+    protected abstract void readFromNBT(NBTTagCompound tagCompound);
+
     /**
      * Helper methods to make building less painful
      */
     protected class Painter {
 
         public final World world;
-        public final StructureBoundingBox boundingBox;
         public final Random random;
 
-        public Painter(World world, StructureBoundingBox boundingBox, Random random) {
+        public Painter(World world, Random random) {
             this.world = world;
-            this.boundingBox = boundingBox;
             this.random = random;
         }
 
         /**
          *
-         * @param x The relative x coordinate
-         * @param y The relative y coordinate.
-         * @param z The relative z coordinate.
+         * @param x     The relative x coordinate
+         * @param y     The relative y coordinate.
+         * @param z     The relative z coordinate.
          * @param block The block to place.
          * @return True if the block was placed, false otherwise.
          */
@@ -117,15 +145,15 @@ public abstract class SomberVillage extends Village {
 
         /**
          *
-         * @param x The relative x coordinate.
-         * @param y The relative y coordinate.
-         * @param z The relative z coordinate.
+         * @param x     The relative x coordinate.
+         * @param y     The relative y coordinate.
+         * @param z     The relative z coordinate.
          * @param block The block to place.
-         * @param md The metadata of the block to place.
+         * @param md    The metadata of the block to place.
          * @return True if the block was placed, false otherwise.
          */
         public boolean set(int x, int y, int z, Block block, int md) {
-            if (!boundingBox.isVecInside(x, y, z)) {
+            if (isOutsideBoundingBox(x, y, z)) {
                 return false;
             }
             placeBlockAtCurrentPosition(world, block, md, x, y, z, boundingBox);
@@ -134,9 +162,10 @@ public abstract class SomberVillage extends Village {
 
         /**
          * Place a block in the world.
-         * @param x The relative x coordinate.
-         * @param y The relative y coordinate.
-         * @param z The relative z coordinate.
+         *
+         * @param x              The relative x coordinate.
+         * @param y              The relative y coordinate.
+         * @param z              The relative z coordinate.
          * @param blockItemStack The block and damage value to place.
          * @return True if the block was placed, false otherwise.
          */
@@ -152,14 +181,15 @@ public abstract class SomberVillage extends Village {
 
         /**
          * Create a chest at the given location, populated by the given chest generation hooks.
-         * @param x The relative x coordinate.
-         * @param y The relative y coordinate.
-         * @param z The relative z coordinate.
+         *
+         * @param x             The relative x coordinate.
+         * @param y             The relative y coordinate.
+         * @param z             The relative z coordinate.
          * @param chestGenHooks The hooks used to populate the chest's contents
          * @return True if the block was placed, false otherwise.
          */
         public boolean generateChest(int x, int y, int z, ChestGenHooks chestGenHooks) {
-            if (!boundingBox.isVecInside(x, y, z)) {
+            if (isOutsideBoundingBox(x, y, z)) {
                 return false;
             }
             generateStructureChestContents(
@@ -176,10 +206,11 @@ public abstract class SomberVillage extends Village {
 
         /**
          * Place a block in the world, attempt to get its tile entity, then configure it with a callback.
-         * @param x The relative x coordinate.
-         * @param y The relative y coordinate.
-         * @param z The relative z coordinate.
-         * @param block The block to place.
+         *
+         * @param x        The relative x coordinate.
+         * @param y        The relative y coordinate.
+         * @param z        The relative z coordinate.
+         * @param block    The block to place.
          * @param callback A callback used to configure the created tile entity.
          * @return True if the block was placed, false otherwise.
          */
@@ -189,11 +220,12 @@ public abstract class SomberVillage extends Village {
 
         /**
          * Place a block in the world, attempt to get its tile entity, then configure it with a callback.
-         * @param x The relative x coordinate.
-         * @param y The relative y coordinate.
-         * @param z The relative z coordinate.
-         * @param block The block to place.
-         * @param md The metadata of the block to place.
+         *
+         * @param x        The relative x coordinate.
+         * @param y        The relative y coordinate.
+         * @param z        The relative z coordinate.
+         * @param block    The block to place.
+         * @param md       The metadata of the block to place.
          * @param callback A callback used to configure the created tile entity.
          * @return True if the block was placed, false otherwise.
          */
@@ -202,7 +234,7 @@ public abstract class SomberVillage extends Village {
                 return false;
             }
             if (callback != null) {
-                final var tileEntity = getTileEntityAtCurrentPosition(world, x, y, z, boundingBox);
+                final var tileEntity = getTileEntityAtCurrentPosition(world, x, y, z);
                 callback.execute(tileEntity);
             }
             return true;
@@ -210,11 +242,12 @@ public abstract class SomberVillage extends Village {
 
         /**
          * Place a block in the world, attempt to get its tile entity, then configure it with a callback.
-         * @param x The relative x coordinate.
-         * @param y The relative y coordinate.
-         * @param z The relative z coordinate.
+         *
+         * @param x              The relative x coordinate.
+         * @param y              The relative y coordinate.
+         * @param z              The relative z coordinate.
          * @param blockItemStack The block and damage value to place.
-         * @param callback A callback used to configure the created tile entity.
+         * @param callback       A callback used to configure the created tile entity.
          * @return True if the block was placed, false otherwise.
          */
         public boolean setTileEntity(int x, int y, int z, ItemStack blockItemStack, TileEntityCallback callback) {
@@ -234,13 +267,14 @@ public abstract class SomberVillage extends Village {
 
         /**
          * Place one or more blocks in an area.
-         * @param x The starting relative x coordinate.
-         * @param y The starting relative y coordinate.
-         * @param z The starting relative z coordinate.
+         *
+         * @param x      The starting relative x coordinate.
+         * @param y      The starting relative y coordinate.
+         * @param z      The starting relative z coordinate.
          * @param deltaX The number of additional blocks to place along the x-axis. Can be positive, negative, or zero.
          * @param deltaY The number of additional blocks to place along the y-axis. Can be positive, negative, or zero.
          * @param deltaZ The number of additional blocks to place along the z-axis. Can be positive, negative, or zero.
-         * @param block The block to place.
+         * @param block  The block to place.
          */
         public void fill(int x, int y, int z, int deltaX, int deltaY, int deltaZ, Block block) {
             fill(x, y, z, deltaX, deltaY, deltaZ, block, 0);
@@ -248,14 +282,15 @@ public abstract class SomberVillage extends Village {
 
         /**
          * Place one or more blocks in an area.
-         * @param x The starting relative x coordinate.
-         * @param y The starting relative y coordinate.
-         * @param z The starting relative z coordinate.
+         *
+         * @param x      The starting relative x coordinate.
+         * @param y      The starting relative y coordinate.
+         * @param z      The starting relative z coordinate.
          * @param deltaX The number of additional blocks to place along the x-axis. Can be positive, negative, or zero.
          * @param deltaY The number of additional blocks to place along the y-axis. Can be positive, negative, or zero.
          * @param deltaZ The number of additional blocks to place along the z-axis. Can be positive, negative, or zero.
-         * @param block The block to place.
-         * @param md The metadata of the block to place.
+         * @param block  The block to place.
+         * @param md     The metadata of the block to place.
          */
         public void fill(int x, int y, int z, int deltaX, int deltaY, int deltaZ, Block block, int md) {
             final var x2 = x + deltaX;
@@ -280,12 +315,16 @@ public abstract class SomberVillage extends Village {
 
         /**
          * Place one or more blocks in an area.
-         * @param x The starting relative x coordinate.
-         * @param y The starting relative y coordinate.
-         * @param z The starting relative z coordinate.
-         * @param deltaX The number of additional blocks to place along the x-axis. Can be positive, negative, or zero.
-         * @param deltaY The number of additional blocks to place along the y-axis. Can be positive, negative, or zero.
-         * @param deltaZ The number of additional blocks to place along the z-axis. Can be positive, negative, or zero.
+         *
+         * @param x              The starting relative x coordinate.
+         * @param y              The starting relative y coordinate.
+         * @param z              The starting relative z coordinate.
+         * @param deltaX         The number of additional blocks to place along the x-axis. Can be positive, negative,
+         *                       or zero.
+         * @param deltaY         The number of additional blocks to place along the y-axis. Can be positive, negative,
+         *                       or zero.
+         * @param deltaZ         The number of additional blocks to place along the z-axis. Can be positive, negative,
+         *                       or zero.
          * @param blockItemStack The block and damage value to place.
          */
         public void fill(int x, int y, int z, int deltaX, int deltaY, int deltaZ, ItemStack blockItemStack) {
@@ -300,6 +339,7 @@ public abstract class SomberVillage extends Village {
 
         /**
          * Create a flower pot with a random flower at the given coordinates.
+         *
          * @param x The relative x coordinate.
          * @param y The relative y coordinate.
          * @param z The relative z coordinate.
