@@ -6,8 +6,11 @@ import net.minecraftforge.common.config.Configuration;
 
 public class Config {
 
+    static final String categoryGeneral = "general";
     static final String categoryItems = "items";
     static final String categoryVillages = "villages";
+
+    public static boolean debugTweaks = false;
 
     public static int decayingFleshDecayChance = 50;
     public static int decayingFleshDropRate = 4;
@@ -20,6 +23,12 @@ public class Config {
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
+
+        debugTweaks = configuration.getBoolean(
+            "Debug Tweaks",
+            categoryGeneral,
+            debugTweaks,
+            "Enables tweaks that make debugging mod development easier.");
 
         decayingFleshDecayChance = configuration.getInt(
             "Decaying Flesh decay chance",

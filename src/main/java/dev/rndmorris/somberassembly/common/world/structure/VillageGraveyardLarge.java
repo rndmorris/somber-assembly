@@ -392,7 +392,11 @@ public class VillageGraveyardLarge extends SomberVillage {
 
     private void buildTowerContents() {
         final var altarX = 12;
-        painter.set(altarX, groundLevel(2), 11, BlockHelper.chiseledStoneBrick());
+
+        final var altarBase = Config.debugTweaks ? new ItemStack(planks, 0, coordBaseMode)
+            : BlockHelper.chiseledStoneBrick();
+
+        painter.set(altarX, groundLevel(2), 11, altarBase);
         painter.fill(altarX, groundLevel(3), 11, 0, 3, 0, fence);
         final var gateMd = getMetadataWithOffset(fence_gate, 3);
         painter.set(altarX, groundLevel(5), 10, fence_gate, gateMd);
@@ -507,10 +511,6 @@ public class VillageGraveyardLarge extends SomberVillage {
             banner.markDirty();
         });
 
-        if (!generatedNode && painter.createAuraNode(originX + 2, originY + 3, originZ + 2, false, true, true)) {
-            generatedNode = true;
-        }
-
         painter.fill(originX + 1, originY + 1, originZ + 4, 0, 3, 0, bookshelf);
         painter.fill(originX + 1, originY + 1, originZ + 7, 0, 3, 0, bookshelf);
         painter.fill(originX + 1, originY + 4, originZ + 5, 0, 0, 1, bookshelf);
@@ -534,5 +534,9 @@ public class VillageGraveyardLarge extends SomberVillage {
 
         painter.set(endX - 1, stairY, endZ - 3, brickStairS);
         painter.set(endX - 3, stairY, endZ - 3, brickStairS);
+
+        if (!generatedNode && painter.createAuraNode(originX + 2, originY + 3, originZ + 2, false, true, true)) {
+            generatedNode = true;
+        }
     }
 }
