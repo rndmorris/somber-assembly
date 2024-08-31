@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
@@ -48,10 +48,11 @@ public class VillageGraveyardLarge extends SomberVillage {
     private static final int groundLevel = 7;
 
     private final ChestGenHooks graveChestHooks;
-    private final boolean hasBasement;
 
+    private final boolean hasBasement;
     private final ItemStack carpet;
-    private final Boolean[] graveIsFlowery;
+    private final Boolean[] graveIsFlowery = new Boolean[8];
+    private final Boolean[] coffinGenerated = new Boolean[16];
 
     public VillageGraveyardLarge(Start start, int componentType, Random random, StructureBoundingBox boundingBox,
         int coodBaseMode) {
@@ -60,8 +61,8 @@ public class VillageGraveyardLarge extends SomberVillage {
         hasBasement = Config.graveyardLargeBasementFrequency != -1
             && MathHelper.getRandomIntegerInRange(random, 0, Config.graveyardLargeBasementFrequency) == 0;
         carpet = BlockHelper.carpet(random);
-        graveIsFlowery = new Boolean[8];
         ArrayUtil.fillFromInitializer(graveIsFlowery, i -> random.nextBoolean());
+        ArrayUtil.fillFromInitializer(coffinGenerated, i -> false);
     }
 
     @Override
@@ -70,8 +71,23 @@ public class VillageGraveyardLarge extends SomberVillage {
     }
 
     @Override
-    protected int yAdjustment() {
+    protected int groundLevel() {
         return yShift;
+    }
+
+    @Override
+    protected int yOffset() {
+        return -8;
+    }
+
+    @Override
+    protected void readFromNBT(NBTTagCompound tagCompound) {
+
+    }
+
+    @Override
+    protected void writeToNBT(NBTTagCompound tagCompound) {
+
     }
 
     public static VillageGraveyardLarge build(StructureVillagePieces.Start start, List<StructureComponent> pieces,
@@ -85,13 +101,7 @@ public class VillageGraveyardLarge extends SomberVillage {
     }
 
     @Override
-    public boolean addComponentParts(World world, Random rand, StructureBoundingBox boundingBox) {
-        if (!canWorkWithAverageGroundLevel(world, boundingBox)) {
-            return true;
-        }
-
-        painter = new Painter(world, boundingBox, rand);
-
+    public void buildStructure() {
         buildWalls();
         buildWallPosts();
         buildLeftGraves();
@@ -108,8 +118,6 @@ public class VillageGraveyardLarge extends SomberVillage {
         if (hasBasement) {
             buildBasement();
         }
-
-        return true;
     }
 
     private void buildWalls() {
@@ -149,11 +157,11 @@ public class VillageGraveyardLarge extends SomberVillage {
 
     private void buildLeftGraves() {
         for (var zz = 0; zz < 5; ++zz) {
-            buildLeftGrave(3 + (zz * 2), graveIsFlowery[zz]);
+            buildLeftGrave(3 + (zz * 2), graveIsFlowery[zz], zz);
         }
     }
 
-    private void buildLeftGrave(int z, boolean isFlowerGrave) {
+    private void buildLeftGrave(int z, boolean isFlowerGrave, int coffinIndex) {
         painter.set(3, groundLevel + 1, z, stonebrick);
         painter.set(3, groundLevel + 2, z, stone_brick_stairs, getMetadataWithOffset(stone_brick_stairs, 0));
 
@@ -161,8 +169,12 @@ public class VillageGraveyardLarge extends SomberVillage {
             final var coarseDirt = BlockHelper.coarseDirt();
             painter.set(4, groundLevel, z, coarseDirt);
             painter.set(5, groundLevel, z, coarseDirt);
-            painter.generateChest(4, groundLevel - 1, z, graveChestHooks);
-            painter.generateChest(5, groundLevel - 1, z, graveChestHooks);
+            if (!coffinGenerated[coffinIndex] && painter.generateChest(4, groundLevel - 1, z, graveChestHooks)) {
+                coffinGenerated[coffinIndex] = true;
+            }
+            if (!coffinGenerated[coffinIndex + 1] && painter.generateChest(5, groundLevel - 1, z, graveChestHooks)) {
+                coffinGenerated[coffinIndex + 1] = true;
+            }
             painter.createFlowerPot(4, groundLevel + 1, z);
         } else {
             painter.set(4, groundLevel + 1, z, stone_slab);
