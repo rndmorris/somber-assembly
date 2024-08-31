@@ -88,6 +88,7 @@ public abstract class SomberVillage extends Village {
 
     /**
      * The height of the structure
+     * 
      * @return An integer
      */
     protected abstract int structureHeight();
