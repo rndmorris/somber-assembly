@@ -26,6 +26,46 @@ public class BlockHelper {
         return new ItemStack(Blocks.dirt, 0, 1);
     }
 
+    public static ItemStack flowerAllium() {
+        return new ItemStack(Blocks.yellow_flower, 0, 2);
+    }
+
+    public static ItemStack flowerAzureBluet() {
+        return new ItemStack(Blocks.yellow_flower, 0, 3);
+    }
+
+    public static ItemStack flowerBlueOrchid() {
+        return new ItemStack(Blocks.yellow_flower, 0, 1);
+    }
+
+    public static ItemStack flowerDandelion() {
+        return new ItemStack(Blocks.yellow_flower);
+    }
+
+    public static ItemStack flowerOxeyeDaisy() {
+        return new ItemStack(Blocks.yellow_flower, 0, 8);
+    }
+
+    public static ItemStack flowerPoppy() {
+        return new ItemStack(Blocks.red_flower, 0);
+    }
+
+    public static ItemStack flowerTulipOrange() {
+        return new ItemStack(Blocks.yellow_flower, 0, 5);
+    }
+
+    public static ItemStack flowerTulipRed() {
+        return new ItemStack(Blocks.yellow_flower, 0, 4);
+    }
+
+    public static ItemStack flowerTulipPink() {
+        return new ItemStack(Blocks.yellow_flower, 0, 7);
+    }
+
+    public static ItemStack flowerTulipWhite() {
+        return new ItemStack(Blocks.yellow_flower, 0, 6);
+    }
+
     public static class Thaumcraft {
 
         public static ItemStack arcaneStoneBricks() {

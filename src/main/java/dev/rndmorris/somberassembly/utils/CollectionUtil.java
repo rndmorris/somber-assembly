@@ -3,6 +3,7 @@ package dev.rndmorris.somberassembly.utils;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -57,5 +58,9 @@ public final class CollectionUtil {
             .filter(index -> predicate.test(list.get(index)))
             .findFirst()
             .orElse(-1);
+    }
+
+    public static <T> T randomElement(Random random, List<T> list) {
+        return list.get(random.nextInt(list.size()));
     }
 }

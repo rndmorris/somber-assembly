@@ -18,6 +18,7 @@ import net.minecraftforge.common.ChestGenHooks;
 
 import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
+import dev.rndmorris.somberassembly.utils.CollectionUtil;
 import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
 
 public abstract class SomberVillage extends Village {
@@ -381,7 +382,7 @@ public abstract class SomberVillage extends Village {
         public boolean createFlowerPot(int x, int y, int z) {
             return setTileEntity(x, y, z, flower_pot, (te) -> {
                 if (te instanceof TileEntityFlowerPot flowerPot) {
-                    final var flower = LootGeneration.randomFlower(painter.random);
+                    final var flower = CollectionUtil.randomElement(painter.random, LootGeneration.graveyardFlowers);
                     flowerPot.func_145964_a(flower.getItem(), flower.getItemDamage());
                     flowerPot.markDirty();
                 }
