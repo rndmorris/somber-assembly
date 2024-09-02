@@ -46,6 +46,7 @@ import dev.rndmorris.somberassembly.utils.ArrayUtil;
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.tiles.TileBanner;
+import thaumcraft.common.tiles.TileNode;
 
 public class VillageGraveyardLarge extends SomberVillage {
 
@@ -59,13 +60,11 @@ public class VillageGraveyardLarge extends SomberVillage {
     private final static String NBT_COFFIN_CREATED = "coffinCreated";
     private final static String NBT_HAS_BASEMENT = "hasBasement";
     private final static String NBT_CARPET_COLOR = "carpetColor";
-    private final static String NBT_GENERATED_NODE = "generatedNode";
 
     private final ChestGenHooks graveChestHooks;
     private final boolean[] floweryGraves = new boolean[NUMBER_OF_GRAVES];
     private final boolean[] flowerpotCreated = new boolean[NUMBER_OF_GRAVES];
     private final boolean[] coffinCreated = new boolean[NUMBER_OF_GRAVES * 2];
-    private boolean generatedNode;
     private boolean hasBasement;
     private ItemStack carpet;
 
@@ -101,9 +100,6 @@ public class VillageGraveyardLarge extends SomberVillage {
         }
         if (tagCompound.hasKey(NBT_HAS_BASEMENT)) {
             hasBasement = tagCompound.getBoolean(NBT_HAS_BASEMENT);
-        }
-        if (tagCompound.hasKey(NBT_GENERATED_NODE)) {
-            generatedNode = tagCompound.getBoolean(NBT_GENERATED_NODE);
         }
 
         final var hasFloweryGraves = tagCompound.hasKey(NBT_FLOWERY_GRAVES);
@@ -155,7 +151,6 @@ public class VillageGraveyardLarge extends SomberVillage {
 
         tagCompound.setByte(NBT_CARPET_COLOR, (byte) carpet.getItemDamage());
         tagCompound.setBoolean(NBT_HAS_BASEMENT, hasBasement);
-        tagCompound.setBoolean(NBT_GENERATED_NODE, generatedNode);
         tagCompound.setByte(NBT_FLOWERY_GRAVES, (byte) dataFloweryGraves);
         tagCompound.setByte(NBT_FLOWERPOT_CREATED, (byte) dataFlowerpotCreated);
         tagCompound.setShort(NBT_COFFIN_CREATED, (short) dataCoffinCreated);
@@ -535,8 +530,7 @@ public class VillageGraveyardLarge extends SomberVillage {
         painter.set(endX - 1, stairY, endZ - 3, brickStairS);
         painter.set(endX - 3, stairY, endZ - 3, brickStairS);
 
-        if (!generatedNode && painter.createAuraNode(originX + 2, originY + 3, originZ + 2, false, true, true)) {
-            generatedNode = true;
-        }
+        final int nodeX = originX + 2, nodeY = originY + 3, nodeZ = originZ + 2;
+        painter.createAuraNode(nodeX, nodeY, nodeZ, false, true, true);
     }
 }
