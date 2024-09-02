@@ -16,6 +16,7 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Village;
 import net.minecraftforge.common.ChestGenHooks;
 
+import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.world.LootGeneration;
 import thaumcraft.common.lib.world.ThaumcraftWorldGenerator;
 
@@ -24,10 +25,18 @@ public abstract class SomberVillage extends Village {
     protected int averageGroundLevel = -1;
     protected Painter painter;
 
+    private static int debugCoordBaseMode = 0;
+
+    private static int nextDebugCoordBaseMode() {
+        var result = debugCoordBaseMode;
+        debugCoordBaseMode = (debugCoordBaseMode + 1) % 4;
+        return result;
+    }
+
     public SomberVillage(StructureVillagePieces.Start start, int componentType, Random random,
         StructureBoundingBox boundingBox, int coordBaseMode) {
         super(start, componentType);
-        this.coordBaseMode = coordBaseMode;
+        this.coordBaseMode = Config.debugTweaks ? nextDebugCoordBaseMode() : coordBaseMode;
         this.boundingBox = boundingBox;
     }
 
@@ -74,6 +83,28 @@ public abstract class SomberVillage extends Village {
             if (metadata >= 4) {
                 // upside-down stairs are just +4
                 return super.getMetadataWithOffset(block, metadata - 4) + 4;
+            }
+        }
+        if (block == Blocks.trapdoor) {
+            if (coordBaseMode == 0) {
+                if (metadata == 9 || metadata == 13) {
+                    return metadata - 1;
+                }
+            }
+            if (coordBaseMode == 1) {
+                if (metadata == 9 || metadata == 13) {
+                    return metadata + 2;
+                }
+            }
+            if (coordBaseMode == 2) {
+                if (metadata == 9 || metadata == 13) {
+                    return metadata;
+                }
+            }
+            if (coordBaseMode == 3) {
+                if (metadata == 9 || metadata == 13) {
+                    return metadata + 1;
+                }
             }
         }
         return super.getMetadataWithOffset(block, metadata);

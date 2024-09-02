@@ -46,7 +46,6 @@ import dev.rndmorris.somberassembly.utils.ArrayUtil;
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.tiles.TileBanner;
-import thaumcraft.common.tiles.TileNode;
 
 public class VillageGraveyardLarge extends SomberVillage {
 
