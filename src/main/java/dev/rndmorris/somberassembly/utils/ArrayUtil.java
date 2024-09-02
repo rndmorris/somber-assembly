@@ -20,6 +20,13 @@ public final class ArrayUtil {
         return array;
     }
 
+    public static boolean[] fillFromInitializer(boolean[] array, InitializerClosure<Boolean> initializer) {
+        for (var index = 0; index < array.length; ++index) {
+            array[index] = initializer.create(index);
+        }
+        return array;
+    }
+
     public interface InitializerClosure<T> {
 
         T create(int index);
