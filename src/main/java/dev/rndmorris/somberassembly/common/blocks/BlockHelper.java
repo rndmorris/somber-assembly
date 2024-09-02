@@ -27,15 +27,15 @@ public class BlockHelper {
     }
 
     public static ItemStack flowerAllium() {
-        return new ItemStack(Blocks.yellow_flower, 0, 2);
+        return new ItemStack(Blocks.red_flower, 0, 2);
     }
 
     public static ItemStack flowerAzureBluet() {
-        return new ItemStack(Blocks.yellow_flower, 0, 3);
+        return new ItemStack(Blocks.red_flower, 0, 3);
     }
 
     public static ItemStack flowerBlueOrchid() {
-        return new ItemStack(Blocks.yellow_flower, 0, 1);
+        return new ItemStack(Blocks.red_flower, 0, 1);
     }
 
     public static ItemStack flowerDandelion() {
@@ -43,7 +43,7 @@ public class BlockHelper {
     }
 
     public static ItemStack flowerOxeyeDaisy() {
-        return new ItemStack(Blocks.yellow_flower, 0, 8);
+        return new ItemStack(Blocks.red_flower, 0, 8);
     }
 
     public static ItemStack flowerPoppy() {
@@ -51,19 +51,19 @@ public class BlockHelper {
     }
 
     public static ItemStack flowerTulipOrange() {
-        return new ItemStack(Blocks.yellow_flower, 0, 5);
+        return new ItemStack(Blocks.red_flower, 0, 5);
     }
 
     public static ItemStack flowerTulipRed() {
-        return new ItemStack(Blocks.yellow_flower, 0, 4);
+        return new ItemStack(Blocks.red_flower, 0, 4);
     }
 
     public static ItemStack flowerTulipPink() {
-        return new ItemStack(Blocks.yellow_flower, 0, 7);
+        return new ItemStack(Blocks.red_flower, 0, 7);
     }
 
     public static ItemStack flowerTulipWhite() {
-        return new ItemStack(Blocks.yellow_flower, 0, 6);
+        return new ItemStack(Blocks.red_flower, 0, 6);
     }
 
     public static class Thaumcraft {
