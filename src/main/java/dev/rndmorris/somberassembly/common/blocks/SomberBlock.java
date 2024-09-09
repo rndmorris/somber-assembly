@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import dev.rndmorris.somberassembly.SomberAssembly;
 import thaumcraft.api.ItemApi;
 
@@ -12,7 +13,7 @@ public abstract class SomberBlock extends Block {
     public static Block boneBlock;
 
     public static void preInit() {
-        boneBlock = new BoneBlock();
+        boneBlock = GameRegistry.registerBlock(new BoneBlock(), BoneBlock.NAME);
     }
 
     protected SomberBlock(Material materialIn) {
@@ -21,13 +22,11 @@ public abstract class SomberBlock extends Block {
         this.setCreativeTab(SomberAssembly.creativeTab);
     }
 
-    @Override
-    public Block setBlockName(String name) {
+    public Block setBlockNamePrefixed(String name) {
         return super.setBlockName(SomberAssembly.prefixModid(name));
     }
 
-    @Override
-    public Block setBlockTextureName(String name) {
+    public Block setBlockTextureNamePrefixed(String name) {
         return super.setBlockTextureName(SomberAssembly.prefixModid(name));
     }
 

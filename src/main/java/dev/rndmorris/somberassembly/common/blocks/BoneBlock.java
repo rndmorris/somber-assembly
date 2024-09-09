@@ -11,9 +11,7 @@ public class BoneBlock extends SomberBlock {
     public BoneBlock() {
         super(Material.rock);
 
-        this.setBlockName(NAME);
-        this.setBlockTextureName(NAME);
-
-        GameRegistry.registerBlock(this, NAME);
+        this.setBlockNamePrefixed(NAME);
+        this.setBlockTextureNamePrefixed(NAME);
     }
 }
