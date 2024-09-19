@@ -11,9 +11,11 @@ import thaumcraft.api.ItemApi;
 public abstract class SomberBlock extends Block {
 
     public static Block boneBlock;
+    public static Block viralIceBlock;
 
     public static void preInit() {
         boneBlock = GameRegistry.registerBlock(new BoneBlock(), BoneBlock.NAME);
+        viralIceBlock = GameRegistry.registerBlock(new BlockViralIce(), BlockViralIce.NAME);
     }
 
     protected SomberBlock(Material materialIn) {

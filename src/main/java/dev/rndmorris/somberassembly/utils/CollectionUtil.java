@@ -63,4 +63,8 @@ public final class CollectionUtil {
     public static <T> T randomElement(Random random, List<T> list) {
         return list.get(random.nextInt(list.size()));
     }
+
+    public static <T> T randomElement(Random random, T[] array) {
+        return array[random.nextInt(array.length)];
+    }
 }

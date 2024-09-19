@@ -1,5 +1,6 @@
 # Blocks
 tile.somberassembly:block_bone.name=Block of Bones
+tile.somberassembly:block_viral_ice.name=Viral Ice
 
 # Creative Tabs
 itemGroup.somberassembly=Somber Assembly
