@@ -7,7 +7,9 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "ITaskOwner",
-    "MixinEntityAINearestAttackableTarget$1"
+    "MixinEntityAINearestAttackableTarget$1",
+    "MixinGameRules",
+    "MixinGameRulesValue"
   ],
   "client": [],
   "server": []
