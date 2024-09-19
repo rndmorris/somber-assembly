@@ -11,6 +11,7 @@ import dev.rndmorris.somberassembly.SomberAssembly;
 import dev.rndmorris.somberassembly.common.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.common.configs.Config;
 import dev.rndmorris.somberassembly.common.events.EntityEvents;
+import dev.rndmorris.somberassembly.common.events.WorldEvents;
 import dev.rndmorris.somberassembly.common.items.SomberItem;
 import dev.rndmorris.somberassembly.common.potions.SomberPotion;
 import dev.rndmorris.somberassembly.common.recipes.SomberRecipes;
@@ -30,6 +31,7 @@ public class CommonProxy {
         SomberBlock.preInit();
         SomberItem.preInit();
         EntityEvents.preInit();
+        WorldEvents.preInit();
         try {
             MapGenStructureIO.func_143031_a(VillageGraveyardSmall.class, "SAGraveyardSmall");
             MapGenStructureIO.func_143031_a(VillageGraveyardLarge.class, "SAGraveyardLarge");
