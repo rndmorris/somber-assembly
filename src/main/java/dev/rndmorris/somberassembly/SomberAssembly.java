@@ -2,6 +2,8 @@ package dev.rndmorris.somberassembly;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
@@ -17,6 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import dev.rndmorris.somberassembly.common.CommonProxy;
 import dev.rndmorris.somberassembly.common.blocks.SomberBlock;
+import dev.rndmorris.somberassembly.common.configs.Config;
 
 @Mod(
     modid = SomberAssembly.MODID,
@@ -66,6 +69,20 @@ public class SomberAssembly {
     public void postInit(FMLPostInitializationEvent event) {
         LOG.info("Starting postInit :3");
         proxy.postInit(event);
+    }
+
+    /**
+     * Debugging method. Opens the chat window to frees the mouse
+     * so IntelliJ will let me use it when stepping through methods.
+     * Calls to this method should not be left in the final product.
+     */
+    @Deprecated
+    public static void openChat() {
+        if (!Config.debugTweaks) {
+            return;
+        }
+        Minecraft.getMinecraft()
+            .displayGuiScreen(new GuiChat());
     }
 
     public static String prefixModid(@Nonnull String toPrefix) {
