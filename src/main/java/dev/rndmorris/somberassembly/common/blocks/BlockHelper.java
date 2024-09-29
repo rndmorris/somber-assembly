@@ -84,6 +84,17 @@ public class BlockHelper {
             return ItemApi.getBlock("blockMetalDevice", 0);
         }
 
+        /**
+         * Placeholder block for compound recipes. Displays as "Empty Space".
+         */
+        public static ItemStack empty() {
+            return ItemApi.getBlock("blockHole", 0);
+        }
+
+        public static ItemStack flesh() {
+            return ItemApi.getBlock("blockTaint", 2);
+        }
+
         public static ItemStack table(boolean northSouth) {
             return ItemApi.getBlock("blockTable", northSouth ? 1 : 0);
         }

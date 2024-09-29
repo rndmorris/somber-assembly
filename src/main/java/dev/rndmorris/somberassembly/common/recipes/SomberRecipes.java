@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
 import dev.rndmorris.somberassembly.common.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.common.items.SomberItem;
 import dev.rndmorris.somberassembly.common.research.SomberResearch;
@@ -86,7 +87,7 @@ public class SomberRecipes {
             .aspectCost(Aspect.ORDER, 5);
         assembleZombie = CompoundRecipe.start()
             .blueprint(() -> {
-                final var fleshBlock = SomberBlock.Thaumcraft.fleshBlockItemStack();
+                final var fleshBlock = BlockHelper.Thaumcraft.flesh();
                 return new ItemStack[][][] { { { fleshBlock, }, { null, }, }, { { fleshBlock, }, { basicWand, } },
                     { { fleshBlock, }, { null, } }, };
             })

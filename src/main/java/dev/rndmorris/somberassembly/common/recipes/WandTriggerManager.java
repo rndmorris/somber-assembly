@@ -1,5 +1,6 @@
 package dev.rndmorris.somberassembly.common.recipes;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -9,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import dev.rndmorris.somberassembly.common.blocks.BlockHelper;
 import dev.rndmorris.somberassembly.common.blocks.SomberBlock;
 import dev.rndmorris.somberassembly.common.research.SomberResearch.Research;
 import thaumcraft.api.wands.IWandTriggerManager;
@@ -105,15 +107,15 @@ public class WandTriggerManager implements IWandTriggerManager {
     }
 
     private MobAssemblyService buildZombieService() {
-        final var assembleZombieBlock = SomberBlock.Thaumcraft.fleshBlock();
-        final var assembleZombieMetadata = SomberBlock.Thaumcraft.fleshBlockDamage();
+        final var flesh = BlockHelper.Thaumcraft.flesh();
+        final var fleshBlock = Block.getBlockFromItem(flesh.getItem());
+        final var fleshMetadata = flesh.getItemDamage();
 
-        WandTriggerRegistry
-            .registerWandBlockTrigger(this, ASSEMBLE_ZOMBIE_EVENT, assembleZombieBlock, assembleZombieMetadata);
+        WandTriggerRegistry.registerWandBlockTrigger(this, ASSEMBLE_ZOMBIE_EVENT, fleshBlock, fleshMetadata);
 
         return MobAssemblyService.configure()
-            .expectedBlockType(assembleZombieBlock)
-            .expectedBlockMetadata(assembleZombieMetadata)
+            .expectedBlockType(fleshBlock)
+            .expectedBlockMetadata(fleshMetadata)
             .createEntityClosure((args) -> {
                 var zombie = new EntityZombie(args.world());
                 for (var slot = 0; slot <= 4; ++slot) {

@@ -2,10 +2,8 @@ package dev.rndmorris.somberassembly.common.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
 
 import dev.rndmorris.somberassembly.SomberAssembly;
-import thaumcraft.api.ItemApi;
 
 public abstract class SomberBlock extends Block {
 
@@ -29,30 +27,5 @@ public abstract class SomberBlock extends Block {
     @Override
     public Block setBlockTextureName(String name) {
         return super.setBlockTextureName(SomberAssembly.prefixModid(name));
-    }
-
-    /**
-     * Helper methods to get Thaumcraft blocks.
-     */
-    public static class Thaumcraft {
-
-        /**
-         * Placeholder block for compound recipes. Displays as "Empty Space".
-         */
-        public static ItemStack emptyBlock() {
-            return ItemApi.getBlock("blockHole", 0);
-        }
-
-        public static Block fleshBlock() {
-            return Block.getBlockFromItem(fleshBlockItemStack().getItem());
-        }
-
-        public static int fleshBlockDamage() {
-            return 2;
-        }
-
-        public static ItemStack fleshBlockItemStack() {
-            return ItemApi.getBlock("blockTaint", fleshBlockDamage());
-        }
     }
 }
